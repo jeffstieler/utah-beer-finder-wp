@@ -1,0 +1,52 @@
+{
+	"name": "jeffstieler/brewtah",
+	"description": "Find the best beer available in Utah",
+	"authors": [
+		{
+			"name": "Jeff Stieler",
+			"email": "jeff.m.stieler@gmail.com"
+		}
+	],
+	"type": "project",
+	"minimum-stability": "dev",
+	"repositories": [
+		{
+			"type": "package",
+			"package": {
+				"name": "wordpress",
+				"type": "webroot",
+				"version": "4.0",
+				"dist": {
+					"type": "zip",
+					"url": "http://wordpress.org/wordpress-4.0.zip"
+				},
+				"require" : {
+					"fancyguy/webroot-installer": "1.0.0"
+				}
+			}
+		},
+		{
+			"type": "composer",
+			"url": "http://wpackagist.org"
+		}
+	],
+	"config": {
+		"vendor-dir": "vendor"
+	},
+	"require": {
+		"wordpress": "~4.0",
+		"fancyguy/webroot-installer": "~1.0"
+	},
+	"extra": {
+		"webroot-dir": "wp",
+		"webroot-package": "wordpress",
+		"installer-paths": {
+			"wp-content/plugins/{$name}/": [
+				"type:wordpress-plugin"
+			],
+			"wp-content/themes/{$name}/": [
+				"type:wordpress-theme"
+			]
+		}
+	}
+}	
