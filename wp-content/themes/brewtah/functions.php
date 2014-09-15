@@ -110,6 +110,11 @@ add_action( 'wp_enqueue_scripts', 'brewtah_scripts' );
 require dirname( __FILE__ ) . '/vendor/autoload.php';
 
 /**
+ * Include the DABC Beer post type
+ */
+require dirname( __FILE__ ) . '/inc/dabc-beer-post-type.php';
+
+/**
  * Implement the Custom Header feature.
  */
 //require get_template_directory() . '/inc/custom-header.php';
