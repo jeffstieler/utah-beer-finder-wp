@@ -12,6 +12,8 @@ if ( ! isset( $content_width ) ) {
 	$content_width = 640; /* pixels */
 }
 
+define( 'BREWTAH_NAMESPACE', 'brewtah' );
+
 if ( ! function_exists( 'brewtah_setup' ) ) :
 /**
  * Sets up theme defaults and registers support for various WordPress features.
@@ -28,7 +30,7 @@ function brewtah_setup() {
 	 * If you're building a theme based on Brewtah, use a find and replace
 	 * to change 'brewtah' to the name of your theme in all the template files
 	 */
-	load_theme_textdomain( 'brewtah', get_template_directory() . '/languages' );
+	load_theme_textdomain( BREWTAH_NAMESPACE, get_template_directory() . '/languages' );
 
 	// Add default posts and comments RSS feed links to head.
 	add_theme_support( 'automatic-feed-links' );
@@ -42,7 +44,7 @@ function brewtah_setup() {
 
 	// This theme uses wp_nav_menu() in one location.
 	register_nav_menus( array(
-		'primary' => __( 'Primary Menu', 'brewtah' ),
+		'primary' => __( 'Primary Menu', BREWTAH_NAMESPACE ),
 	) );
 
 	/*
@@ -77,7 +79,7 @@ add_action( 'after_setup_theme', 'brewtah_setup' );
  */
 function brewtah_widgets_init() {
 	register_sidebar( array(
-		'name'          => __( 'Sidebar', 'brewtah' ),
+		'name'          => __( 'Sidebar', BREWTAH_NAMESPACE ),
 		'id'            => 'sidebar-1',
 		'description'   => '',
 		'before_widget' => '<aside id="%1$s" class="widget %2$s">',
@@ -108,6 +110,7 @@ add_action( 'wp_enqueue_scripts', 'brewtah_scripts' );
  * Include the Composer dependencies
  */
 require dirname( __FILE__ ) . '/vendor/autoload.php';
+require dirname( __FILE__ ) . '/plugins/titan-framework/titan-framework.php';
 
 /**
  * Include the DABC Beer post type

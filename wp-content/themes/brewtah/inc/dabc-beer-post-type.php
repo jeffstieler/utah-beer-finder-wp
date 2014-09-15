@@ -6,11 +6,11 @@
  */
 
 class DABC_Beer_Post_Type {
-	
+
 	const POST_TYPE = 'dabc-beer';
-	
+
 	function init() {
-		
+
 		register_post_type(
 			self::POST_TYPE,
 			array(
@@ -38,9 +38,34 @@ class DABC_Beer_Post_Type {
 				)
 			)
 		);
-		
+
+		$titan = TitanFramework::getInstance( BREWTAH_NAMESPACE );
+
+		$box = $titan->createMetaBox( array(
+			'name'      => 'Beer Info',
+			'id'        => 'beer-info',
+			'post_type' => self::POST_TYPE
+		) );
+
+		$box->createOption( array(
+			'name' => 'DABC Name',
+			'id'   => 'dabc-name',
+			'desc' => 'The original description from the DABC'
+		) );
+
+		$box->createOption( array(
+			'name' => 'CS Code',
+			'id'   => 'cs-code',
+			'desc' => 'The DABC\'s SKU for this beer'
+		) );
+
+		$box->createOption( array(
+			'name' => 'Price',
+			'id'   => 'price'
+		) );
+
 	}
-	
+
 }
 
 add_action( 'init', array( new DABC_Beer_Post_Type(), 'init' ) );

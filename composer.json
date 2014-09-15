@@ -37,12 +37,16 @@
 		"wordpress": "~4.0",
 		"fancyguy/webroot-installer": "~1.0",
 		"symfony/css-selector": "~2.6",
-		"symfony/dom-crawler": "~2.5"
+		"symfony/dom-crawler": "~2.5",
+		"wpackagist-plugin/titan-framework": "~1.5"
 	},
 	"extra": {
 		"webroot-dir": "wp",
 		"webroot-package": "wordpress",
 		"installer-paths": {
+			"wp-content/themes/brewtah/plugins/{$name}/": [
+				"wpackagist-plugin/titan-framework"
+			],
 			"wp-content/plugins/{$name}/": [
 				"type:wordpress-plugin"
 			],
