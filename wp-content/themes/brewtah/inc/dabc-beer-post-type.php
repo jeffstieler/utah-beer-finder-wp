@@ -7,9 +7,23 @@
 
 class DABC_Beer_Post_Type {
 
-	const POST_TYPE = 'dabc-beer';
+	const POST_TYPE       = 'dabc-beer';
+	const DEPT_TAXONOMY   = 'dabc-dept';
+	const CAT_TAXONOMY    = 'dabc-cat';
+	const SIZE_TAXONOMY   = 'beer-size';
+	const STATUS_TAXONOMY = 'dabc-status';
 
 	function init() {
+
+		$this->create_post_type();
+
+		$this->create_post_meta();
+
+		$this->create_taxonomies();
+
+	}
+
+	function create_post_type() {
 
 		register_post_type(
 			self::POST_TYPE,
@@ -39,6 +53,10 @@ class DABC_Beer_Post_Type {
 			)
 		);
 
+	}
+
+	function create_post_meta() {
+
 		$titan = TitanFramework::getInstance( BREWTAH_NAMESPACE );
 
 		$box = $titan->createMetaBox( array(
@@ -62,6 +80,26 @@ class DABC_Beer_Post_Type {
 		$box->createOption( array(
 			'name' => 'Price',
 			'id'   => 'price'
+		) );
+
+	}
+
+	function create_taxonomies() {
+
+		register_taxonomy( self::DEPT_TAXONOMY, self::POST_TYPE, array(
+			'label' => 'Department'
+		) );
+
+		register_taxonomy( self::CAT_TAXONOMY, self::POST_TYPE, array(
+			'label' => 'Category'
+		) );
+
+		register_taxonomy( self::SIZE_TAXONOMY, self::POST_TYPE, array(
+			'label' => 'Size'
+		) );
+
+		register_taxonomy( self::STATUS_TAXONOMY, self::POST_TYPE, array(
+			'label' => 'Status'
 		) );
 
 	}
