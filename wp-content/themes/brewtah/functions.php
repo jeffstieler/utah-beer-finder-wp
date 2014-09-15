@@ -105,6 +105,11 @@ function brewtah_scripts() {
 add_action( 'wp_enqueue_scripts', 'brewtah_scripts' );
 
 /**
+ * Include the Composer dependencies
+ */
+require dirname( __FILE__ ) . '/vendor/autoload.php';
+
+/**
  * Implement the Custom Header feature.
  */
 //require get_template_directory() . '/inc/custom-header.php';
