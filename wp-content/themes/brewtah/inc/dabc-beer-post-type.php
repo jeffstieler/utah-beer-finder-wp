@@ -15,15 +15,15 @@ class DABC_Beer_Post_Type {
 
 	function init() {
 
-		$this->create_post_type();
+		$this->register_post_type();
 
-		$this->create_post_meta();
+		$this->register_post_meta();
 
-		$this->create_taxonomies();
+		$this->register_taxonomies();
 
 	}
 
-	function create_post_type() {
+	function register_post_type() {
 
 		register_post_type(
 			self::POST_TYPE,
@@ -55,7 +55,7 @@ class DABC_Beer_Post_Type {
 
 	}
 
-	function create_post_meta() {
+	function register_post_meta() {
 
 		$titan = TitanFramework::getInstance( BREWTAH_NAMESPACE );
 
@@ -84,7 +84,7 @@ class DABC_Beer_Post_Type {
 
 	}
 
-	function create_taxonomies() {
+	function register_taxonomies() {
 
 		register_taxonomy( self::DEPT_TAXONOMY, self::POST_TYPE, array(
 			'label' => 'Department'
