@@ -4,6 +4,7 @@
  *
  * @package Brewtah
  */
+use Symfony\Component\DomCrawler\Crawler;
 
 class DABC_Beer_Post_Type {
 
@@ -122,6 +123,59 @@ class DABC_Beer_Post_Type {
 		}
 
 		return $result;
+
+	}
+
+	function parse_dabc_beer_list( $html ) {
+
+		$column_map = array(
+			'description',
+			'div',
+			'dept',
+			'cat',
+			'size',
+			'cs_code',
+			'price',
+			'status',
+			'spa_on'
+		);
+
+		$beers = array();
+
+		$crawler = new Crawler();
+
+		$crawler->addHtmlContent( $html );
+
+		$table_rows = $crawler->filter( '#ctl00_ContentPlaceHolderBody_gvPricelist > tr' );
+
+		$beers = $table_rows->each( function( Crawler $row, $i ) use ( $column_map ) {
+
+			$beer = false;
+
+			$cols = $row->filter( 'td' );
+
+			if ( iterator_count( $cols ) ) {
+
+				$beer = array();
+
+				foreach ( $column_map as $i => $key ) {
+
+					$beer[$key] = $cols->eq( $i )->text();
+
+				}
+
+				// remove "355ml" and similar from beer description
+				$beer['description'] = trim( preg_replace( '/\d+ml/', '', $beer['description'] ) );
+
+			}
+
+			return $beer;
+
+		} );
+
+		$beers = array_filter( $beers );
+
+		return $beers;
 
 	}
 
