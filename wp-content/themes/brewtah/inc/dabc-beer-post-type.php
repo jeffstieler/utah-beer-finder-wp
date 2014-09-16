@@ -7,11 +7,12 @@
 
 class DABC_Beer_Post_Type {
 
-	const POST_TYPE       = 'dabc-beer';
-	const DEPT_TAXONOMY   = 'dabc-dept';
-	const CAT_TAXONOMY    = 'dabc-cat';
-	const SIZE_TAXONOMY   = 'beer-size';
-	const STATUS_TAXONOMY = 'dabc-status';
+	const POST_TYPE          = 'dabc-beer';
+	const DEPT_TAXONOMY      = 'dabc-dept';
+	const CAT_TAXONOMY       = 'dabc-cat';
+	const SIZE_TAXONOMY      = 'beer-size';
+	const STATUS_TAXONOMY    = 'dabc-status';
+	const DABC_BEER_LIST_URL = 'http://www.webapps.abc.utah.gov/Production/OnlinePriceList/DisplayPriceList.aspx?DivCd=T';
 
 	function init() {
 
@@ -101,6 +102,26 @@ class DABC_Beer_Post_Type {
 		register_taxonomy( self::STATUS_TAXONOMY, self::POST_TYPE, array(
 			'label' => 'Status'
 		) );
+
+	}
+
+	function get_beer_list_from_dabc() {
+
+		$result = false;
+
+		$response = wp_remote_get( self::DABC_BEER_LIST_URL );
+
+		if ( is_wp_error( $response ) ) {
+
+			$result = $response;
+
+		} else if ( 200 === wp_remote_retrieve_response_code( $response ) ) {
+
+			$result = wp_remote_retrieve_body( $response );
+
+		}
+
+		return $result;
 
 	}
 
