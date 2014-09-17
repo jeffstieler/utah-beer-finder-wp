@@ -128,6 +128,33 @@ class DABC_Beer_Post_Type {
 
 	}
 
+	/**
+	 * Beautify common ugliness in DABC beer descriptions
+	 *
+	 * @param string $beer_name original beer description from the DABC
+	 * @return string Prettier beer name
+	 */
+	function pretty_up_beer_name( $beer_name ) {
+
+		// remove size from end of description, trim whitespace
+		// "BEER NAME         355ml" => "BEER NAME"
+		$beer_name = trim( preg_replace( '/\d+ml$/', '', $beer_name ) );
+
+		// BEER NAME => Beer Name
+		$beer_name = ucwords( strtolower( $beer_name ) );
+
+		// set abbreviations back to all caps (IPA, IPL, etc)
+		$beer_name = strtr( $beer_name, array(
+			'Ipa' => 'IPA',
+			'Ipl' => 'IPL',
+			'Esb' => 'ESB',
+			'Apa' => 'APA'
+		) );
+
+		return $beer_name;
+
+	}
+
 	function get_beer_list_from_dabc() {
 
 		$result = false;
@@ -164,8 +191,7 @@ class DABC_Beer_Post_Type {
 
 			}
 
-			// remove "355ml" and similar from beer description
-			$beer['description'] = trim( preg_replace( '/\d+ml/', '', $beer['description'] ) );
+			$beer['name'] = $this->pretty_up_beer_name( $beer['description'] );
 
 		}
 
@@ -223,7 +249,8 @@ class DABC_Beer_Post_Type {
 	 *
 	 * expected $beer_info structure:
 	 *	array(
-     *		"description" => "ROGUE DEAD GUY ALE",
+	 *		"name" => "Rogue Dead Guy Ale"
+     *		"description" => "ROGUE DEAD GUY ALE 355ml",
      *		"div" => "T"
      *		"dept" => "TN"
      *		"cat" => "TNC"
@@ -240,7 +267,7 @@ class DABC_Beer_Post_Type {
 
 		$post_data = array(
 			'post_type'   => self::POST_TYPE,
-			'post_title'  => $beer_info['description'],
+			'post_title'  => $beer_info['name'],
 			'post_status' => 'publish'
 		);
 
