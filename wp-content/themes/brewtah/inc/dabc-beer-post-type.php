@@ -193,6 +193,31 @@ class DABC_Beer_Post_Type {
 
 	}
 
+	/**
+	 * Retrieve a DABC Beer by its CS CODE
+	 *
+	 * @param string $cs_code
+	 */
+	function get_beer_by_cs_code( $cs_code ) {
+
+		$beer_query = new WP_Query( array(
+			'post_type'      => self::POST_TYPE,
+			'meta_key'       => self::TITAN_NAMESPACE . '_' . self::CS_CODE_OPTION,
+			'meta_value'     => $cs_code,
+			'no_found_rows'  => true,
+			'posts_per_page' => 1
+		) );
+
+		if ( $beer_query->have_posts() ) {
+
+			return $beer_query->next_post();
+
+		}
+
+		return false;
+
+	}
+
 }
 
 add_action( 'init', array( new DABC_Beer_Post_Type(), 'init' ) );
