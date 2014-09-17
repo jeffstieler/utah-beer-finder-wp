@@ -277,6 +277,36 @@ class DABC_Beer_Post_Type {
 
 	}
 
+	/**
+	 * Sync post type with DABC site data
+	 */
+	function sync_beers_with_dabc() {
+
+		$result = $this->get_beer_list_from_dabc();
+
+		if ( is_wp_error( $result ) ) {
+
+			// reschedule job if connection timeout ?
+			return;
+
+		}
+
+		$beers = $this->parse_dabc_beer_list( $result );
+
+		foreach ( $beers as $beer_info ) {
+
+			$existing_beer = $this->get_beer_by_cs_code( $beer_info['cs_code'] );
+
+			if ( ! $existing_beer ) {
+
+				$this->create_beer( $beer_info );
+
+			}
+
+		}
+
+	}
+
 }
 
 add_action( 'init', array( new DABC_Beer_Post_Type(), 'init' ) );
