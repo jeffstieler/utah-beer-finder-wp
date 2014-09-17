@@ -14,6 +14,10 @@ class DABC_Beer_Post_Type {
 	const SIZE_TAXONOMY      = 'beer-size';
 	const STATUS_TAXONOMY    = 'dabc-status';
 	const DABC_BEER_LIST_URL = 'http://www.webapps.abc.utah.gov/Production/OnlinePriceList/DisplayPriceList.aspx?DivCd=T';
+	const TITAN_NAMESPACE    = 'dabc-beer';
+	const DABC_NAME_OPTION   = 'dabc-name';
+	const CS_CODE_OPTION     = 'cs-code';
+	const PRICE_OPTION       = 'price';
 
 	var $dabc_column_map;
 
@@ -77,7 +81,7 @@ class DABC_Beer_Post_Type {
 
 	function register_post_meta() {
 
-		$titan = TitanFramework::getInstance( BREWTAH_NAMESPACE );
+		$titan = TitanFramework::getInstance( self::TITAN_NAMESPACE );
 
 		$box = $titan->createMetaBox( array(
 			'name'      => 'Beer Info',
@@ -87,19 +91,19 @@ class DABC_Beer_Post_Type {
 
 		$box->createOption( array(
 			'name' => 'DABC Name',
-			'id'   => 'dabc-name',
+			'id'   => self::DABC_NAME_OPTION,
 			'desc' => 'The original description from the DABC'
 		) );
 
 		$box->createOption( array(
 			'name' => 'CS Code',
-			'id'   => 'cs-code',
+			'id'   => self::CS_CODE_OPTION,
 			'desc' => 'The DABC\'s SKU for this beer'
 		) );
 
 		$box->createOption( array(
 			'name' => 'Price',
-			'id'   => 'price'
+			'id'   => self::PRICE_OPTION
 		) );
 
 	}
