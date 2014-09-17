@@ -218,6 +218,65 @@ class DABC_Beer_Post_Type {
 
 	}
 
+	/**
+	 * Create a DABC Beer post, including meta and taxonomy terms
+	 *
+	 * expected $beer_info structure:
+	 *	array(
+     *		"description" => "ROGUE DEAD GUY ALE",
+     *		"div" => "T"
+     *		"dept" => "TN"
+     *		"cat" => "TNC"
+     *		"size" => "355"
+     *		"cs_code" => "904164"
+     *		"price" => "2.54"
+     *		"status" => "1"
+     *		"spa_on" => " "
+	 *  )
+	 *
+	 * @param array $beer_info
+	 */
+	function create_beer( $beer_info ) {
+
+		$post_data = array(
+			'post_type'   => self::POST_TYPE,
+			'post_title'  => $beer_info['description'],
+			'post_status' => 'publish'
+		);
+
+		$post_id = wp_insert_post( $post_data );
+
+		$titan = TitanFramework::getInstance( self::TITAN_NAMESPACE );
+
+		$titan->setOption( self::DABC_NAME_OPTION, $beer_info['description'], $post_id );
+
+		$titan->setOption( self::CS_CODE_OPTION, $beer_info['cs_code'], $post_id );
+
+		$titan->setOption( self::PRICE_OPTION, $beer_info['price'], $post_id );
+
+		$taxonomy_map = array(
+			'dept'   => self::DEPT_TAXONOMY,
+			'cat'    => self::CAT_TAXONOMY,
+			'size'   => self::SIZE_TAXONOMY,
+			'status' => self::STATUS_TAXONOMY
+		);
+
+		foreach ( $taxonomy_map as $info_key => $taxonomy ) {
+
+			if ( ! term_exists( $beer_info[$info_key], $taxonomy ) ) {
+
+				wp_insert_term( $beer_info[$info_key], $taxonomy );
+
+			}
+
+			wp_set_object_terms( $post_id, $beer_info[$info_key], $taxonomy );
+
+		}
+
+		return $post_id;
+
+	}
+
 }
 
 add_action( 'init', array( new DABC_Beer_Post_Type(), 'init' ) );
