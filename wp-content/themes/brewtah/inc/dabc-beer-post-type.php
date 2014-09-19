@@ -8,16 +8,18 @@ use Symfony\Component\DomCrawler\Crawler;
 
 class DABC_Beer_Post_Type {
 
-	const POST_TYPE          = 'dabc-beer';
-	const DEPT_TAXONOMY      = 'dabc-dept';
-	const CAT_TAXONOMY       = 'dabc-cat';
-	const SIZE_TAXONOMY      = 'beer-size';
-	const STATUS_TAXONOMY    = 'dabc-status';
-	const DABC_BEER_LIST_URL = 'http://www.webapps.abc.utah.gov/Production/OnlinePriceList/DisplayPriceList.aspx?DivCd=T';
-	const TITAN_NAMESPACE    = 'dabc-beer';
-	const DABC_NAME_OPTION   = 'dabc-name';
-	const CS_CODE_OPTION     = 'cs-code';
-	const PRICE_OPTION       = 'price';
+	const POST_TYPE           = 'dabc-beer';
+	const DEPT_TAXONOMY       = 'dabc-dept';
+	const CAT_TAXONOMY        = 'dabc-cat';
+	const SIZE_TAXONOMY       = 'beer-size';
+	const STATUS_TAXONOMY     = 'dabc-status';
+	const DABC_BEER_LIST_URL  = 'http://www.webapps.abc.utah.gov/Production/OnlinePriceList/DisplayPriceList.aspx?DivCd=T';
+	const TITAN_NAMESPACE     = 'dabc-beer';
+	const DABC_NAME_OPTION    = 'dabc-name';
+	const CS_CODE_OPTION      = 'cs-code';
+	const PRICE_OPTION        = 'price';
+	const RATEBEER_BASE_URL   = 'http://www.ratebeer.com';
+	const RATEBEER_URL_OPTION = 'ratebeer-url';
 
 	var $dabc_column_map;
 	var $ratebeer_search_column_map;
@@ -112,6 +114,11 @@ class DABC_Beer_Post_Type {
 		$box->createOption( array(
 			'name' => 'Price',
 			'id'   => self::PRICE_OPTION
+		) );
+
+		$box->createOption( array(
+			'name' => 'Ratebeer URL',
+			'id'   => self::RATEBEER_URL_OPTION
 		) );
 
 	}
@@ -356,7 +363,7 @@ class DABC_Beer_Post_Type {
 		$result = false;
 
 		$response = wp_remote_post(
-			'http://www.ratebeer.com/findbeer.asp',
+			self::RATEBEER_BASE_URL . '/findbeer.asp',
 			array(
 				'headers' => array(
 					'Content-Type' => 'application/x-www-form-urlencoded'
@@ -441,7 +448,7 @@ class DABC_Beer_Post_Type {
 	}
 
 	/**
-	 * Search Ratebeer for beer(s)
+	 * Search Ratebeer for beer(s), filtering out aliased beers
 	 *
 	 * @param string $query
 	 * @return boolean|array boolean false on error, array of beers on success
@@ -458,7 +465,44 @@ class DABC_Beer_Post_Type {
 
 		$beers = $this->parse_ratebeer_response( $response );
 
+		$beers = array_filter( $beers, function( $beer ) {
+
+			return ( 'A' !== $beer['status'] );
+
+		} );
+
 		return $beers;
+
+	}
+
+	/**
+	 * For a given DABC beer post ID, search ratebeer for it
+	 * and associate the URL if found
+	 *
+	 * @param int $post_id
+	 * @return bool success
+	 */
+	function map_dabc_beer_to_ratebeer( $post_id ) {
+
+		$post = get_post( $post_id );
+
+		$beer_name = $post->post_title;
+
+		$search_results = $this->search_ratebeer( $beer_name );
+
+		if ( is_array( $search_results ) ) {
+
+			$beer = array_shift( $search_results );
+
+			if ( $beer ) {
+
+				$titan = TitanFramework::getInstance( self::TITAN_NAMESPACE );
+
+				$titan->setOption( self::RATEBEER_URL_OPTION, $beer['url'], $post_id );
+
+			}
+
+		}
 
 	}
 
