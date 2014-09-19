@@ -440,6 +440,28 @@ class DABC_Beer_Post_Type {
 
 	}
 
+	/**
+	 * Search Ratebeer for beer(s)
+	 *
+	 * @param string $query
+	 * @return boolean|array boolean false on error, array of beers on success
+	 */
+	function search_ratebeer( $query ) {
+
+		$response = $this->ratebeer_search_request( $query );
+
+		if ( ( false === $response ) || is_wp_error( $response ) ) {
+
+			return false;
+
+		}
+
+		$beers = $this->parse_ratebeer_response( $response );
+
+		return $beers;
+
+	}
+
 }
 
 add_action( 'init', array( new DABC_Beer_Post_Type(), 'init' ) );
