@@ -346,12 +346,12 @@ class DABC_Beer_Post_Type {
 	}
 
 	/**
-	 * Search Ratebeer
+	 * Make search request to Ratebeer
 	 *
 	 * @param string $query - search query for ratebeer
 	 * @return bool|WP_Error|string boolean false if non 200, WP_Error on request error, HTML string on success
 	 */
-	function search_ratebeer( $query ) {
+	function ratebeer_search_request( $query ) {
 
 		$result = false;
 
