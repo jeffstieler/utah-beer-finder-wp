@@ -406,6 +406,8 @@ class DABC_Beer_Post_Type {
 
 			}
 
+			$beer['url'] = $cols->eq( 0 )->filter( 'a' )->attr( 'href' );
+
 		}
 
 		return $beer;
