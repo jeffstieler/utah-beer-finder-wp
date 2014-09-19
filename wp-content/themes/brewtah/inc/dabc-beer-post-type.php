@@ -20,6 +20,7 @@ class DABC_Beer_Post_Type {
 	const PRICE_OPTION       = 'price';
 
 	var $dabc_column_map;
+	var $ratebeer_search_column_map;
 
 	function __construct() {
 
@@ -33,6 +34,13 @@ class DABC_Beer_Post_Type {
 			'price',
 			'status',
 			'spa_on',
+		);
+
+		$this->ratebeer_search_column_map = array(
+			0 => 'name',
+			2 => 'status',
+			3 => 'score',
+			4 => 'ratings',
 		);
 
 	}
@@ -334,6 +342,99 @@ class DABC_Beer_Post_Type {
 			}
 
 		}
+
+	}
+
+	/**
+	 * Search Ratebeer
+	 *
+	 * @param string $query - search query for ratebeer
+	 * @return bool|WP_Error|string boolean false if non 200, WP_Error on request error, HTML string on success
+	 */
+	function search_ratebeer( $query ) {
+
+		$result = false;
+
+		$response = wp_remote_post(
+			'http://www.ratebeer.com/findbeer.asp',
+			array(
+				'headers' => array(
+					'Content-Type' => 'application/x-www-form-urlencoded'
+				),
+				'body' => array(
+					'BeerName' => $query
+				)
+			)
+		);
+
+		if ( is_wp_error( $response ) ) {
+
+			$result = $response;
+
+		} else if ( 200 === wp_remote_retrieve_response_code( $response ) ) {
+
+			$result = wp_remote_retrieve_body( $response );
+
+		}
+
+		return $result;
+
+	}
+
+	/**
+	 * Callback to process rows from parse_ratebeer_response() and map
+	 * table columns to beer info array keys
+	 *
+	 * @param \Symfony\Component\DomCrawler\Crawler $row
+	 * @return array beer information from ratebeer
+	 */
+	function parse_ratebeer_search_results_table_row( Crawler $row ) {
+
+		$beer = false;
+
+		$cols = $row->filter( 'td' );
+
+		if ( iterator_count( $cols ) ) {
+
+			$beer = array();
+
+			foreach ( $this->ratebeer_search_column_map as $i => $key ) {
+
+				$column_text = $cols->eq( $i )->text();
+
+				$beer[$key] = trim( str_replace( "\xc2\xa0", ' ', $column_text ) );
+
+			}
+
+		}
+
+		return $beer;
+
+	}
+
+	/**
+	 * Produce an array of beers from Ratebeer search results page markup
+	 *
+	 * @param string $html HTML search results from Ratebeer
+	 * @return array beers found in Ratebeer html response
+	 */
+	function parse_ratebeer_response( $html ) {
+
+		$beers = array();
+
+		$crawler = new Crawler();
+
+		$crawler->addHtmlContent( $html );
+
+		$result_rows = $crawler->filter( 'table.results tr:not([bgcolor])' );
+
+		$beers = $result_rows->each( function( Crawler $row ) {
+
+			return $this->parse_ratebeer_search_results_table_row( $row );
+
+		} );
+
+		return $beers;
 
 	}
 
