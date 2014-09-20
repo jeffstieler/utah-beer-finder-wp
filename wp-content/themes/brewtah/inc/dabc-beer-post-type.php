@@ -20,6 +20,8 @@ class DABC_Beer_Post_Type {
 	const PRICE_OPTION        = 'price';
 	const RATEBEER_BASE_URL   = 'http://www.ratebeer.com';
 	const RATEBEER_URL_OPTION = 'ratebeer-url';
+	const RATEBEER_SEARCHED   = 'has-ratebeer-searched';
+	const RATEBEER_MAP_CRON   = 'map_ratebeer';
 
 	var $dabc_column_map;
 	var $ratebeer_search_column_map;
@@ -54,6 +56,8 @@ class DABC_Beer_Post_Type {
 		$this->register_post_meta();
 
 		$this->register_taxonomies();
+
+		$this->attach_hooks();
 
 	}
 
@@ -140,6 +144,12 @@ class DABC_Beer_Post_Type {
 		register_taxonomy( self::STATUS_TAXONOMY, self::POST_TYPE, array(
 			'label' => 'Status'
 		) );
+
+	}
+
+	function attach_hooks() {
+
+		add_action( self::RATEBEER_MAP_CRON, array( $this, 'cron_map_dabc_beer_to_ratebeer' ) );
 
 	}
 
@@ -450,7 +460,7 @@ class DABC_Beer_Post_Type {
 	/**
 	 * Search Ratebeer for beer(s), filtering out aliased beers
 	 *
-	 * @param string $query
+	 * @param string $query search query
 	 * @return boolean|array boolean false on error, array of beers on success
 	 */
 	function search_ratebeer( $query ) {
@@ -472,6 +482,19 @@ class DABC_Beer_Post_Type {
 		} );
 
 		return $beers;
+
+	}
+
+	/**
+	 * Flag a beer as having attempted to be mapped with Ratebeer
+	 * NOTE: many won't be found and we don't want to keep looking
+	 *
+	 * @param int $post_id beer post ID
+	 * @return bool success
+	 */
+	function mark_beer_as_ratebeer_processed( $post_id ) {
+
+		return (bool) update_post_meta( $post_id, self::RATEBEER_SEARCHED, true );
 
 	}
 
@@ -501,6 +524,70 @@ class DABC_Beer_Post_Type {
 				$titan->setOption( self::RATEBEER_URL_OPTION, $beer['url'], $post_id );
 
 			}
+
+			return true;
+
+		}
+
+		return false;
+
+	}
+
+	/**
+	 * Find all beers that haven't been searched for on Ratebeer
+	 * successfully and schedule a cron job to map them
+	 */
+	function sync_beers_with_ratebeer() {
+
+		$unmapped_beers = new WP_Query( array(
+			'post_type'      => self::POST_TYPE,
+			'meta_query'     => array(
+				array(
+					'key'     => self::RATEBEER_SEARCHED,
+					'value'   => '',
+					'compare' => 'NOT EXISTS'
+				)
+			),
+			'no_found_rows'  => true,
+			'posts_per_page' => -1,
+			'fields'         => 'ids'
+		) );
+
+		array_map( array( $this, 'schedule_ratebeer_sync_for_beer' ), $unmapped_beers->posts );
+
+	}
+
+	/**
+	 * Schedule a job to sync a single beer with Ratebeer
+	 *
+	 * @param int $post_id beer post ID
+	 * @param int $offset_in_minutes optional. delay (from right now) of cron job
+	 */
+	function schedule_ratebeer_sync_for_beer( $post_id, $offset_in_minutes = 0 ) {
+
+		$timestamp = ( time() + ( $offset_in_minutes * MINUTE_IN_SECONDS ) );
+
+		wp_schedule_single_event( $timestamp, self::RATEBEER_MAP_CRON, array( $post_id ) );
+
+	}
+
+	/**
+	 * WP-Cron hook callback for syncing a beer with Ratebeer
+	 * Marks beer as processed on success, or rescedules itself on failure
+	 *
+	 * @param int $post_id beer post ID
+	 */
+	function cron_map_dabc_beer_to_ratebeer( $post_id ) {
+
+		$success = $this->map_dabc_beer_to_ratebeer( $post_id );
+
+		if ( $success ) {
+
+			$this->mark_beer_as_ratebeer_processed( $post_id );
+
+		} else {
+
+			$this->schedule_ratebeer_sync_for_beer( $post_id, 10 );
 
 		}
 
