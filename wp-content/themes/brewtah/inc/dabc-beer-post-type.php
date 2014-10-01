@@ -380,7 +380,8 @@ class DABC_Beer_Post_Type {
 				),
 				'body' => array(
 					'BeerName' => $query
-				)
+				),
+				'timeout' => 10
 			)
 		);
 
