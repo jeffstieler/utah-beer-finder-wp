@@ -26,6 +26,22 @@
 			}
 		},
 		{
+			"type": "package",
+			"package": {
+				"name": "upstatement/jigsaw",
+				"type": "wordpress-plugin",
+				"version": "0.4.11",
+				"source": {
+					"url": "https://github.com/Upstatement/jigsaw.git",
+					"type": "git",
+					"reference": "5c3d9c4fbb095246500c63c2aa9c4cb09bbb8688"
+				},
+				"require" : {
+					"composer/installers": "~1.0"
+				}
+			}
+		},
+		{
 			"type": "composer",
 			"url": "http://wpackagist.org"
 		}
@@ -38,14 +54,16 @@
 		"fancyguy/webroot-installer": "~1.0",
 		"symfony/css-selector": "~2.6",
 		"symfony/dom-crawler": "~2.5",
-		"wpackagist-plugin/titan-framework": "~1.5"
+		"wpackagist-plugin/titan-framework": "~1.5",
+		"upstatement/jigsaw": "~0.4"
 	},
 	"extra": {
 		"webroot-dir": "wp",
 		"webroot-package": "wordpress",
 		"installer-paths": {
 			"wp-content/themes/brewtah/plugins/{$name}/": [
-				"wpackagist-plugin/titan-framework"
+				"wpackagist-plugin/titan-framework",
+				"upstatement/jigsaw"
 			],
 			"wp-content/plugins/{$name}/": [
 				"type:wordpress-plugin"
