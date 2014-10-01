@@ -111,6 +111,7 @@ add_action( 'wp_enqueue_scripts', 'brewtah_scripts' );
  */
 require dirname( __FILE__ ) . '/vendor/autoload.php';
 require dirname( __FILE__ ) . '/plugins/titan-framework/titan-framework.php';
+require dirname( __FILE__ ) . '/plugins/jigsaw/jigsaw.php';
 
 /**
  * Include the DABC Beer post type

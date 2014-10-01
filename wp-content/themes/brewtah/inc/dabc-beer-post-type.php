@@ -23,10 +23,13 @@ class DABC_Beer_Post_Type {
 	const RATEBEER_SEARCHED   = 'has-ratebeer-searched';
 	const RATEBEER_MAP_CRON   = 'map_ratebeer';
 
+	var $titan;
 	var $dabc_column_map;
 	var $ratebeer_search_column_map;
 
 	function __construct() {
+
+		$this->titan = TitanFramework::getInstance( self::TITAN_NAMESPACE );
 
 		$this->dabc_column_map = array(
 			'description',
@@ -58,6 +61,8 @@ class DABC_Beer_Post_Type {
 		$this->register_taxonomies();
 
 		$this->attach_hooks();
+
+		$this->add_post_columns();
 
 	}
 
@@ -95,9 +100,7 @@ class DABC_Beer_Post_Type {
 
 	function register_post_meta() {
 
-		$titan = TitanFramework::getInstance( self::TITAN_NAMESPACE );
-
-		$box = $titan->createMetaBox( array(
+		$box = $this->titan->createMetaBox( array(
 			'name'      => 'Beer Info',
 			'id'        => 'beer-info',
 			'post_type' => self::POST_TYPE
@@ -150,6 +153,34 @@ class DABC_Beer_Post_Type {
 	function attach_hooks() {
 
 		add_action( self::RATEBEER_MAP_CRON, array( $this, 'cron_map_dabc_beer_to_ratebeer' ) );
+
+	}
+
+	function add_post_columns() {
+
+		Jigsaw::add_column( self::POST_TYPE, 'DABC ID', array( $this, 'display_dabc_id_column' ) );
+
+		Jigsaw::add_column( self::POST_TYPE, 'Price', array( $this, 'display_price_column' ) );
+
+		Jigsaw::add_column( self::POST_TYPE, 'Ratebeer URL', array( $this, 'display_ratebeer_url_column' ) );
+
+	}
+
+	function display_dabc_id_column( $post_id ) {
+
+		echo $this->titan->getOption( self::CS_CODE_OPTION, $post_id );
+
+	}
+
+	function display_price_column( $post_id ) {
+
+		echo $this->titan->getOption( self::PRICE_OPTION, $post_id );
+
+	}
+
+	function display_ratebeer_url_column( $post_id ) {
+
+		echo $this->titan->getOption( self::RATEBEER_URL_OPTION, $post_id );
 
 	}
 
