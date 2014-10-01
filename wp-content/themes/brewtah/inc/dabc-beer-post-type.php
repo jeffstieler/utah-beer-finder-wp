@@ -446,13 +446,27 @@ class DABC_Beer_Post_Type {
 
 		$crawler->addHtmlContent( $html );
 
-		$result_rows = $crawler->filter( 'table.results tr:not([bgcolor])' );
+		$no_results = $crawler->filter( 'span.greenbeerhed' );
 
-		$beers = $result_rows->each( function( Crawler $row ) {
+		// when there are no results, a "Search Tips" box displays
+		if ( iterator_count( $no_results ) && ( 'SEARCH TIPS' === $no_results->text() ) ) {
 
-			return $this->parse_ratebeer_search_results_table_row( $row );
+			return $beers;
 
-		} );
+		}
+
+		// only the "beers" result table has a row with bgcolor specified (F0F0F0)
+		$result_rows = $crawler->filter( 'table.results tr[bgcolor] ~ tr' );
+
+		if ( iterator_count( $result_rows ) ) {
+
+			$beers = $result_rows->each( function( Crawler $row ) {
+
+				return $this->parse_ratebeer_search_results_table_row( $row );
+
+			} );
+
+		}
 
 		return $beers;
 
