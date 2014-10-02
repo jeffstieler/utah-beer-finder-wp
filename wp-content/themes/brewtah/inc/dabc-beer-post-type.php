@@ -13,6 +13,7 @@ class DABC_Beer_Post_Type {
 	const CAT_TAXONOMY        = 'dabc-cat';
 	const SIZE_TAXONOMY       = 'beer-size';
 	const STATUS_TAXONOMY     = 'dabc-status';
+	const STYLE_TAXONOMY      = 'beer-style';
 	const DABC_BEER_LIST_URL  = 'http://www.webapps.abc.utah.gov/Production/OnlinePriceList/DisplayPriceList.aspx?DivCd=T';
 	const TITAN_NAMESPACE     = 'dabc-beer';
 	const DABC_NAME_OPTION    = 'dabc-name';
@@ -146,6 +147,10 @@ class DABC_Beer_Post_Type {
 
 		register_taxonomy( self::STATUS_TAXONOMY, self::POST_TYPE, array(
 			'label' => 'Status'
+		) );
+
+		register_taxonomy( self::STYLE_TAXONOMY, self::POST_TYPE, array(
+			'label' => 'Style'
 		) );
 
 	}
