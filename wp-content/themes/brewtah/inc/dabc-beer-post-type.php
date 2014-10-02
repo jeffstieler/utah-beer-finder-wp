@@ -583,7 +583,7 @@ class DABC_Beer_Post_Type {
 	 * Find all beers that haven't been searched for on Ratebeer
 	 * successfully and schedule a cron job to map them
 	 */
-	function sync_beers_with_ratebeer() {
+	function search_beers_on_ratebeer() {
 
 		$unmapped_beers = new WP_Query( array(
 			'post_type'      => self::POST_TYPE,
@@ -599,17 +599,17 @@ class DABC_Beer_Post_Type {
 			'fields'         => 'ids'
 		) );
 
-		array_map( array( $this, 'schedule_ratebeer_sync_for_beer' ), $unmapped_beers->posts );
+		array_map( array( $this, 'schedule_ratebeer_search_for_beer' ), $unmapped_beers->posts );
 
 	}
 
 	/**
-	 * Schedule a job to sync a single beer with Ratebeer
+	 * Schedule a job to search a single beer on Ratebeer
 	 *
 	 * @param int $post_id beer post ID
 	 * @param int $offset_in_minutes optional. delay (from right now) of cron job
 	 */
-	function schedule_ratebeer_sync_for_beer( $post_id, $offset_in_minutes = 0 ) {
+	function schedule_ratebeer_search_for_beer( $post_id, $offset_in_minutes = 0 ) {
 
 		$timestamp = ( time() + ( $offset_in_minutes * MINUTE_IN_SECONDS ) );
 
@@ -633,7 +633,7 @@ class DABC_Beer_Post_Type {
 
 		} else {
 
-			$this->schedule_ratebeer_sync_for_beer( $post_id, 10 );
+			$this->schedule_ratebeer_search_for_beer( $post_id, 10 );
 
 		}
 
