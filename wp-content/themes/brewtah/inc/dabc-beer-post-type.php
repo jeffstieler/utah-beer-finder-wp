@@ -844,21 +844,43 @@ class DABC_Beer_Post_Type {
 	 */
 	function parse_ratebeer_sync_response( $html ) {
 
-		$info = array();
-
 		$crawler = new Crawler( $html );
 
+		// overall score
 		$overall_score = $crawler->filter( 'span[itemprop="rating"] span:not([style])' );
 
 		$overall_score = iterator_count( $overall_score ) ? $overall_score->text() : 'N/A';
 
+		// style score
 		$style_score   = $crawler->filter( 'span[itemprop="average"]' );
 
 		$style_score   = iterator_count( $style_score ) ? $style_score->text() : 'N/A';
 
-		$info = compact( 'overall_score', 'style_score' );
+		// commerical description
+		$description   = $crawler->filter( 'td[width=650] > div > div > div' );
 
-		return $info;
+		$description   = iterator_count( $description ) ? $description->last()->text() : '';
+
+		$description   = preg_replace( '/^COMMERCIAL DESCRIPTION/', '', $description );
+
+		// "info" bar: ratings, weighted avg, calories, abv
+		$info     = $crawler->filter( 'td[width=650] > div > div > small > big' );
+		$calories = '';
+		$abv      = '';
+
+		if ( 4 === iterator_count( $info ) ) {
+
+			// calories (per 12oz)
+			$calories = $info->eq( 2 )->text();
+
+			// abv %
+			$abv = $info->eq( 3 )->text();
+
+		}
+
+		$beer_info = compact( 'overall_score', 'style_score', 'description', 'calories', 'abv' );
+
+		return $beer_info;
 
 	}
 
