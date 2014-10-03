@@ -207,6 +207,10 @@ class DABC_Beer_Post_Type {
 
 		Jigsaw::add_column( self::POST_TYPE, 'Style', array( $this, 'display_ratebeer_style_score_column' ) );
 
+		Jigsaw::add_column( self::POST_TYPE, 'Calories', array( $this, 'display_ratebeer_calories_column' ) );
+
+		Jigsaw::add_column( self::POST_TYPE, 'ABV', array( $this, 'display_ratebeer_abv_column' ) );
+
 	}
 
 	function display_dabc_id_column( $post_id ) {
@@ -236,6 +240,18 @@ class DABC_Beer_Post_Type {
 	function display_ratebeer_style_score_column( $post_id ) {
 
 		echo $this->titan->getOption( self::RATEBEER_STYLE_SCORE, $post_id );
+
+	}
+
+	function display_ratebeer_calories_column( $post_id ) {
+
+		echo $this->titan->getOption( self::RATEBEER_CALORIES, $post_id );
+
+	}
+
+	function display_ratebeer_abv_column( $post_id ) {
+
+		echo $this->titan->getOption( self::RATEBEER_ABV, $post_id );
 
 	}
 
