@@ -185,6 +185,10 @@ class DABC_Beer_Post_Type {
 
 		Jigsaw::add_column( self::POST_TYPE, 'Ratebeer URL', array( $this, 'display_ratebeer_url_column' ) );
 
+		Jigsaw::add_column( self::POST_TYPE, 'Overall', array( $this, 'display_ratebeer_overall_score_column' ) );
+
+		Jigsaw::add_column( self::POST_TYPE, 'Style', array( $this, 'display_ratebeer_style_score_column' ) );
+
 	}
 
 	function display_dabc_id_column( $post_id ) {
@@ -202,6 +206,18 @@ class DABC_Beer_Post_Type {
 	function display_ratebeer_url_column( $post_id ) {
 
 		echo $this->titan->getOption( self::RATEBEER_URL_OPTION, $post_id );
+
+	}
+
+	function display_ratebeer_overall_score_column( $post_id ) {
+
+		echo $this->titan->getOption( self::RATEBEER_OVERALL_SCORE, $post_id );
+
+	}
+
+	function display_ratebeer_style_score_column( $post_id ) {
+
+		echo $this->titan->getOption( self::RATEBEER_STYLE_SCORE, $post_id );
 
 	}
 
