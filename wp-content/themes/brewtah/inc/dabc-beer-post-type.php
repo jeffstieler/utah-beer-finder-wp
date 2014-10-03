@@ -27,6 +27,8 @@ class DABC_Beer_Post_Type {
 	const RATEBEER_SYNCED        = 'has-ratebeer-sync';
 	const RATEBEER_OVERALL_SCORE = 'ratebeer-overall-score';
 	const RATEBEER_STYLE_SCORE   = 'ratebeer-style-score';
+	const RATEBEER_CALORIES      = 'ratebeer-calories';
+	const RATEBEER_ABV           = 'ratebeer-abv';
 
 	var $titan;
 	var $dabc_column_map;
@@ -105,42 +107,58 @@ class DABC_Beer_Post_Type {
 
 	function register_post_meta() {
 
-		$box = $this->titan->createMetaBox( array(
-			'name'      => 'Beer Info',
-			'id'        => 'beer-info',
+		$dabc_box = $this->titan->createMetaBox( array(
+			'name'      => 'DABC Beer Info',
+			'id'        => 'dabc-beer-info',
 			'post_type' => self::POST_TYPE
 		) );
 
-		$box->createOption( array(
-			'name' => 'DABC Name',
+		$dabc_box->createOption( array(
+			'name' => 'Description',
 			'id'   => self::DABC_NAME_OPTION,
 			'desc' => 'The original description from the DABC'
 		) );
 
-		$box->createOption( array(
+		$dabc_box->createOption( array(
 			'name' => 'CS Code',
 			'id'   => self::CS_CODE_OPTION,
 			'desc' => 'The DABC\'s SKU for this beer'
 		) );
 
-		$box->createOption( array(
+		$dabc_box->createOption( array(
 			'name' => 'Price',
 			'id'   => self::PRICE_OPTION
 		) );
 
-		$box->createOption( array(
-			'name' => 'Ratebeer URL',
+		$rb_box = $this->titan->createMetaBox( array(
+			'name'      => 'Ratebeer Info',
+			'id'        => 'ratebeer-info',
+			'post_type' => self::POST_TYPE
+		) );
+
+		$rb_box->createOption( array(
+			'name' => 'URL',
 			'id'   => self::RATEBEER_URL_OPTION
 		) );
 
-		$box->createOption( array(
-			'name' => 'Ratebeer Overall Score',
+		$rb_box->createOption( array(
+			'name' => 'Overall Score',
 			'id'   => self::RATEBEER_OVERALL_SCORE
 		) );
 
-		$box->createOption( array(
-			'name' => 'Ratebeer Style Score',
+		$rb_box->createOption( array(
+			'name' => 'Style Score',
 			'id'   => self::RATEBEER_STYLE_SCORE
+		) );
+
+		$rb_box->createOption( array(
+			'name' => 'Calories',
+			'id'   => self::RATEBEER_CALORIES
+		) );
+
+		$rb_box->createOption( array(
+			'name' => 'ABV',
+			'id'   => self::RATEBEER_ABV
 		) );
 
 	}
