@@ -8,21 +8,25 @@ use Symfony\Component\DomCrawler\Crawler;
 
 class DABC_Beer_Post_Type {
 
-	const POST_TYPE           = 'dabc-beer';
-	const DEPT_TAXONOMY       = 'dabc-dept';
-	const CAT_TAXONOMY        = 'dabc-cat';
-	const SIZE_TAXONOMY       = 'beer-size';
-	const STATUS_TAXONOMY     = 'dabc-status';
-	const STYLE_TAXONOMY      = 'beer-style';
-	const DABC_BEER_LIST_URL  = 'http://www.webapps.abc.utah.gov/Production/OnlinePriceList/DisplayPriceList.aspx?DivCd=T';
-	const TITAN_NAMESPACE     = 'dabc-beer';
-	const DABC_NAME_OPTION    = 'dabc-name';
-	const CS_CODE_OPTION      = 'cs-code';
-	const PRICE_OPTION        = 'price';
-	const RATEBEER_BASE_URL   = 'http://www.ratebeer.com';
-	const RATEBEER_URL_OPTION = 'ratebeer-url';
-	const RATEBEER_SEARCHED   = 'has-ratebeer-searched';
-	const RATEBEER_MAP_CRON   = 'map_ratebeer';
+	const POST_TYPE              = 'dabc-beer';
+	const DEPT_TAXONOMY          = 'dabc-dept';
+	const CAT_TAXONOMY           = 'dabc-cat';
+	const SIZE_TAXONOMY          = 'beer-size';
+	const STATUS_TAXONOMY        = 'dabc-status';
+	const STYLE_TAXONOMY         = 'beer-style';
+	const DABC_BEER_LIST_URL     = 'http://www.webapps.abc.utah.gov/Production/OnlinePriceList/DisplayPriceList.aspx?DivCd=T';
+	const TITAN_NAMESPACE        = 'dabc-beer';
+	const DABC_NAME_OPTION       = 'dabc-name';
+	const CS_CODE_OPTION         = 'cs-code';
+	const PRICE_OPTION           = 'price';
+	const RATEBEER_BASE_URL      = 'http://www.ratebeer.com';
+	const RATEBEER_URL_OPTION    = 'ratebeer-url';
+	const RATEBEER_SEARCHED      = 'has-ratebeer-searched';
+	const RATEBEER_MAP_CRON      = 'map_ratebeer';
+	const RATEBEER_SYNC_CRON     = 'sync_ratebeer';
+	const RATEBEER_SYNCED        = 'has-ratebeer-sync';
+	const RATEBEER_OVERALL_SCORE = 'ratebeer-overall-score';
+	const RATEBEER_STYLE_SCORE   = 'ratebeer-style-score';
 
 	var $titan;
 	var $dabc_column_map;
@@ -129,6 +133,16 @@ class DABC_Beer_Post_Type {
 			'id'   => self::RATEBEER_URL_OPTION
 		) );
 
+		$box->createOption( array(
+			'name' => 'Ratebeer Overall Score',
+			'id'   => self::RATEBEER_OVERALL_SCORE
+		) );
+
+		$box->createOption( array(
+			'name' => 'Ratebeer Style Score',
+			'id'   => self::RATEBEER_STYLE_SCORE
+		) );
+
 	}
 
 	function register_taxonomies() {
@@ -158,6 +172,8 @@ class DABC_Beer_Post_Type {
 	function attach_hooks() {
 
 		add_action( self::RATEBEER_MAP_CRON, array( $this, 'cron_map_dabc_beer_to_ratebeer' ) );
+
+		add_action( self::RATEBEER_SYNC_CRON, array( $this, 'cron_sync_dabc_beer_with_ratebeer' ) );
 
 	}
 
@@ -474,7 +490,7 @@ class DABC_Beer_Post_Type {
 	 * @param string $html HTML search results from Ratebeer
 	 * @return array beers found in Ratebeer html response
 	 */
-	function parse_ratebeer_response( $html ) {
+	function parse_ratebeer_search_response( $html ) {
 
 		$beers = array();
 
@@ -524,7 +540,7 @@ class DABC_Beer_Post_Type {
 
 		}
 
-		$beers = $this->parse_ratebeer_response( $response );
+		$beers = $this->parse_ratebeer_search_response( $response );
 
 		$beers = array_filter( $beers, function( $beer ) {
 
@@ -543,7 +559,7 @@ class DABC_Beer_Post_Type {
 	 * @param int $post_id beer post ID
 	 * @return bool success
 	 */
-	function mark_beer_as_ratebeer_processed( $post_id ) {
+	function mark_beer_as_ratebeer_searched( $post_id ) {
 
 		return (bool) update_post_meta( $post_id, self::RATEBEER_SEARCHED, true );
 
@@ -623,7 +639,7 @@ class DABC_Beer_Post_Type {
 	}
 
 	/**
-	 * WP-Cron hook callback for syncing a beer with Ratebeer
+	 * WP-Cron hook callback for searching a beer on Ratebeer
 	 * Marks beer as processed on success, or rescedules itself on failure
 	 *
 	 * @param int $post_id beer post ID
@@ -634,13 +650,199 @@ class DABC_Beer_Post_Type {
 
 		if ( $success ) {
 
-			$this->mark_beer_as_ratebeer_processed( $post_id );
+			$this->mark_beer_as_ratebeer_searched( $post_id );
 
 		} else {
 
 			$this->schedule_ratebeer_search_for_beer( $post_id, 10 );
 
 		}
+
+	}
+
+	/**
+	 * Flag a beer as having been synced with Ratebeer (single beer page)
+	 *
+	 * @param int $post_id beer post ID
+	 * @return bool success
+	 */
+	function mark_beer_as_ratebeer_synced( $post_id ) {
+
+		return (bool) update_post_meta( $post_id, self::RATEBEER_SYNCED, true );
+
+	}
+
+	/**
+	 * Retrieve info and ratings from Ratebeer for beers that have been mapped
+	 */
+	function sync_beers_with_ratebeer() {
+
+		$unsynced_beers = new WP_Query( array(
+			'post_type'      => self::POST_TYPE,
+			'meta_query'     => array(
+				array(
+					'key'     => self::RATEBEER_SYNCED,
+					'value'   => '',
+					'compare' => 'NOT EXISTS'
+				)
+			),
+			'no_found_rows'  => true,
+			'posts_per_page' => -1,
+			'fields'         => 'ids'
+		) );
+
+		foreach ( $unsynced_beers->posts as $post_id ) {
+
+			if ( $this->titan->getOption( self::RATEBEER_URL_OPTION, $post_id ) ) {
+
+				$this->schedule_ratebeer_sync_for_beer( $post_id );
+
+			}
+
+		}
+
+	}
+
+	/**
+	 * Schedule a job to sync a single beer with Ratebeer
+	 *
+	 * @param int $post_id beer post ID
+	 * @param int $offset_in_minutes optional. delay (from right now) of cron job
+	 */
+	function schedule_ratebeer_sync_for_beer( $post_id, $offset_in_minutes = 0 ) {
+
+		$timestamp = ( time() + ( $offset_in_minutes * MINUTE_IN_SECONDS ) );
+
+		wp_schedule_single_event( $timestamp, self::RATEBEER_SYNC_CRON, array( $post_id ) );
+
+	}
+
+	/**
+	 * WP-Cron hook callback for syncing a beer with Ratebeer
+	 * Marks beer as processed on success, or rescedules itself on failure
+	 *
+	 * @param int $post_id beer post ID
+	 */
+	function cron_sync_dabc_beer_with_ratebeer( $post_id ) {
+
+		$success = $this->sync_dabc_beer_with_ratebeer( $post_id );
+
+		if ( $success ) {
+
+			$this->mark_beer_as_ratebeer_synced( $post_id );
+
+		} else {
+
+			$this->schedule_ratebeer_sync_for_beer( $post_id, 10 );
+
+		}
+
+	}
+
+	/**
+	 * For a given DABC beer post ID, sync date with ratebeer
+	 *
+	 * @param int $post_id
+	 * @return bool success
+	 */
+	function sync_dabc_beer_with_ratebeer( $post_id ) {
+
+		$post = get_post( $post_id );
+
+		$beer_path = $this->titan->getOption( self::RATEBEER_URL_OPTION, $post_id );
+
+		$beer_info = $this->sync_ratebeer( $beer_path );
+
+		if ( is_array( $beer_info ) && $beer_info ) {
+
+			$this->titan->setOption( self::RATEBEER_OVERALL_SCORE, $beer_info['overall_score'], $post_id );
+
+			$this->titan->setOption( self::RATEBEER_STYLE_SCORE, $beer_info['style_score'], $post_id );
+
+			return true;
+
+		}
+
+		return false;
+
+	}
+
+	/**
+	 * Sync Ratebeer
+	 *
+	 * @param string $path beer path on Ratebeer
+	 * @return boolean|array boolean false on error, array of beer info on success
+	 */
+	function sync_ratebeer( $path ) {
+
+		$response = $this->ratebeer_sync_request( $path );
+
+		if ( ( false === $response ) || is_wp_error( $response ) ) {
+
+			return false;
+
+		}
+
+		$info = $this->parse_ratebeer_sync_response( $response );
+
+		return $info;
+
+	}
+
+	/**
+	 * Make sync request to Ratebeer
+	 *
+	 * @param string $path - beer path on ratebeer
+	 * @return bool|WP_Error|string boolean false if non 200, WP_Error on request error, HTML string on success
+	 */
+	function ratebeer_sync_request( $path ) {
+
+		$result = false;
+
+		$response = wp_remote_get(
+			self::RATEBEER_BASE_URL . $path,
+			array(
+				'timeout' => 10
+			)
+		);
+
+		if ( is_wp_error( $response ) ) {
+
+			$result = $response;
+
+		} else if ( 200 === wp_remote_retrieve_response_code( $response ) ) {
+
+			$result = wp_remote_retrieve_body( $response );
+
+		}
+
+		return $result;
+
+	}
+
+	/**
+	 * Produce an array of beer info from Ratebeer single beer page markup
+	 *
+	 * @param string $html HTML beer page from Ratebeer
+	 * @return array beer info found in Ratebeer html response
+	 */
+	function parse_ratebeer_sync_response( $html ) {
+
+		$info = array();
+
+		$crawler = new Crawler( $html );
+
+		$overall_score = $crawler->filter( 'span[itemprop="rating"] span:not([style])' );
+
+		$overall_score = iterator_count( $overall_score ) ? $overall_score->text() : 'N/A';
+
+		$style_score   = $crawler->filter( 'span[itemprop="average"]' );
+
+		$style_score   = iterator_count( $style_score ) ? $style_score->text() : 'N/A';
+
+		$info = compact( 'overall_score', 'style_score' );
+
+		return $info;
 
 	}
 
