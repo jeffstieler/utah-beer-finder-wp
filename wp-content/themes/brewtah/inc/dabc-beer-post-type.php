@@ -793,6 +793,19 @@ class DABC_Beer_Post_Type {
 
 			$this->titan->setOption( self::RATEBEER_STYLE_SCORE, $beer_info['style_score'], $post_id );
 
+			$this->titan->setOption( self::RATEBEER_ABV, $beer_info['abv'], $post_id );
+
+			$this->titan->setOption( self::RATEBEER_CALORIES, $beer_info['calories'], $post_id );
+
+			if ( ! empty( $beer_info['description'] ) ) {
+
+				wp_update_post( array(
+					'ID'           => $post_id,
+					'post_content' => $beer_info['description']
+				) );
+
+			}
+
 			return true;
 
 		}
