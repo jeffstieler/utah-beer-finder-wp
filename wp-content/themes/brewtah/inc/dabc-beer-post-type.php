@@ -24,6 +24,7 @@ class DABC_Beer_Post_Type {
 	const RATEBEER_SEARCHED      = 'has-ratebeer-searched';
 	const RATEBEER_MAP_CRON      = 'map_ratebeer';
 	const RATEBEER_SYNC_CRON     = 'sync_ratebeer';
+	const RATEBEER_IMAGE_CRON    = 'image_ratebeer';
 	const RATEBEER_SYNCED        = 'has-ratebeer-sync';
 	const RATEBEER_ID            = 'ratebeer-id';
 	const RATEBEER_OVERALL_SCORE = 'ratebeer-overall-score';
@@ -31,6 +32,7 @@ class DABC_Beer_Post_Type {
 	const RATEBEER_CALORIES      = 'ratebeer-calories';
 	const RATEBEER_ABV           = 'ratebeer-abv';
 	const RATEBEER_IMGURL_FORMAT = 'http://res.cloudinary.com/ratebeer/image/upload/beer_%s.jpg';
+	const RATEBEER_IMG_SEARCHED  = 'has-ratebeer-image';
 
 	var $titan;
 	var $dabc_column_map;
@@ -199,6 +201,8 @@ class DABC_Beer_Post_Type {
 		add_action( self::RATEBEER_MAP_CRON, array( $this, 'cron_map_dabc_beer_to_ratebeer' ) );
 
 		add_action( self::RATEBEER_SYNC_CRON, array( $this, 'cron_sync_dabc_beer_with_ratebeer' ) );
+
+		add_action( self::RATEBEER_IMAGE_CRON, array( $this, 'sync_featured_image_with_ratebeer' ), 10, 2 );
 
 	}
 
@@ -956,42 +960,101 @@ class DABC_Beer_Post_Type {
 	}
 
 	/**
+	 * Grab featured images from Ratebeer
+	 */
+	function sync_featured_images_with_ratebeer() {
+
+		$no_image_beers = new WP_Query( array(
+			'post_type'      => self::POST_TYPE,
+			'posts_per_page' => -1,
+			'fields'         => 'ids',
+			'meta_query'     => array(
+				array(
+					'key'     => '_thumbnail_id',
+					'value'   => '',
+					'compare' => 'NOT EXISTS'
+				)
+			)
+		) );
+
+		foreach ( $no_image_beers->posts as $post_id ) {
+
+			$ratebeer_id  = $this->titan->getOption( self::RATEBEER_ID, $post_id );
+
+			$image_synced = $this->titan->getOption( self::RATEBEER_IMG_SEARCHED, $post_id );
+
+			if ( $ratebeer_id && ! $image_synced ) {
+
+				$this->schedule_ratebeer_image_sync_for_beer( $ratebeer_id, $post_id );
+
+			}
+
+		}
+
+	}
+
+	/**
+	 * Schedule a job to download a beer image from Ratebeer
+	 *
+	 * @param int $post_id beer post ID
+	 * @param int $offset_in_minutes optional. delay (from right now) of cron job
+	 */
+	function schedule_ratebeer_image_sync_for_beer( $ratebeer_id, $post_id, $offset_in_minutes = 0 ) {
+
+		$timestamp = ( time() + ( $offset_in_minutes * MINUTE_IN_SECONDS ) );
+
+		wp_schedule_single_event( $timestamp, self::RATEBEER_IMAGE_CRON, array( $ratebeer_id, $post_id ) );
+
+	}
+
+	/**
+	 * Flag a beer as having an image sync attempt with Ratebeer
+	 *
+	 * @param int $post_id beer post ID
+	 * @return bool success
+	 */
+	function mark_beer_as_image_searched( $post_id ) {
+
+		return (bool) update_post_meta( $post_id, self::RATEBEER_IMG_SEARCHED, true );
+
+	}
+
+	/**
 	 * Download a beer's image from Ratebeer and set as it's featured image
 	 *
 	 * @param int $post_id
 	 */
-	function sync_featured_image_with_ratebeer( $post_id ) {
+	function sync_featured_image_with_ratebeer( $ratebeer_id, $post_id ) {
 
-		$ratebeer_id = $this->titan->getOption( self::RATEBEER_ID, $post_id );
+		$image_url = $this->get_ratebeer_image_url( $ratebeer_id );
 
-		if ( $ratebeer_id ) {
+		$result    = media_sideload_image( $image_url, $post_id );
 
-			$image_url = $this->get_ratebeer_image_url( $ratebeer_id );
+		if ( is_wp_error( $result ) ) {
 
-			$result    = media_sideload_image( $image_url, $post_id );
+			if ( 'http_404' === $result->get_error_code() ) {
 
-			if ( is_wp_error( $result ) ) {
-
-				if ( 'http_404' === $result->get_error_code() ) {
-
-					// TODO: mark beer as having image download attempt
-				}
+				$this->mark_beer_as_image_searched( $post_id );
 
 			} else {
 
-				$images = get_attached_media( 'image', $post_id );
-
-				$thumbnail = array_shift( $images );
-
-				if ( ! is_null( $thumbnail ) ) {
-
-					set_post_thumbnail( $post_id, $thumbnail->ID );
-
-				}
-
-				// TODO: mark beer as having image download attempt
+				$this->schedule_ratebeer_image_sync_for_beer( $ratebeer_id, $post_id, 10 );
 
 			}
+
+		} else {
+
+			$images = get_attached_media( 'image', $post_id );
+
+			$thumbnail = array_shift( $images );
+
+			if ( ! is_null( $thumbnail ) ) {
+
+				set_post_thumbnail( $post_id, $thumbnail->ID );
+
+			}
+
+			$this->mark_beer_as_image_searched( $post_id );
 
 		}
 
@@ -1000,10 +1063,3 @@ class DABC_Beer_Post_Type {
 }
 
 add_action( 'init', array( new DABC_Beer_Post_Type(), 'init' ) );
-
-
-add_action( 'admin__head', function() {
-	$dabc = new DABC_Beer_Post_Type();
-	$dabc->sync_featured_image_with_ratebeer(2442);
-
-} );
