@@ -556,9 +556,7 @@ class DABC_Beer_Post_Type {
 
 		$beers = array();
 
-		$crawler = new Crawler();
-
-		$crawler->addHtmlContent( $html );
+		$crawler = new Crawler( $html );
 
 		$no_results = $crawler->filter( 'span.greenbeerhed' );
 
