@@ -915,13 +915,13 @@ class DABC_Beer_Post_Type {
 		$calories = '';
 		$abv      = '';
 
-		if ( 4 === iterator_count( $info ) ) {
+		if ( $info_count = iterator_count( $info ) ) {
 
 			// calories (per 12oz)
-			$calories = $info->eq( 2 )->text();
+			$calories = $info->eq( $info_count - 2 )->text();
 
 			// abv %
-			$abv = $info->eq( 3 )->text();
+			$abv = $info->last()->text();
 
 		}
 
