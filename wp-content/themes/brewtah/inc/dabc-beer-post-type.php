@@ -293,21 +293,34 @@ class DABC_Beer_Post_Type {
 
 	}
 
-	function get_beer_list_from_dabc() {
+	/**
+	 * HTTP request helper
+	 *
+	 * @param string $url URL to request
+	 * @param array $args wp_remote_request() arguments
+	 * @return boolean|WP_Error|string - bool on non-200, WP_Error on error, string body on 200
+	 */
+	function _make_http_request( $url, $args = array() ) {
 
-		$result = false;
-
-		$response = wp_remote_get( self::DABC_BEER_LIST_URL );
+		$response = wp_remote_request( $url, $args );
 
 		if ( is_wp_error( $response ) ) {
 
-			$result = $response;
+			return $response;
 
 		} else if ( 200 === wp_remote_retrieve_response_code( $response ) ) {
 
-			$result = wp_remote_retrieve_body( $response );
+			return wp_remote_retrieve_body( $response );
 
 		}
+
+		return false;
+
+	}
+
+	function get_beer_list_from_dabc() {
+
+		$result = $this->_make_http_request( self::DABC_BEER_LIST_URL );
 
 		return $result;
 
@@ -480,11 +493,10 @@ class DABC_Beer_Post_Type {
 	 */
 	function ratebeer_search_request( $query ) {
 
-		$result = false;
-
-		$response = wp_remote_post(
+		$result = $this->_make_http_request(
 			self::RATEBEER_BASE_URL . '/findbeer.asp',
 			array(
+				'method'  => 'POST',
 				'headers' => array(
 					'Content-Type' => 'application/x-www-form-urlencoded'
 				),
@@ -494,16 +506,6 @@ class DABC_Beer_Post_Type {
 				'timeout' => 10
 			)
 		);
-
-		if ( is_wp_error( $response ) ) {
-
-			$result = $response;
-
-		} else if ( 200 === wp_remote_retrieve_response_code( $response ) ) {
-
-			$result = wp_remote_retrieve_body( $response );
-
-		}
 
 		return $result;
 
@@ -876,24 +878,12 @@ class DABC_Beer_Post_Type {
 	 */
 	function ratebeer_sync_request( $path ) {
 
-		$result = false;
-
-		$response = wp_remote_get(
+		$result = $this->_make_http_request(
 			self::RATEBEER_BASE_URL . $path,
 			array(
 				'timeout' => 10
 			)
 		);
-
-		if ( is_wp_error( $response ) ) {
-
-			$result = $response;
-
-		} else if ( 200 === wp_remote_retrieve_response_code( $response ) ) {
-
-			$result = wp_remote_retrieve_body( $response );
-
-		}
 
 		return $result;
 
