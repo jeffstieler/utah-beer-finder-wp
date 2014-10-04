@@ -147,12 +147,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/CssSelector.git",
-                "reference": "fc60f879b9c3d39963d717e20a03bb72c7ac2d58"
+                "reference": "0c11572e1420ae1e59309bb188f8daed5545717c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/CssSelector/zipball/fc60f879b9c3d39963d717e20a03bb72c7ac2d58",
-                "reference": "fc60f879b9c3d39963d717e20a03bb72c7ac2d58",
+                "url": "https://api.github.com/repos/symfony/CssSelector/zipball/0c11572e1420ae1e59309bb188f8daed5545717c",
+                "reference": "0c11572e1420ae1e59309bb188f8daed5545717c",
                 "shasum": ""
             },
             "require": {
@@ -189,7 +189,7 @@
             ],
             "description": "Symfony CssSelector Component",
             "homepage": "http://symfony.com",
-            "time": "2014-09-22 11:59:59"
+            "time": "2014-10-01 05:53:11"
         },
         {
             "name": "symfony/dom-crawler",
@@ -198,12 +198,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/DomCrawler.git",
-                "reference": "029695752b5f3dfccae4fcc117ba6446a706e107"
+                "reference": "14adb9c3b16796097d8d48f9393099422fde5c59"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/DomCrawler/zipball/029695752b5f3dfccae4fcc117ba6446a706e107",
-                "reference": "029695752b5f3dfccae4fcc117ba6446a706e107",
+                "url": "https://api.github.com/repos/symfony/DomCrawler/zipball/14adb9c3b16796097d8d48f9393099422fde5c59",
+                "reference": "14adb9c3b16796097d8d48f9393099422fde5c59",
                 "shasum": ""
             },
             "require": {
@@ -242,7 +242,7 @@
             ],
             "description": "Symfony DomCrawler Component",
             "homepage": "http://symfony.com",
-            "time": "2014-09-22 11:59:59"
+            "time": "2014-10-01 05:53:11"
         },
         {
             "name": "upstatement/jigsaw",
