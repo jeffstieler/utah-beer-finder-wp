@@ -267,9 +267,6 @@ class DABC_Beer_Post_Type {
 		// "BEER NAME         355ml" => "BEER NAME"
 		$beer_name = trim( preg_replace( '/\d+ml$/', '', $beer_name ) );
 
-		// remove packaging from end of description, trim whitespace
-		$beer_name = trim( preg_replace( '/CANS?$/', '', $beer_name ) );
-
 		// BEER NAME => Beer Name
 		$beer_name = ucwords( strtolower( $beer_name ) );
 
