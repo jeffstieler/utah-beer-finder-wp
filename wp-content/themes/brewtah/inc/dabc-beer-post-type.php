@@ -352,11 +352,7 @@ class DABC_Beer_Post_Type {
 
 	function parse_dabc_beer_list( $html ) {
 
-		$beers = array();
-
-		$crawler = new Crawler();
-
-		$crawler->addHtmlContent( $html );
+		$crawler = new Crawler( $html );
 
 		$table_rows = $crawler->filter( '#ctl00_ContentPlaceHolderBody_gvPricelist > tr' );
 
