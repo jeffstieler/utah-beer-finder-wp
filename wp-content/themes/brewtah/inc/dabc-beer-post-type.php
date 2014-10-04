@@ -30,6 +30,7 @@ class DABC_Beer_Post_Type {
 	const RATEBEER_STYLE_SCORE   = 'ratebeer-style-score';
 	const RATEBEER_CALORIES      = 'ratebeer-calories';
 	const RATEBEER_ABV           = 'ratebeer-abv';
+	const RATEBEER_IMGURL_FORMAT = 'http://res.cloudinary.com/ratebeer/image/upload/beer_%s.jpg';
 
 	var $titan;
 	var $dabc_column_map;
@@ -942,6 +943,67 @@ class DABC_Beer_Post_Type {
 
 	}
 
+	/**
+	 * Build a beer image URL from it's Ratebeer ID
+	 *
+	 * @param int $id
+	 * @return string URL for Ratebeer image
+	 */
+	function get_ratebeer_image_url( $id ) {
+
+		return sprintf( self::RATEBEER_IMGURL_FORMAT, $id );
+
+	}
+
+	/**
+	 * Download a beer's image from Ratebeer and set as it's featured image
+	 *
+	 * @param int $post_id
+	 */
+	function sync_featured_image_with_ratebeer( $post_id ) {
+
+		$ratebeer_id = $this->titan->getOption( self::RATEBEER_ID, $post_id );
+
+		if ( $ratebeer_id ) {
+
+			$image_url = $this->get_ratebeer_image_url( $ratebeer_id );
+
+			$result    = media_sideload_image( $image_url, $post_id );
+
+			if ( is_wp_error( $result ) ) {
+
+				if ( 'http_404' === $result->get_error_code() ) {
+
+					// TODO: mark beer as having image download attempt
+				}
+
+			} else {
+
+				$images = get_attached_media( 'image', $post_id );
+
+				$thumbnail = array_shift( $images );
+
+				if ( ! is_null( $thumbnail ) ) {
+
+					set_post_thumbnail( $post_id, $thumbnail->ID );
+
+				}
+
+				// TODO: mark beer as having image download attempt
+
+			}
+
+		}
+
+	}
+
 }
 
 add_action( 'init', array( new DABC_Beer_Post_Type(), 'init' ) );
+
+
+add_action( 'admin__head', function() {
+	$dabc = new DABC_Beer_Post_Type();
+	$dabc->sync_featured_image_with_ratebeer(2442);
+
+} );
