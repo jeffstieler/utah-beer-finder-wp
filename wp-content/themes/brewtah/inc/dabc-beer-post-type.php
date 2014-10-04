@@ -25,6 +25,7 @@ class DABC_Beer_Post_Type {
 	const RATEBEER_MAP_CRON      = 'map_ratebeer';
 	const RATEBEER_SYNC_CRON     = 'sync_ratebeer';
 	const RATEBEER_SYNCED        = 'has-ratebeer-sync';
+	const RATEBEER_ID            = 'ratebeer-id';
 	const RATEBEER_OVERALL_SCORE = 'ratebeer-overall-score';
 	const RATEBEER_STYLE_SCORE   = 'ratebeer-style-score';
 	const RATEBEER_CALORIES      = 'ratebeer-calories';
@@ -134,6 +135,11 @@ class DABC_Beer_Post_Type {
 			'name'      => 'Ratebeer Info',
 			'id'        => 'ratebeer-info',
 			'post_type' => self::POST_TYPE
+		) );
+
+		$rb_box->createOption( array(
+			'name' => 'ID',
+			'id'   => self::RATEBEER_ID
 		) );
 
 		$rb_box->createOption( array(
@@ -525,6 +531,12 @@ class DABC_Beer_Post_Type {
 
 			$beer['url'] = $cols->eq( 0 )->filter( 'a' )->attr( 'href' );
 
+			$id_pattern_matches = array();
+
+			preg_match( '/\/(\d+)\/$/', $beer['url'], $id_pattern_matches );
+
+			$beer['id'] = $id_pattern_matches[1];
+
 		}
 
 		return $beer;
@@ -636,6 +648,8 @@ class DABC_Beer_Post_Type {
 				$titan = TitanFramework::getInstance( self::TITAN_NAMESPACE );
 
 				$titan->setOption( self::RATEBEER_URL_OPTION, $beer['url'], $post_id );
+
+				$titan->setOption( self::RATEBEER_ID, $beer['id'], $post_id );
 
 			}
 
