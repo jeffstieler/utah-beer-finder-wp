@@ -1044,6 +1044,70 @@ class DABC_Beer_Post_Type {
 
 	}
 
+	/**
+	 * Get store inventories for a given CS Code
+	 *
+	 * @param string $cs_code DABC Beer SKU
+	 * @return boolean|array false on failure, array of store inventories on success
+	 */
+	function search_dabc_inventory_for_cs_code( $cs_code ) {
+
+		$url = 'http://www.webapps.abc.utah.gov/Production/OnlineInventoryQuery/IQ/InventoryQuery.aspx';
+
+		$result = $this->_make_http_request( $url );
+
+		if ( $result && ! is_wp_error( $result ) ) {
+
+			$crawler = new Crawler( $result );
+
+			$viewstate  = $crawler->filter( '#__VIEWSTATE' )->attr( 'value' );
+
+			$validation = $crawler->filter( '#__EVENTVALIDATION' )->attr( 'value' );
+
+			$result = $this->_make_http_request(
+				$url,
+				array(
+					'method'  => 'POST',
+					'headers' => array(
+						'Content-Type' => 'application/x-www-form-urlencoded; charset=UTF-8',
+						'User-Agent' => 'Mozilla'
+					),
+					'body' => array(
+						'__VIEWSTATE' => $viewstate,
+						'__EVENTVALIDATION' => $validation,
+						'__ASYNCPOST' => 'true',
+						'ctl00$ContentPlaceHolderBody$tbCscCode' => $cs_code
+					),
+					'timeout' => 10
+				)
+			);
+
+			if ( $result && ! is_wp_error( $result ) ) {
+
+				$crawler->clear();
+
+				$crawler->addHtmlContent( $result );
+
+				$rows = $crawler->filter( '#ContentPlaceHolderBody_gvInventoryDetails tr.gridViewRow' );
+
+				$inventory = $rows->each( function( $row ) {
+					$cols = $row->filter('td');
+					return array(
+						'store' => $cols->first()->text(),
+						'quantity' => $cols->eq( 2 )->text()
+					);
+				} );
+
+				return $inventory;
+
+			}
+
+		}
+
+		return false;
+
+	}
+
 }
 
 add_action( 'init', array( new DABC_Beer_Post_Type(), 'init' ) );
