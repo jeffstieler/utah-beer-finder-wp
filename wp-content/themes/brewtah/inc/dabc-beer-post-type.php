@@ -14,12 +14,10 @@ class DABC_Beer_Post_Type {
 	const SIZE_TAXONOMY          = 'beer-size';
 	const STATUS_TAXONOMY        = 'dabc-status';
 	const STYLE_TAXONOMY         = 'beer-style';
-	const DABC_BEER_LIST_URL     = 'http://www.webapps.abc.utah.gov/Production/OnlinePriceList/DisplayPriceList.aspx?DivCd=T';
 	const TITAN_NAMESPACE        = 'dabc-beer';
 	const DABC_NAME_OPTION       = 'dabc-name';
 	const CS_CODE_OPTION         = 'cs-code';
 	const PRICE_OPTION           = 'price';
-	const RATEBEER_BASE_URL      = 'http://www.ratebeer.com';
 	const RATEBEER_URL_OPTION    = 'ratebeer-url';
 	const RATEBEER_SEARCHED      = 'has-ratebeer-searched';
 	const RATEBEER_MAP_CRON      = 'map_ratebeer';
@@ -33,6 +31,10 @@ class DABC_Beer_Post_Type {
 	const RATEBEER_ABV           = 'ratebeer-abv';
 	const RATEBEER_IMGURL_FORMAT = 'http://res.cloudinary.com/ratebeer/image/upload/beer_%s.jpg';
 	const RATEBEER_IMG_SEARCHED  = 'has-ratebeer-image';
+	const RATEBEER_BASE_URL      = 'http://www.ratebeer.com';
+	const DABC_URL_BASE          = 'http://www.webapps.abc.utah.gov/Production';
+	const DABC_BEER_LIST_URL     = '/OnlinePriceList/DisplayPriceList.aspx?DivCd=T';
+	const DABC_INVENTORY_URL     = '/OnlineInventoryQuery/IQ/InventoryQuery.aspx';
 
 	var $titan;
 	var $dabc_column_map;
@@ -320,7 +322,7 @@ class DABC_Beer_Post_Type {
 
 	function get_beer_list_from_dabc() {
 
-		$result = $this->_make_http_request( self::DABC_BEER_LIST_URL );
+		$result = $this->_make_http_request( self::DABC_URL_BASE . self::DABC_BEER_LIST_URL );
 
 		return $result;
 
@@ -1052,9 +1054,7 @@ class DABC_Beer_Post_Type {
 	 */
 	function search_dabc_inventory_for_cs_code( $cs_code ) {
 
-		$url = 'http://www.webapps.abc.utah.gov/Production/OnlineInventoryQuery/IQ/InventoryQuery.aspx';
-
-		$result = $this->_make_http_request( $url );
+		$result = $this->_make_http_request( self::DABC_URL_BASE . self::DABC_INVENTORY_URL );
 
 		if ( $result && ! is_wp_error( $result ) ) {
 
