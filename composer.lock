@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "5ce8121979779d9b79158ad76924dac2",
+    "hash": "e8db61fcb9cf0dfcf49bb21c886e9666",
     "packages": [
         {
             "name": "composer/installers",
@@ -256,6 +256,86 @@
                 "composer/installers": "~1.0"
             },
             "type": "wordpress-plugin"
+        },
+        {
+            "name": "voceconnect/objects-to-objects",
+            "version": "1.2.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/voceconnect/objects-to-objects.git",
+                "reference": "53ea0ae777aa486e66e83a6b75a0d81abcae739b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/voceconnect/objects-to-objects/zipball/53ea0ae777aa486e66e83a6b75a0d81abcae739b",
+                "reference": "53ea0ae777aa486e66e83a6b75a0d81abcae739b",
+                "shasum": ""
+            },
+            "require": {
+                "voceconnect/post-selection-ui": "~1.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "3.7.*"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "src/",
+                    "admin/admin.php"
+                ],
+                "files": [
+                    "objects-to-objects.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPLv2+"
+            ],
+            "authors": [
+                {
+                    "name": "Michael Pretty",
+                    "email": "mpretty@voceconnect.com"
+                }
+            ],
+            "description": "A WordPress plugin/module that provides the ability to map relationships between posts and other post types",
+            "keywords": [
+                "Relationships",
+                "wordpress"
+            ],
+            "time": "2014-08-25 12:03:53"
+        },
+        {
+            "name": "voceconnect/post-selection-ui",
+            "version": "1.0.9",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/voceconnect/post-selection-ui.git",
+                "reference": "862b4e4c250372a19312473a747ed5f50b1b954c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/voceconnect/post-selection-ui/zipball/862b4e4c250372a19312473a747ed5f50b1b954c",
+                "reference": "862b4e4c250372a19312473a747ed5f50b1b954c",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "post-selection-ui.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPLv2+"
+            ],
+            "authors": [
+                {
+                    "name": "Mike Pretty",
+                    "email": "mpretty@voceconnect.com"
+                }
+            ],
+            "description": "A WordPress library to display a user interface to easily select posts from any post type",
+            "time": "2014-07-08 16:33:23"
         },
         {
             "name": "wordpress",

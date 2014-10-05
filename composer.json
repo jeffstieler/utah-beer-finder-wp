@@ -55,7 +55,8 @@
 		"symfony/css-selector": "~2.6",
 		"symfony/dom-crawler": "~2.5",
 		"wpackagist-plugin/titan-framework": "~1.5",
-		"upstatement/jigsaw": "~0.4"
+		"upstatement/jigsaw": "~0.4",
+		"voceconnect/objects-to-objects": "~1.2"
 	},
 	"extra": {
 		"webroot-dir": "wp",
