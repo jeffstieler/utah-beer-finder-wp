@@ -119,6 +119,11 @@ require dirname( __FILE__ ) . '/plugins/jigsaw/jigsaw.php';
 require dirname( __FILE__ ) . '/inc/dabc-beer-post-type.php';
 
 /**
+ * Include the DABC Store post type
+ */
+require dirname( __FILE__ ) . '/inc/dabc-store-post-type.php';
+
+/**
  * Implement the Custom Header feature.
  */
 //require get_template_directory() . '/inc/custom-header.php';
