@@ -201,46 +201,65 @@ class DABC_Store_Post_Type {
 
 	}
 
+	/**
+	 * Parse DABC store map JavaScript into PHP array of store info
+	 *
+	 * @param string $map_js abcMap.js contents from DABC site
+	 * @return array $stores array of stores' info
+	 */
+	function parse_dabc_store_map_js( $map_js ) {
+
+		$stores  = array();
+
+		$matches = array();
+
+		preg_match_all( '/^locations\.push\(({.+})\);/m', $map_js, $matches );
+
+		if ( isset( $matches[1] ) ) {
+
+			foreach ( $matches[1] as $store_json ) {
+
+				$store_json = preg_replace( '/ ([a-zA-Z][\w\d]*):/', ' "$1":', $store_json );
+
+				$store_json = str_replace( "'", '"', $store_json );
+
+				$store = json_decode( $store_json, ARRAY_A );
+
+				if ( ! is_null( $store['storeNumber'] ) ) {
+
+					$stores[] = $store;
+
+				}
+			}
+
+		}
+
+		return $stores;
+
+	}
+
 	function sync_stores_with_dabc() {
 
 		$map_js = $this->_make_http_request( self::STORES_JS_URL );
 
 		if ( $map_js && !is_wp_error( $map_js ) ) {
 
-			$matches = array();
+			$stores = $this->parse_dabc_store_map_js( $map_js );
 
-			preg_match_all( '/^locations\.push\(({.+})\);/m', $map_js, $matches );
+			foreach ( $stores as $store ) {
 
-			if ( isset( $matches[1] ) ) {
-
-				foreach ( $matches[1] as $store_json ) {
-
-					$store_json = preg_replace( '/ ([a-zA-Z][\w\d]*):/', ' "$1":', $store_json );
-
-					$store_json = str_replace( "'", '"', $store_json );
-
-					$store = json_decode( $store_json, ARRAY_A );
-
-					if ( is_null( $store['storeNumber'] ) ) {
-
-						continue;
-
-					}
-
-					$this->create_store( array(
-						'label'       => $store['label'],
-						'hours'       => $store['hours'],
-						'number'      => $store['storeNumber'],
-						'phone'       => $store['phone'],
-						'address1'    => $store['address01'],
-						'address2'    => $store['address02'],
-						'city'        => $store['whatCity'],
-						'google_zoom' => $store['googleZoom'],
-						'latitude'    => $store['latitude'],
-						'longitude'   => $store['longitude']
-					) );
-
-				}
+				$this->create_store( array(
+					'label'       => $store['label'],
+					'hours'       => $store['hours'],
+					'number'      => $store['storeNumber'],
+					'phone'       => $store['phone'],
+					'address1'    => $store['address01'],
+					'address2'    => $store['address02'],
+					'city'        => $store['whatCity'],
+					'google_zoom' => $store['googleZoom'],
+					'latitude'    => $store['latitude'],
+					'longitude'   => $store['longitude']
+				) );
 
 			}
 
