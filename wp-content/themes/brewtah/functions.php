@@ -114,14 +114,9 @@ require dirname( __FILE__ ) . '/plugins/titan-framework/titan-framework.php';
 require dirname( __FILE__ ) . '/plugins/jigsaw/jigsaw.php';
 
 /**
- * Include the DABC Beer post type
+ * Include DABC functionality
  */
-require dirname( __FILE__ ) . '/inc/dabc-beer-post-type.php';
-
-/**
- * Include the DABC Store post type
- */
-require dirname( __FILE__ ) . '/inc/dabc-store-post-type.php';
+require dirname( __FILE__ ) . '/inc/dabc/dabc.php';
 
 /**
  * Implement the Custom Header feature.
