@@ -147,6 +147,60 @@ class DABC_Store_Post_Type {
 
 	}
 
+	/**
+	 * Create a DABC Store post, including meta and taxonomy terms
+	 *
+	 * expected $store_info structure:
+	 *	array(
+	 *		"label"       => "Store #39"
+     *		"hours"       => "Monday - Saturday, 11:00 am to 10:00 pm",
+     *		"number"      => "39"
+     *		"address1"    => "(Wine Store) 161 North 900 East"
+     *		"address2"    => "St. George, UT 84770"
+     *		"phone"       => "(435) 674-9550"
+     *		"latitude"    => "37.1104731609"
+     *		"longitude"   => "-113.564036681"
+     *		"google_zoom" => "16"
+     *		"city"        => "St. George"
+	 *  )
+	 *
+	 * @param array $store_info
+	 */
+	function create_store( $store_info ) {
+
+		$post_id = wp_insert_post( array(
+			'post_type' => self::POST_TYPE,
+			'post_status' => 'publish',
+			'post_title' => $store_info['label'],
+			'post_content' => $store_info['hours']
+		) );
+
+		$this->titan->setOption( self::STORE_NUMBER, $store_info['number'], $post_id );
+
+		$this->titan->setOption( self::GOOGLE_ZOOM, $store_info['google_zoom'], $post_id );
+
+		$this->titan->setOption( self::ADDRESS_1, $store_info['address1'], $post_id );
+
+		$this->titan->setOption( self::ADDRESS_2, $store_info['address2'], $post_id );
+
+		$this->titan->setOption( self::PHONE_NUMBER, $store_info['phone'], $post_id );
+
+		$this->titan->setOption( self::LATITUDE, $store_info['latitude'], $post_id );
+
+		$this->titan->setOption( self::LONGITUDE, $store_info['longitude'], $post_id );
+
+		if ( ! term_exists( $store_info['city'], self::CITY_TAXONOMY ) ) {
+
+			wp_insert_term( $store_info['city'], self::CITY_TAXONOMY );
+
+		}
+
+		wp_set_object_terms( $post_id, $store_info['city'], self::CITY_TAXONOMY );
+
+		return $post_id;
+
+	}
+
 	function sync_stores_with_dabc() {
 
 		$map_js = $this->_make_http_request( self::STORES_JS_URL );
@@ -173,34 +227,18 @@ class DABC_Store_Post_Type {
 
 					}
 
-					$post_id = wp_insert_post( array(
-						'post_type' => self::POST_TYPE,
-						'post_status' => 'publish',
-						'post_title' => $store['label'],
-						'post_content' => $store['hours']
+					$this->create_store( array(
+						'label'       => $store['label'],
+						'hours'       => $store['hours'],
+						'number'      => $store['storeNumber'],
+						'phone'       => $store['phone'],
+						'address1'    => $store['address01'],
+						'address2'    => $store['address02'],
+						'city'        => $store['whatCity'],
+						'google_zoom' => $store['googleZoom'],
+						'latitude'    => $store['latitude'],
+						'longitude'   => $store['longitude']
 					) );
-
-					$this->titan->setOption( self::STORE_NUMBER, $store['storeNumber'], $post_id );
-
-					$this->titan->setOption( self::GOOGLE_ZOOM, $store['googleZoom'], $post_id );
-
-					$this->titan->setOption( self::ADDRESS_1, $store['address01'], $post_id );
-
-					$this->titan->setOption( self::ADDRESS_2, $store['address02'], $post_id );
-
-					$this->titan->setOption( self::PHONE_NUMBER, $store['phone'], $post_id );
-
-					$this->titan->setOption( self::LATITUDE, $store['latitude'], $post_id );
-
-					$this->titan->setOption( self::LONGITUDE, $store['longitude'], $post_id );
-
-					if ( ! term_exists( $store['whatCity'], self::CITY_TAXONOMY ) ) {
-
-						wp_insert_term( $store['whatCity'], self::CITY_TAXONOMY );
-
-					}
-
-					wp_set_object_terms( $post_id, $store['whatCity'], self::CITY_TAXONOMY );
 
 				}
 
