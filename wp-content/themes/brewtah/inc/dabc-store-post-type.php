@@ -147,6 +147,69 @@ class DABC_Store_Post_Type {
 
 	}
 
+	function sync_stores_with_dabc() {
+
+		$map_js = $this->_make_http_request( self::STORES_JS_URL );
+
+		if ( $map_js && !is_wp_error( $map_js ) ) {
+
+			$matches = array();
+
+			preg_match_all( '/^locations\.push\(({.+})\);/m', $map_js, $matches );
+
+			if ( isset( $matches[1] ) ) {
+
+				foreach ( $matches[1] as $store_json ) {
+
+					$store_json = preg_replace( '/ ([a-zA-Z][\w\d]*):/', ' "$1":', $store_json );
+
+					$store_json = str_replace( "'", '"', $store_json );
+
+					$store = json_decode( $store_json, ARRAY_A );
+
+					if ( is_null( $store['storeNumber'] ) ) {
+
+						continue;
+
+					}
+
+					$post_id = wp_insert_post( array(
+						'post_type' => self::POST_TYPE,
+						'post_status' => 'publish',
+						'post_title' => $store['label'],
+						'post_content' => $store['hours']
+					) );
+
+					$this->titan->setOption( self::STORE_NUMBER, $store['storeNumber'], $post_id );
+
+					$this->titan->setOption( self::GOOGLE_ZOOM, $store['googleZoom'], $post_id );
+
+					$this->titan->setOption( self::ADDRESS_1, $store['address01'], $post_id );
+
+					$this->titan->setOption( self::ADDRESS_2, $store['address02'], $post_id );
+
+					$this->titan->setOption( self::PHONE_NUMBER, $store['phone'], $post_id );
+
+					$this->titan->setOption( self::LATITUDE, $store['latitude'], $post_id );
+
+					$this->titan->setOption( self::LONGITUDE, $store['longitude'], $post_id );
+
+					if ( ! term_exists( $store['whatCity'], self::CITY_TAXONOMY ) ) {
+
+						wp_insert_term( $store['whatCity'], self::CITY_TAXONOMY );
+
+					}
+
+					wp_set_object_terms( $post_id, $store['whatCity'], self::CITY_TAXONOMY );
+
+				}
+
+			}
+
+		}
+
+	}
+
 }
 
 add_action( 'init', array( new DABC_Store_Post_Type(), 'init' ) );
