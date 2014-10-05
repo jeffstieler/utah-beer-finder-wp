@@ -1202,5 +1202,3 @@ class DABC_Beer_Post_Type {
 	}
 
 }
-
-add_action( 'init', array( new DABC_Beer_Post_Type(), 'init' ) );

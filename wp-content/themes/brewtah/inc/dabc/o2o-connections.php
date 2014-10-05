@@ -33,5 +33,3 @@ class DABC_O2O_Connections {
 	}
 	
 }
-
-add_action( 'init', array( new DABC_O2O_Connections(), 'init' ) );

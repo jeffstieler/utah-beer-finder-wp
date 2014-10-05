@@ -211,5 +211,3 @@ class DABC_Store_Post_Type {
 	}
 
 }
-
-add_action( 'init', array( new DABC_Store_Post_Type(), 'init' ) );
