@@ -1047,6 +1047,121 @@ class DABC_Beer_Post_Type {
 	}
 
 	/**
+	 * Grab the __VIEWSTATE and __EVENTVALIDATION hidden inputs from
+	 * a block of HTML containing an ASP.Net form
+	 *
+	 * @param string $html HTML containing an ASP.Net form
+	 * @return bool|array false on error, array of viewstate and validation field values on success
+	 */
+	function parse_required_asp_form_fields( $html ) {
+
+		$crawler    = new Crawler( $html );
+
+		$viewstate  = $crawler->filter( '#__VIEWSTATE' );
+
+		$validation = $crawler->filter( '#__EVENTVALIDATION' );
+
+		if ( iterator_count( $viewstate ) && iterator_count( $validation ) ) {
+
+			$form = array(
+				'__VIEWSTATE'       => $viewstate->attr( 'value' ),
+				'__EVENTVALIDATION' => $validation->attr( 'value' )
+			);
+
+			return $form;
+
+		}
+
+		return false;
+
+	}
+
+	/**
+	 * POST the DABC inventory search form
+	 *
+	 * @param string $cs_code DABC beer SKU
+	 * @param array $session_values __VIEWSTATE and __EVENTVALIDATION
+	 * @return bool|WP_Error|string see _make_http_request()
+	 */
+	function submit_dabc_inventory_form( $cs_code, $session_values ) {
+
+		$body = array_merge(
+			$session_values,
+			array(
+				'__ASYNCPOST' => 'true',
+				'ctl00$ContentPlaceHolderBody$tbCscCode' => $cs_code
+			)
+		);
+
+		$result = $this->_make_http_request(
+			self::DABC_URL_BASE . self::DABC_INVENTORY_URL,
+			array(
+				'method'  => 'POST',
+				'headers' => array(
+					'Content-Type' => 'application/x-www-form-urlencoded; charset=UTF-8',
+					'User-Agent'   => 'Mozilla'
+				),
+				'body'    => $body,
+				'timeout' => 10
+			)
+		);
+
+		return $result;
+
+	}
+
+	/**
+	 * Parse out the Store Number and Quantity from a DABC Inventory table row
+	 *
+	 * @param Crawler $row
+	 * @return boolean|array false on parsing error, array of store/qty on success
+	 */
+	function parse_dabc_inventory_search_result_row( $row ) {
+
+		$cols = $row->filter( 'td' );
+
+		if ( iterator_count( $cols ) ) {
+
+			return array(
+				'store'    => $cols->first()->text(),
+				'quantity' => $cols->eq( 2 )->text()
+			);
+
+		}
+
+		return false;
+
+	}
+
+	/**
+	 * Parse the HTML response from searching DABC inventory
+	 *
+	 * @param string $html
+	 * @return array list of store numbers and beer quantities
+	 */
+	function parse_dabc_inventory_search_response( $html ) {
+
+		$crawler   = new Crawler( $html );
+
+		$inventory = array();
+
+		$rows      = $crawler->filter( '#ContentPlaceHolderBody_gvInventoryDetails tr.gridViewRow' );
+
+		if ( iterator_count( $rows ) ) {
+
+			$inventory = $rows->each( function( Crawler $row ) {
+				return $this->parse_dabc_inventory_search_result_row( $row );
+			} );
+
+			$inventory = array_filter( $inventory );
+
+		}
+
+		return $inventory;
+
+	}
+
+	/**
 	 * Get store inventories for a given CS Code
 	 *
 	 * @param string $cs_code DABC Beer SKU
@@ -1054,57 +1169,35 @@ class DABC_Beer_Post_Type {
 	 */
 	function search_dabc_inventory_for_cs_code( $cs_code ) {
 
-		$result = $this->_make_http_request( self::DABC_URL_BASE . self::DABC_INVENTORY_URL );
+		$url    = self::DABC_URL_BASE . self::DABC_INVENTORY_URL;
 
-		if ( $result && ! is_wp_error( $result ) ) {
+		$result = $this->_make_http_request( $url );
 
-			$crawler = new Crawler( $result );
+		if ( ( false === $result ) || is_wp_error( $result ) ) {
 
-			$viewstate  = $crawler->filter( '#__VIEWSTATE' )->attr( 'value' );
-
-			$validation = $crawler->filter( '#__EVENTVALIDATION' )->attr( 'value' );
-
-			$result = $this->_make_http_request(
-				$url,
-				array(
-					'method'  => 'POST',
-					'headers' => array(
-						'Content-Type' => 'application/x-www-form-urlencoded; charset=UTF-8',
-						'User-Agent' => 'Mozilla'
-					),
-					'body' => array(
-						'__VIEWSTATE' => $viewstate,
-						'__EVENTVALIDATION' => $validation,
-						'__ASYNCPOST' => 'true',
-						'ctl00$ContentPlaceHolderBody$tbCscCode' => $cs_code
-					),
-					'timeout' => 10
-				)
-			);
-
-			if ( $result && ! is_wp_error( $result ) ) {
-
-				$crawler->clear();
-
-				$crawler->addHtmlContent( $result );
-
-				$rows = $crawler->filter( '#ContentPlaceHolderBody_gvInventoryDetails tr.gridViewRow' );
-
-				$inventory = $rows->each( function( $row ) {
-					$cols = $row->filter('td');
-					return array(
-						'store' => $cols->first()->text(),
-						'quantity' => $cols->eq( 2 )->text()
-					);
-				} );
-
-				return $inventory;
-
-			}
+			return false;
 
 		}
 
-		return false;
+		$form = $this->parse_required_asp_form_fields( $result );
+
+		if ( false === $form ) {
+
+			return false;
+
+		}
+
+		$result = $this->submit_dabc_inventory_form( $cs_code, $form );
+
+		if ( ( false === $result ) || is_wp_error( $result ) ) {
+
+			return false;
+
+		}
+
+		$inventory = $this->parse_dabc_inventory_search_response( $result );
+
+		return $inventory;
 
 	}
 
