@@ -42,6 +42,48 @@ class DABC {
 
 	}
 
+	/**
+	 * Search DABC inventory for given beer, associate it with store posts
+	 * where it's in stock and record the inventory quantities
+	 *
+	 * @param int $beer_post_id
+	 */
+	function sync_inventory_for_beer( $beer_post_id ) {
+
+		$cs_code = $this->beers->get_cs_code( $beer_post_id );
+
+		if ( ! $cs_code ) {
+
+			return;
+
+		}
+
+		$inventory = $this->beers->search_dabc_inventory_for_cs_code( $cs_code );
+
+		if ( ! $inventory ) {
+
+			return;
+
+		}
+
+		// TODO: remove beer from stores it's no longer in stock
+
+		foreach ( $inventory as $store_inventory ) {
+
+			$store_post = $this->stores->get_store_by_store_number( $store_inventory['store'] );
+
+			if ( $store_post ) {
+
+				$this->connections->add_beer_to_store( $beer_post_id, $store_post->ID );
+
+			}
+
+		}
+
+		$this->connections->set_beer_inventory( $beer_post_id, $inventory );
+
+	}
+
 }
 
 add_action( 'init', array( new DABC(), 'init' ) );
