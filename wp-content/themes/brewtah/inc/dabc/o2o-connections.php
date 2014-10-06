@@ -66,4 +66,63 @@ class DABC_O2O_Connections {
 
 	}
 
+	/**
+	 * Pack data (serialized) into the O2O connection term description
+	 *
+	 * @param string $connection_name
+	 * @param int $object_id
+	 * @param mixed $data
+	 * @return boolean|WP_Error|WP_Term
+	 */
+	function set_object_connection_term_data( $connection_name, $object_id, $data ) {
+
+		$connection = $this->o2o_connection_factory->get_connection( $connection_name );
+
+		$connection_term_id = $connection->get_object_termID( $object_id, false );
+
+		if ( $connection_term_id ) {
+
+			$args = array(
+				'description' => serialize( $data )
+			);
+
+			return wp_update_term( $connection_term_id, $connection->get_taxonomy(), $args );
+
+		}
+
+		return false;
+
+	}
+
+	/**
+	 * Retrieve the data packed into an O2O connection term's description
+	 *
+	 * @param string $connection_name
+	 * @param int $object_id
+	 * @return null|mixed null on failure, unserialized data on success
+	 */
+	function get_object_connection_term_data( $connection_name, $object_id ) {
+
+		$connection = $this->o2o_connection_factory->get_connection( $connection_name );
+
+		$connection_term_id = $connection->get_object_termID( $object_id, false );
+
+		$data = null;
+
+		if ( $connection_term_id ) {
+
+			$term = get_term( $connection_term_id, $connection->get_taxonomy() );
+
+			if ( ! is_wp_error( $term ) ) {
+
+				$data = unserialize( $term->description );
+
+			}
+
+		}
+
+		return $data;
+
+	}
+
 }
