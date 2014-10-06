@@ -147,7 +147,12 @@ class DABC_O2O_Connections {
 	 */
 	function set_beer_inventory( $beer_post_id, $inventory ) {
 
-		return $this->set_object_connection_term_data( self::DABC_STORE_BEERS, $beer_post_id, $inventory );
+		$data = array(
+			'last_updated' => date( 'Y-m-d H:i:s' ),
+			'inventory'    => $inventory
+		);
+
+		return $this->set_object_connection_term_data( self::DABC_STORE_BEERS, $beer_post_id, $data );
 
 	}
 
