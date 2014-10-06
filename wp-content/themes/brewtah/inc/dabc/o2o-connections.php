@@ -134,7 +134,20 @@ class DABC_O2O_Connections {
 	 */
 	function add_beer_to_store( $beer_post_id, $store_post_id ) {
 
-		return $this->set_connected_to( self::DABC_STORE_BEERS, $store_post_id, $beer_post_id, true );
+		return $this->set_connected_to( self::DABC_STORE_BEERS, $store_post_id, array( $beer_post_id ), true );
+
+	}
+
+	/**
+	 * Add beer inventory information to it's O2O connection term
+	 *
+	 * @param int $beer_post_id
+	 * @param array $inventory
+	 * @return bool|WP_Error|WP_Term
+	 */
+	function set_beer_inventory( $beer_post_id, $inventory ) {
+
+		return $this->set_object_connection_term_data( self::DABC_STORE_BEERS, $beer_post_id, $inventory );
 
 	}
 
