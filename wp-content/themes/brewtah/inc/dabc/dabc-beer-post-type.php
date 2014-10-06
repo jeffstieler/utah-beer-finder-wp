@@ -1122,10 +1122,11 @@ class DABC_Beer_Post_Type {
 
 		if ( iterator_count( $cols ) ) {
 
-			return array(
-				'store'    => $cols->first()->text(),
-				'quantity' => $cols->eq( 2 )->text()
-			);
+			$store    = preg_replace( '/^0+/', '', $cols->first()->text() );
+			
+			$quantity = (int) $cols->eq( 2 )->text();
+			
+			return compact( 'store', 'quantity' );
 
 		}
 
