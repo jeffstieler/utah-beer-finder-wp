@@ -148,6 +148,32 @@ class DABC_Store_Post_Type {
 	}
 
 	/**
+	 * Get a store post by it's DABC number
+	 *
+	 * @param string $store_number DABC store number
+	 * @return boolean|WP_Post false on no store found, store post otherwise
+	 */
+	function get_store_by_store_number( $store_number ) {
+
+		$store_query = new WP_Query( array(
+			'post_type'      => self::POST_TYPE,
+			'meta_key'       => self::TITAN_NAMESPACE . '_' . self::STORE_NUMBER,
+			'meta_value'     => $store_number,
+			'no_found_rows'  => true,
+			'posts_per_page' => 1
+		) );
+
+		if ( $store_query->have_posts() ) {
+
+			return $store_query->next_post();
+
+		}
+
+		return false;
+
+	}
+
+	/**
 	 * Create a DABC Store post, including meta and taxonomy terms
 	 *
 	 * expected $store_info structure:
