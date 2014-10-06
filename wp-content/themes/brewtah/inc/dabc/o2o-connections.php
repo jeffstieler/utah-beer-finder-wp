@@ -125,4 +125,17 @@ class DABC_O2O_Connections {
 
 	}
 
+	/**
+	 * Add a beer post to a store's connected beers
+	 *
+	 * @param int $beer_post_id
+	 * @param int $store_post_id
+	 * @return bool|WP_Error true on success, WP_Error otherwise
+	 */
+	function add_beer_to_store( $beer_post_id, $store_post_id ) {
+
+		return $this->set_connected_to( self::DABC_STORE_BEERS, $store_post_id, $beer_post_id, true );
+
+	}
+
 }
