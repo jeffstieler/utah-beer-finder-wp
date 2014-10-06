@@ -18,6 +18,8 @@ require_once( 'o2o-connections.php' );
 
 class DABC {
 
+	const BEER_INVENTORY_CRON = 'sync_inventory';
+
 	var $beers;
 	var $stores;
 	var $connections;
@@ -39,6 +41,14 @@ class DABC {
 		$this->stores->init();
 
 		$this->connections->init();
+
+		$this->attach_hooks();
+
+	}
+
+	function attach_hooks() {
+
+		add_action( self::BEER_INVENTORY_CRON, array( $this, 'sync_inventory_for_beer' ) );
 
 	}
 
@@ -74,6 +84,7 @@ class DABC {
 
 			if ( $store_post ) {
 
+				// TODO: only add beer to store if it isn't already associated
 				$this->connections->add_beer_to_store( $beer_post_id, $store_post->ID );
 
 			}
@@ -81,6 +92,36 @@ class DABC {
 		}
 
 		$this->connections->set_beer_inventory( $beer_post_id, $inventory );
+
+	}
+
+	/**
+	 * Schedule a one-time cron job to update a beer's inventory
+	 *
+	 * @param int $post_id
+	 * @param int $offset_in_minutes
+	 */
+	function schedule_inventory_sync_for_beer( $post_id, $offset_in_minutes = 0 ) {
+
+		$timestamp = ( time() + ( $offset_in_minutes * MINUTE_IN_SECONDS ) );
+
+		wp_schedule_single_event( $timestamp, self::BEER_INVENTORY_CRON, array( $post_id ) );
+
+	}
+
+	/**
+	 * Schedule one-time cron jobs to sync all beer inventory
+	 */
+	function sync_inventory_with_dabc() {
+
+		$beers = new WP_Query( array(
+			'post_type'      => DABC_Beer_Post_Type::POST_TYPE,
+			'post_status'    => 'publish',
+			'posts_per_page' => -1,
+			'fields'         => 'ids'
+		) );
+
+		array_map( array( $this, 'schedule_inventory_sync_for_beer' ), $beers->posts );
 
 	}
 
