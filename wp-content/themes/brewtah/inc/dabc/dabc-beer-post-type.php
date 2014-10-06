@@ -1201,4 +1201,16 @@ class DABC_Beer_Post_Type {
 
 	}
 
+	/**
+	 * Get DABC CS Code for given Beer post ID
+	 *
+	 * @param int $post_id beer post ID
+	 * @return string $cs_code DABC CS Code
+	 */
+	function get_cs_code( $post_id ) {
+
+		return $this->titan->getOption( self::CS_CODE_OPTION, $post_id );
+
+	}
+
 }
