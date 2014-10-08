@@ -822,8 +822,6 @@ class DABC_Beer_Post_Type {
 	 */
 	function sync_dabc_beer_with_ratebeer( $post_id ) {
 
-		$post = get_post( $post_id );
-
 		$beer_path = $this->titan->getOption( self::RATEBEER_URL_OPTION, $post_id );
 
 		$beer_info = $this->sync_ratebeer( $beer_path );
