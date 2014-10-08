@@ -18,6 +18,7 @@ class DABC_Beer_Post_Type {
 	const DABC_NAME_OPTION       = 'dabc-name';
 	const CS_CODE_OPTION         = 'cs-code';
 	const PRICE_OPTION           = 'price';
+	const DABC_INVENTORY         = 'dabc-store-inventory';
 	const RATEBEER_URL_OPTION    = 'ratebeer-url';
 	const RATEBEER_SEARCHED      = 'has-ratebeer-searched';
 	const RATEBEER_MAP_CRON      = 'map_ratebeer';
@@ -1123,9 +1124,9 @@ class DABC_Beer_Post_Type {
 		if ( iterator_count( $cols ) ) {
 
 			$store    = preg_replace( '/^0+/', '', $cols->first()->text() );
-			
+
 			$quantity = (int) $cols->eq( 2 )->text();
-			
+
 			return compact( 'store', 'quantity' );
 
 		}
@@ -1211,6 +1212,38 @@ class DABC_Beer_Post_Type {
 	function get_cs_code( $post_id ) {
 
 		return $this->titan->getOption( self::CS_CODE_OPTION, $post_id );
+
+	}
+
+	/**
+	 * Store beer inventory information
+	 *
+	 * @param int $beer_post_id
+	 * @param array $inventory
+	 * @return int|bool
+	 */
+	function set_beer_inventory( $beer_post_id, $inventory ) {
+
+		$data = array(
+			'last_updated' => date( 'Y-m-d H:i:s' ),
+			'inventory'    => $inventory
+		);
+
+		return update_post_meta( $beer_post_id, self::DABC_INVENTORY, $data );
+
+	}
+
+	/**
+	 * Get stored beer inventory
+	 *
+	 * @param int $beer_post_id
+	 * @return mixed
+	 */
+	function get_beer_inventory( $beer_post_id ) {
+
+		$inventory = get_post_meta( $beer_post_id, self::DABC_INVENTORY, true );
+
+		return $inventory;
 
 	}
 

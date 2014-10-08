@@ -91,7 +91,7 @@ class DABC {
 
 		}
 
-		$this->connections->set_beer_inventory( $beer_post_id, $inventory );
+		$this->beers->set_beer_inventory( $beer_post_id, $inventory );
 
 	}
 
