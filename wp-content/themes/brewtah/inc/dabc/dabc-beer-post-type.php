@@ -1021,6 +1021,14 @@ class DABC_Beer_Post_Type {
 	 */
 	function sync_featured_image_with_ratebeer( $ratebeer_id, $post_id ) {
 
+		if ( ! function_exists( 'media_sideload_image' ) ) {
+
+			require_once( trailingslashit( ABSPATH ) . 'wp-admin/includes/media.php' );
+
+			require_once( trailingslashit( ABSPATH ) . 'wp-admin/includes/file.php' );
+
+		}
+
 		$image_url = $this->get_ratebeer_image_url( $ratebeer_id );
 
 		$result    = media_sideload_image( $image_url, $post_id );
