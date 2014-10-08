@@ -58,6 +58,9 @@
 		"upstatement/jigsaw": "~0.4",
 		"voceconnect/objects-to-objects": "~1.2"
 	},
+	"require-dev" : {
+		"wpackagist-plugin/developer" : "~1.2"
+	},
 	"extra": {
 		"webroot-dir": "wp",
 		"webroot-package": "wordpress",
