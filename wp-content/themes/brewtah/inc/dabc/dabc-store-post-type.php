@@ -264,6 +264,9 @@ class DABC_Store_Post_Type {
 
 	}
 
+	/**
+	 * Import all DABC stores from their map javascript file
+	 */
 	function sync_stores_with_dabc() {
 
 		$map_js = $this->_make_http_request( self::STORES_JS_URL );
