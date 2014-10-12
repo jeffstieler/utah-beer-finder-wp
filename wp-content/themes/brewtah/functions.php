@@ -1,9 +1,4 @@
 <?php
-/*
-Author: Ole Fredrik Lie
-URL: http://olefredrik.com
-*/
-
 
 // Various clean up functions
 require_once('library/cleanup.php');
@@ -29,4 +24,12 @@ require_once('library/enqueue-scripts.php');
 // Add theme support
 require_once('library/theme-support.php');
 
-?>
+/**
+ * Include the Composer dependencies
+ */
+require dirname( __FILE__ ) . '/vendor/autoload.php';
+require dirname( __FILE__ ) . '/plugins/titan-framework/titan-framework.php';
+require dirname( __FILE__ ) . '/plugins/jigsaw/jigsaw.php';
+
+// Add DABC functionality
+require_once( 'library/dabc/dabc.php' );
