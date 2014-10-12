@@ -1,15 +1,5 @@
-<?php
-/**
- * The sidebar containing the main widget area.
- *
- * @package Brewtah
- */
-
-if ( ! is_active_sidebar( 'sidebar-1' ) ) {
-	return;
-}
-?>
-
-<div id="secondary" class="widget-area" role="complementary">
-	<?php dynamic_sidebar( 'sidebar-1' ); ?>
-</div><!-- #secondary -->
+<aside id="sidebar" class="small-12 large-4 columns">
+	<?php do_action('foundationPress_before_sidebar'); ?>
+	<?php dynamic_sidebar("sidebar-widgets"); ?>
+	<?php do_action('foundationPress_after_sidebar'); ?>
+</aside>

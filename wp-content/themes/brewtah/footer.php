@@ -1,25 +1,15 @@
-<?php
-/**
- * The template for displaying the footer.
- *
- * Contains the closing of the #content div and all content after
- *
- * @package Brewtah
- */
-?>
+</section>
+<footer class="row">
+	<?php do_action('foundationPress_before_footer'); ?>
+	<?php dynamic_sidebar("footer-widgets"); ?>
+	<?php do_action('foundationPress_after_footer'); ?>
+</footer>
+<a class="exit-off-canvas"></a>
 
-	</div><!-- #content -->
-
-	<footer id="colophon" class="site-footer" role="contentinfo">
-		<div class="site-info">
-			<a href="<?php echo esc_url( __( 'http://wordpress.org/', 'brewtah' ) ); ?>"><?php printf( __( 'Proudly powered by %s', 'brewtah' ), 'WordPress' ); ?></a>
-			<span class="sep"> | </span>
-			<?php printf( __( 'Theme: %1$s by %2$s.', 'brewtah' ), 'Brewtah', '<a href="http://underscores.me/" rel="designer">Underscores.me</a>' ); ?>
-		</div><!-- .site-info -->
-	</footer><!-- #colophon -->
-</div><!-- #page -->
-
+	<?php do_action('foundationPress_layout_end'); ?>
+	</div>
+</div>
 <?php wp_footer(); ?>
-
+<?php do_action('foundationPress_before_closing_body'); ?>
 </body>
 </html>

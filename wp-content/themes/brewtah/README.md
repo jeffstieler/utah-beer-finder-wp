@@ -1,45 +1,115 @@
-![Travis CI Build Status](https://travis-ci.org/Automattic/_s.svg?branch=master)
+# FoundationPress
 
-_s
-===
+This is a WordPress starter theme based on Foundation 5 by Zurb. The purpose of FoundationPress, is to act as a small and handy toolbox that contains the essentials needed to build any design. FoundationPress is meant to be a starting point, not the final product. If you're looking for an all-in-one theme with built-in shortcodes, plugins, fancypancy portfolio templates or whatnot, I'm afraid you have to look elsewhere.
 
-Hi. I'm a starter theme called `_s`, or `underscores`, if you like. I'm a theme meant for hacking so don't use me as a Parent Theme. Instead try turning me into the next, most awesome, WordPress theme out there. That's what I'm here for.
+Please fork, copy, modify, delete, share or do whatever you like with this. 
 
-My ultra-minimal CSS might make me look like theme tartare but that means less stuff to get in your way when you're designing your awesome theme. Here are some of the other more interesting things you'll find here:
+All contributions are welcome!
 
-* A just right amount of lean, well-commented, modern, HTML5 templates.
-* A helpful 404 template.
-* A sample custom header implementation in `inc/custom-header.php` that can be activated by uncommenting one line in `functions.php` and adding the code snippet found in the comments of `inc/custom-header.php` to your `header.php` template.
-* Custom template tags in `inc/template-tags.php` that keep your templates clean and neat and prevent code duplication.
-* Some small tweaks in `inc/extras.php` that can improve your theming experience.
-* A script at `js/navigation.js` that makes your menu a toggled dropdown on small screens (like your phone), ready for CSS artistry. It's enqueued in `functions.php`.
-* 2 sample CSS layouts in `layouts/` for a sidebar on either side of your content.
-* Smartly organized starter CSS in `style.css` that will help you to quickly get your design off the ground.
-* Licensed under GPLv2 or later. :) Use it to make something cool.
+## Requirements
 
-Getting Started
----------------
+**A brief explanation to the requirements** (feel free to skip this if you're a pro):
 
-If you want to keep it simple, head over to http://underscores.me and generate your `_s` based theme from there. You just input the name of the theme you want to create, click the "Generate" button, and you get your ready-to-awesomize starter theme.
+Back in the days we wrote all styles in the style.css file. Then we realized that this could quickly create clutter and confusion, especially in larger projects. Foundation uses SASS (equivalent to LESS, used in Bootstrap). In short, SASS is a CSS pre-processor that allows you to write styles more effectively and tidy. 
 
-If you want to set things up manually, download `_s` from GitHub. The first thing you want to do is copy the `_s` directory and change the name to something else (like, say, `megatherium`), and then you'll need to do a five-step find and replace on the name in all the templates.
+To compile SASS files into one style sheet, we use a tool called Grunt. In short, Grunt is a task runner that automates repetitive tasks like minification, compilation, linting, etc. Grunt and Grunt plugins are installed and managed via npm, the Node.js package manager. Before setting up Grunt ensure that your npm is up-to-date by running ```npm update -g npm``` (this might require ```sudo``` on certain systems)
 
-1. Search for `'_s'` (inside single quotations) to capture the text domain.
-2. Search for `_s_` to capture all the function names.
-3. Search for `Text Domain: _s` in style.css.
-4. Search for <code>&nbsp;_s</code> (with a space before it) to capture DocBlocks.
-5. Search for `_s-` to capture prefixed handles.
+Bower is a package manager used by Zurb to distribute Foundation. When you have Bower installed, you will be able to run ```foundation update``` in the terminal to update Foundation to the latest version. (After an upgrade you must run ```grunt``` to recompile files).
 
-OR
 
-* Search for: `'_s'` and replace with: `'megatherium'`
-* Search for: `_s_` and replace with: `megatherium_`
-* Search for: `Text Domain: _s` and replace with: `Text Domain: megatherium` in style.css.
-* Search for: <code>&nbsp;_s</code> and replace with: <code>&nbsp;Megatherium</code>
-* Search for: `_s-` and replace with: `megatherium-`
+**Okay, so you'll need to have the following items installed before continuing.**
 
-Then, update the stylesheet header in `style.css` and the links in `footer.php` with your own information. Next, update or delete this readme.
+  * [Node.js](http://nodejs.org): Use the installer provided on the NodeJS website.
+  * [Grunt](http://gruntjs.com/): Run `[sudo] npm install -g grunt-cli`
+  * [Bower](http://bower.io): Run `[sudo] npm install -g bower`
 
-Now you're ready to go! The next step is easy to say, but harder to do: make an awesome WordPress theme. :)
+## Quickstart
 
-Good luck!
+```bash
+cd my-wordpress-folder/wp-content/themes/
+git clone git@github.com:olefredrik/FoundationPress.git
+mv FoundationPress your-theme-name
+cd your-theme-name
+npm install && bower install && grunt build
+```
+
+Tip: If you get an error saying Permission denied (publickey) when cloning the repository, use the https protocol instead:
+```git clone https://github.com/olefredrik/FoundationPress.git```
+
+While you're working on your project, run:
+
+`grunt`
+
+And you're set!
+
+Check for Foundation Updates? Run:
+`foundation update` 
+(this requires the foundation gem to be installed in order to work. Please see the [docs](http://foundation.zurb.com/docs/sass.html) for details.)
+
+### Stylesheet Folder Structure
+
+  * `style.css`: Do not worry about this file. (For some reason) it's required by WordPress. All styling are handled in the Sass files described below
+
+  * `scss/app.scss`: Sass imports for global config, foundation and site structure
+
+  * `scss/config/_variables.scss`: Your custom variables
+  * `scss/config/_colors.scss`: Your custom color scheme
+  * `scss/config/_settings.scss`: Original Foundation 5 base settings
+
+  * `scss/site/_structure`: Your custom site structure
+
+  * `css/app.css`: All Sass files are minified and compiled to this file
+
+### Script Folder Strucutre
+  
+  * `bower_components/`: This is the source folder where all Foundation scripts are located. `foundation update` will check and update scripts in this folder
+  * `js/custom`: This is where you put all your custom scripts. Every .js file you put in this directory will be minified and concatinated to [app.js](https://github.com/olefredrik/FoundationPress/blob/master/js/app.js)
+  * `js/`: jQuery, Modernizr and Foundation scripts are copied from `bower_components/` to this directory, where they are minified and concatinated and enqueued in WordPress
+  * Please note that you must run `grunt` in your terminal for the scripts to be copied. See [Gruntfile.js](https://github.com/olefredrik/FoundationPress/blob/master/Gruntfile.js) for details
+
+## Demo
+
+* [Clean FoundationPress install](http://foundationpress.olefredrik.com/)
+* [FoundationPress Kitchen Sink - see every single element in action](http://foundationpress.olefredrik.com/kitchen-sink/)
+* [FoundationPSD - Photoshop template for Foundation](http://foundationpress.olefredrik.com/downloads/foundation-psd-template/)
+
+## Examples of sites built using FoundationPress
+
+* [Harvard Center for Green Buildings and Cities](http://www.harvardcgbc.org/)
+* [Parent-Child Home Program](http://www.parent-child.org/)
+* [Arch Design](http://archdesign.grafique.cz/)
+* [Hip and Healthy](http://hipandhealthy.com)
+* [Thinx Underwear](http://www.shethinx.com/)
+* [Threadbird blog](http://blog.threadbird.com/)
+* [Code Cub](http://www.thecodecub.com/)
+* [Public House Wines](http://publichousewines.hstestsite.info/)
+* [Bristol Doors Open Day 2014](http://www.bristoldoorsopenday.org/)
+* [Franchise Career Advisors](http://franchisecareeradvisors.com)
+
+## Contributing
+#### Here are ways to get involved:
+
+1. [Star](https://github.com/olefredrik/FoundationPress/stargazers) the project!
+2. Answer questions that come through [GitHub issues](https://github.com/olefredrik/FoundationPress/issues)
+3. Report a bug that you find
+4. Share a theme you've built on top of FoundationPress
+5. [Tweet](https://twitter.com/intent/tweet?original_referer=http%3A%2F%2Ffoundationpress.olefredrik.com%2F&text=Check%20out%20FoundationPress%2C%20the%20ultimate%20%23WordPress%20starter-theme%20built%20on%20%23Foundation%205&tw_p=tweetbutton&url=http%3A%2F%2Ffoundationpress.olefredrik.com&via=olefredrik) and [blog](http://www.justinfriebel.com/my-first-experience-with-foundationpress-a-wordpress-starter-theme-106/) about the advantages (and criticisms) of FoundationPress
+
+#### Pull Requests
+
+Pull requests are highly appreciated. About a dozen people have written parts of FoundationPress (so far). Here are some guidelines to help:
+
+1. Solve a problem. Features are great, but even better is cleaning-up and fixing issues in the code that you discover
+2. Make sure that your code is bug-free and does not introduce new bugs
+3. Create a [pull request](https://help.github.com/articles/creating-a-pull-request)
+
+## Documentation
+
+* [Zurb Foundation Docs](http://foundation.zurb.com/docs/)
+* [WordPress Codex](http://codex.wordpress.org/)
+
+## Tutorials
+
+* [Build a responsive WordPress theme](http://www.webdesignermag.co.uk/tutorials/build-a-responsive-wordpress-theme/)
+* [Setting Up a Blog with Foundation and WordPress](http://www.thecodecub.com/htmlcss/setting-up-a-blog-with-foundation-and-wordpress/)
+
