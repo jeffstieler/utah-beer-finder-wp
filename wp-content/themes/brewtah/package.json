@@ -1,5 +1,5 @@
 {
-  "name": "foundationpress-libsass-template",
+  "name": "brewtah-libsass-template",
   "version": "5.4.3",
   "devDependencies": {
     "node-sass": "~0.7.0",

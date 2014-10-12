@@ -1,19 +1,19 @@
-<?php function FoundationPress_comments($comment, $args, $depth) {
+<?php function brewtah_comments($comment, $args, $depth) {
 	$GLOBALS['comment'] = $comment; ?>
 	<li <?php comment_class(); ?>>
 		<article id="comment-<?php comment_ID(); ?>">
 			<header class="comment-author">
 				<?php echo get_avatar($comment,$size='48'); ?>
 				<div class="author-meta">
-					<?php printf(__('<cite class="fn">%s</cite>', 'FoundationPress'), get_comment_author_link()) ?>
-					<time datetime="<?php echo comment_date('c') ?>"><a href="<?php echo esc_url( get_comment_link( $comment->comment_ID ) ) ?>"><?php printf(__('%1$s', 'FoundationPress'), get_comment_date(),  get_comment_time()) ?></a></time>
-					<?php edit_comment_link(__('(Edit)', 'FoundationPress'), '', '') ?>
+					<?php printf(__('<cite class="fn">%s</cite>', 'brewtah'), get_comment_author_link()) ?>
+					<time datetime="<?php echo comment_date('c') ?>"><a href="<?php echo esc_url( get_comment_link( $comment->comment_ID ) ) ?>"><?php printf(__('%1$s', 'brewtah'), get_comment_date(),  get_comment_time()) ?></a></time>
+					<?php edit_comment_link(__('(Edit)', 'brewtah'), '', '') ?>
 				</div>
 			</header>
 
 			<?php if ($comment->comment_approved == '0') : ?>
 				<div class="notice">
-					<p class="bottom"><?php _e('Your comment is awaiting moderation.', 'FoundationPress') ?></p>
+					<p class="bottom"><?php _e('Your comment is awaiting moderation.', 'brewtah') ?></p>
 				</div>
 			<?php endif; ?>
 
@@ -28,12 +28,12 @@
 <?php
 // Do not delete these lines
 	if (!empty($_SERVER['SCRIPT_FILENAME']) && 'comments.php' == basename($_SERVER['SCRIPT_FILENAME']))
-		die (__('Please do not load this page directly. Thanks!', 'FoundationPress'));
+		die (__('Please do not load this page directly. Thanks!', 'brewtah'));
 
 	if ( post_password_required() ) { ?>
 	<section id="comments">
 		<div class="notice">
-			<p class="bottom"><?php _e('This post is password protected. Enter the password to view comments.', 'FoundationPress'); ?></p>
+			<p class="bottom"><?php _e('This post is password protected. Enter the password to view comments.', 'brewtah'); ?></p>
 		</div>
 	</section>
 	<?php
@@ -43,49 +43,49 @@
 <?php // You can start editing here. Customize the respond form below ?>
 <?php if ( have_comments() ) : ?>
 	<section id="comments">
-		<h3><?php comments_number(__('No Responses to', 'FoundationPress'), __('One Response to', 'FoundationPress'), __('% Responses to', 'FoundationPress') ); ?> &#8220;<?php the_title(); ?>&#8221;</h3>
+		<h3><?php comments_number(__('No Responses to', 'brewtah'), __('One Response to', 'brewtah'), __('% Responses to', 'brewtah') ); ?> &#8220;<?php the_title(); ?>&#8221;</h3>
 		<ol class="commentlist">
-		<?php wp_list_comments('type=comment&callback=FoundationPress_comments'); ?>
+		<?php wp_list_comments('type=comment&callback=brewtah_comments'); ?>
 
 		</ol>
 		<footer>
 			<nav id="comments-nav">
-				<div class="comments-previous"><?php previous_comments_link( __( '&larr; Older comments', 'FoundationPress' ) ); ?></div>
-				<div class="comments-next"><?php next_comments_link( __( 'Newer comments &rarr;', 'FoundationPress' ) ); ?></div>
+				<div class="comments-previous"><?php previous_comments_link( __( '&larr; Older comments', 'brewtah' ) ); ?></div>
+				<div class="comments-next"><?php next_comments_link( __( 'Newer comments &rarr;', 'brewtah' ) ); ?></div>
 			</nav>
 		</footer>
 	</section>
 <?php endif; ?>
 <?php if ( comments_open() ) : ?>
 <section id="respond">
-	<h3><?php comment_form_title( __('Leave a Reply', 'FoundationPress'), __('Leave a Reply to %s', 'FoundationPress') ); ?></h3>
+	<h3><?php comment_form_title( __('Leave a Reply', 'brewtah'), __('Leave a Reply to %s', 'brewtah') ); ?></h3>
 	<p class="cancel-comment-reply"><?php cancel_comment_reply_link(); ?></p>
 	<?php if ( get_option('comment_registration') && !is_user_logged_in() ) : ?>
-	<p><?php printf( __('You must be <a href="%s">logged in</a> to post a comment.', 'FoundationPress'), wp_login_url( get_permalink() ) ); ?></p>
+	<p><?php printf( __('You must be <a href="%s">logged in</a> to post a comment.', 'brewtah'), wp_login_url( get_permalink() ) ); ?></p>
 	<?php else : ?>
 	<form action="<?php echo get_option('siteurl'); ?>/wp-comments-post.php" method="post" id="commentform">
 		<?php if ( is_user_logged_in() ) : ?>
-		<p><?php printf(__('Logged in as <a href="%s/wp-admin/profile.php">%s</a>.', 'FoundationPress'), get_option('siteurl'), $user_identity); ?> <a href="<?php echo wp_logout_url(get_permalink()); ?>" title="<?php __('Log out of this account', 'FoundationPress'); ?>"><?php _e('Log out &raquo;', 'FoundationPress'); ?></a></p>
+		<p><?php printf(__('Logged in as <a href="%s/wp-admin/profile.php">%s</a>.', 'brewtah'), get_option('siteurl'), $user_identity); ?> <a href="<?php echo wp_logout_url(get_permalink()); ?>" title="<?php __('Log out of this account', 'brewtah'); ?>"><?php _e('Log out &raquo;', 'brewtah'); ?></a></p>
 		<?php else : ?>
 		<p>
-			<label for="author"><?php _e('Name', 'FoundationPress'); if ($req) _e(' (required)', 'FoundationPress'); ?></label>
+			<label for="author"><?php _e('Name', 'brewtah'); if ($req) _e(' (required)', 'brewtah'); ?></label>
 			<input type="text" class="five" name="author" id="author" value="<?php echo esc_attr($comment_author); ?>" size="22" tabindex="1" <?php if ($req) echo "aria-required='true'"; ?>>
 		</p>
 		<p>
-			<label for="email"><?php _e('Email (will not be published)', 'FoundationPress'); if ($req) _e(' (required)', 'FoundationPress'); ?></label>
+			<label for="email"><?php _e('Email (will not be published)', 'brewtah'); if ($req) _e(' (required)', 'brewtah'); ?></label>
 			<input type="text" class="five" name="email" id="email" value="<?php echo esc_attr($comment_author_email); ?>" size="22" tabindex="2" <?php if ($req) echo "aria-required='true'"; ?>>
 		</p>
 		<p>
-			<label for="url"><?php _e('Website', 'FoundationPress'); ?></label>
+			<label for="url"><?php _e('Website', 'brewtah'); ?></label>
 			<input type="text" class="five" name="url" id="url" value="<?php echo esc_attr($comment_author_url); ?>" size="22" tabindex="3">
 		</p>
 		<?php endif; ?>
 		<p>
-			<label for="comment"><?php _e('Comment', 'FoundationPress'); ?></label>
+			<label for="comment"><?php _e('Comment', 'brewtah'); ?></label>
 			<textarea name="comment" id="comment" tabindex="4"></textarea>
 		</p>
-		<p id="allowed_tags" class="small"><strong>XHTML:</strong> <?php _e('You can use these tags:','FoundationPress'); ?> <code><?php echo allowed_tags(); ?></code></p>
-		<p><input name="submit" class="button" type="submit" id="submit" tabindex="5" value="<?php esc_attr_e('Submit Comment', 'FoundationPress'); ?>"></p>
+		<p id="allowed_tags" class="small"><strong>XHTML:</strong> <?php _e('You can use these tags:','brewtah'); ?> <code><?php echo allowed_tags(); ?></code></p>
+		<p><input name="submit" class="button" type="submit" id="submit" tabindex="5" value="<?php esc_attr_e('Submit Comment', 'brewtah'); ?>"></p>
 		<?php comment_id_fields(); ?>
 		<?php do_action('comment_form', $post->ID); ?>
 	</form>

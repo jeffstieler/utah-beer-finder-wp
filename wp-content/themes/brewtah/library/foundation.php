@@ -1,6 +1,6 @@
 <?php
 // Pagination
-function FoundationPress_pagination() {
+function brewtah_pagination() {
 	global $wp_query;
  
 	$big = 999999999; // This needs to be an unlikely integer
@@ -13,8 +13,8 @@ function FoundationPress_pagination() {
 		'total' => $wp_query->max_num_pages,
 		'mid_size' => 5,
 		'prev_next' => True,
-	    'prev_text' => __('&laquo;', 'FoundationPress'),
-	    'next_text' => __('&raquo;', 'FoundationPress'),
+	    'prev_text' => __('&laquo;', 'brewtah'),
+	    'next_text' => __('&raquo;', 'brewtah'),
 		'type' => 'list'
 	) );
  
@@ -34,14 +34,14 @@ function FoundationPress_pagination() {
 /**
  * A fallback when no navigation is selected by default.
  */
-function FoundationPress_menu_fallback() {
+function brewtah_menu_fallback() {
 	echo '<div class="alert-box secondary">';
 	// Translators 1: Link to Menus, 2: Link to Customize
-  	printf( __( 'Please assign a menu to the primary menu location under %1$s or %2$s the design.', 'FoundationPress' ),
-  		sprintf(  __( '<a href="%s">Menus</a>', 'FoundationPress' ),
+  	printf( __( 'Please assign a menu to the primary menu location under %1$s or %2$s the design.', 'brewtah' ),
+  		sprintf(  __( '<a href="%s">Menus</a>', 'brewtah' ),
   			get_admin_url( get_current_blog_id(), 'nav-menus.php' )
   		),
-  		sprintf(  __( '<a href="%s">Customize</a>', 'FoundationPress' ),
+  		sprintf(  __( '<a href="%s">Customize</a>', 'brewtah' ),
   			get_admin_url( get_current_blog_id(), 'customize.php' )
   		)
   	);
@@ -49,19 +49,19 @@ function FoundationPress_menu_fallback() {
 }
 
 // Add Foundation 'active' class for the current menu item
-function FoundationPress_active_nav_class( $classes, $item ) {
+function brewtah_active_nav_class( $classes, $item ) {
     if ( $item->current == 1 || $item->current_item_ancestor == true ) {
         $classes[] = 'active';
     }
     return $classes;
 }
-add_filter( 'nav_menu_css_class', 'FoundationPress_active_nav_class', 10, 2 );
+add_filter( 'nav_menu_css_class', 'brewtah_active_nav_class', 10, 2 );
 
 /**
  * Use the active class of ZURB Foundation on wp_list_pages output.
  * From required+ Foundation http://themes.required.ch
  */
-function FoundationPress_active_list_pages_class( $input ) {
+function brewtah_active_list_pages_class( $input ) {
 
 	$pattern = '/current_page_item/';
     $replace = 'current_page_item active';
@@ -70,6 +70,6 @@ function FoundationPress_active_list_pages_class( $input ) {
 
     return $output;
 }
-add_filter( 'wp_list_pages', 'FoundationPress_active_list_pages_class', 10, 2 );
+add_filter( 'wp_list_pages', 'brewtah_active_list_pages_class', 10, 2 );
 
 ?>

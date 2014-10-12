@@ -8,7 +8,7 @@
 		<article <?php post_class() ?> id="post-<?php the_ID(); ?>">
 			<header>
 				<h1 class="entry-title"><?php the_title(); ?></h1>
-				<?php FoundationPress_entry_meta(); ?>
+				<?php brewtah_entry_meta(); ?>
 			</header>
 			<?php do_action('foundationPress_post_before_entry_content'); ?>
 			<div class="entry-content">
@@ -24,7 +24,7 @@
 			<?php the_content(); ?>
 			</div>
 			<footer>
-				<?php wp_link_pages(array('before' => '<nav id="page-nav"><p>' . __('Pages:', 'FoundationPress'), 'after' => '</p></nav>' )); ?>
+				<?php wp_link_pages(array('before' => '<nav id="page-nav"><p>' . __('Pages:', 'brewtah'), 'after' => '</p></nav>' )); ?>
 				<p><?php the_tags(); ?></p>
 			</footer>
 			<?php do_action('foundationPress_post_before_comments'); ?>

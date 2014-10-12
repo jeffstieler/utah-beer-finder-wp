@@ -12,7 +12,7 @@ get_header(); ?>
 		</div>
 
 		<div class="medium-6 columns end">
-			<a role="button" class="download large button hide-for-small" href="https://github.com/olefredrik/foundationpress">Download FoundationPress</a>
+			<a role="button" class="download large button hide-for-small" href="https://github.com/olefredrik/brewtah">Download brewtah</a>
 		</div>
 
 		<div class="floatingyeti show-for-medium-up">
@@ -37,7 +37,7 @@ get_header(); ?>
 					<?php the_content(); ?>
 				</div>
 				<footer>
-					<?php wp_link_pages(array('before' => '<nav id="page-nav"><p>' . __('Pages:', 'FoundationPress'), 'after' => '</p></nav>' )); ?>
+					<?php wp_link_pages(array('before' => '<nav id="page-nav"><p>' . __('Pages:', 'brewtah'), 'after' => '</p></nav>' )); ?>
 					<p><?php the_tags(); ?></p>
 				</footer>
 				<?php do_action('foundationPress_page_before_comments'); ?>

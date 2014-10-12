@@ -4,7 +4,7 @@
 
 		<?php do_action('foundationPress_before_content'); ?>
 
-		<h2><?php _e('Search Results for', 'FoundationPress'); ?> "<?php echo get_search_query(); ?>"</h2>
+		<h2><?php _e('Search Results for', 'brewtah'); ?> "<?php echo get_search_query(); ?>"</h2>
 
 	<?php if ( have_posts() ) : ?>
 
@@ -19,11 +19,11 @@
 
 	<?php do_action('foundationPress_before_pagination'); ?>
 
-	<?php if ( function_exists('FoundationPress_pagination') ) { FoundationPress_pagination(); } else if ( is_paged() ) { ?>
+	<?php if ( function_exists('brewtah_pagination') ) { brewtah_pagination(); } else if ( is_paged() ) { ?>
 
 		<nav id="post-nav">
-			<div class="post-previous"><?php next_posts_link( __( '&larr; Older posts', 'FoundationPress' ) ); ?></div>
-			<div class="post-next"><?php previous_posts_link( __( 'Newer posts &rarr;', 'FoundationPress' ) ); ?></div>
+			<div class="post-previous"><?php next_posts_link( __( '&larr; Older posts', 'brewtah' ) ); ?></div>
+			<div class="post-next"><?php previous_posts_link( __( 'Newer posts &rarr;', 'brewtah' ) ); ?></div>
 		</nav>
 	<?php } ?>
 
