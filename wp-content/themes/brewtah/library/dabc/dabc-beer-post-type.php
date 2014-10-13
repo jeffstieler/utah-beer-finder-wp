@@ -85,8 +85,8 @@ class DABC_Beer_Post_Type {
 		register_post_type(
 			self::POST_TYPE,
 			array(
-				'public'   => true,
-				'labels'   => array(
+				'public'      => true,
+				'labels'      => array(
 					'name'               => 'Beers',
 					'singular_name'      => 'Beer',
 					'add_new'            => 'Add New',
@@ -100,13 +100,17 @@ class DABC_Beer_Post_Type {
 					'parent_item_colon'  => null,
 					'all_items'          => 'All Beers'
 				),
-				'supports' => array(
+				'supports'    => array(
 					'title',
 					'editor',
 					'thumbnail',
 					'comments',
 					'revisions'
-				)
+				),
+				'rewrite'     => array(
+					'slug' => 'beer'
+				),
+				'has_archive' => true
 			)
 		);
 
