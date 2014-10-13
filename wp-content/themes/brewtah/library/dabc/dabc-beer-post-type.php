@@ -110,7 +110,7 @@ class DABC_Beer_Post_Type {
 				'rewrite'     => array(
 					'slug' => 'beer'
 				),
-				'has_archive' => true
+				'has_archive' => 'beers'
 			)
 		);
 
