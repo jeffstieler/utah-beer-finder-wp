@@ -42,8 +42,8 @@ class DABC_Store_Post_Type {
 		register_post_type(
 			self::POST_TYPE,
 			array(
-				'public'   => true,
-				'labels'   => array(
+				'public'      => true,
+				'labels'      => array(
 					'name'               => 'Stores',
 					'singular_name'      => 'Store',
 					'add_new'            => 'Add New',
@@ -57,13 +57,17 @@ class DABC_Store_Post_Type {
 					'parent_item_colon'  => null,
 					'all_items'          => 'All Stores'
 				),
-				'supports' => array(
+				'supports'    => array(
 					'title',
 					'editor',
 					'thumbnail',
 					'comments',
 					'revisions'
-				)
+				),
+				'rewrite'     => array(
+					'slug' => 'store'
+				),
+				'has_archive' => 'stores'
 			)
 		);
 
