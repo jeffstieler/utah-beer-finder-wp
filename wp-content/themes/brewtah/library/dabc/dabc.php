@@ -3,17 +3,22 @@
 /**
  * Include the DABC beer post type
  */
-require_once( 'dabc-beer-post-type.php' );
+require_once( __DIR__ . '/dabc-beer-post-type.php' );
 
 /**
  * Include the DABC store post type
  */
-require_once( 'dabc-store-post-type.php' );
+require_once( __DIR__ . '/dabc-store-post-type.php' );
 
 /**
  * Register connections between post types
  */
-require_once( 'o2o-connections.php' );
+require_once( __DIR__ . '/o2o-connections.php' );
+
+/**
+ * Include widgets
+ */
+require_once( __DIR__ . '/widgets.php' );
 
 
 class DABC {
