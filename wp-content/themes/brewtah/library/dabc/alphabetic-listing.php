@@ -11,6 +11,8 @@ class Alphabetic_Listing {
 
 		$this->attach_hooks();
 
+		$this->register_rewrites();
+
 	}
 
 	function attach_hooks() {
@@ -29,9 +31,33 @@ class Alphabetic_Listing {
 
 	}
 
+	function register_rewrites() {
+
+		$supported_types = $this->get_supported_post_types();
+
+		foreach ( $supported_types as $type ) {
+
+			$type = get_post_type_object( $type );
+
+			if ( is_string( $type->has_archive ) ) {
+
+				$archive_slug = $type->has_archive;
+
+				$post_type    = $type->name;
+
+				add_rewrite_rule( "{$archive_slug}/listing/([a-z]){1}/?\$", "index.php?post_type={$post_type}&first-letter=\$matches[1]", 'top' );
+
+				add_rewrite_rule( "{$archive_slug}/listing/([a-z]){1}/page/([0-9]{1,})?\$", "index.php?post_type={$post_type}&first-letter=\$matches[1]&paged=\$matches[2]", 'top' );
+
+			}
+
+		}
+
+	}
+
 	function get_supported_post_types() {
 
-		$post_types = get_post_types();
+		$post_types      = get_post_types();
 
 		$supported_types = array_filter( $post_types, function( $post_type ) {
 
