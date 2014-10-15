@@ -20,6 +20,10 @@ require_once( __DIR__ . '/o2o-connections.php' );
  */
 require_once( __DIR__ . '/widgets.php' );
 
+/**
+ * Include Alphabetical Listing plugin
+ */
+require_once( __DIR__ . '/alphabetic-listing.php' );
 
 class DABC {
 
