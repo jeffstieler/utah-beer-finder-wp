@@ -151,3 +151,48 @@ class DABC_Top_Rated_Beers_Widget extends WP_Widget {
 }
 
 register_widget( 'DABC_Top_Rated_Beers_Widget' );
+
+/**
+ * New Beers Widget
+ */
+class DABC_New_Beers_Widget extends DABC_Top_Rated_Beers_Widget {
+
+	public function __construct() {
+
+		$this->default_title = 'New Beers';
+
+		$this->cache_key = 'widget_new_beers';
+
+		$widget_ops = array(
+			'classname' => 'widget_new_beers',
+			'description' => 'Beers sorted by post_date_gmt DESC'
+		);
+
+		WP_Widget::__construct( 'new-beers', 'New Beers', $widget_ops );
+
+		add_action( 'save_post', array( $this, 'flush_widget_cache' ) );
+		add_action( 'deleted_post', array( $this, 'flush_widget_cache' ) );
+
+	}
+
+	protected function query( $args = array() ) {
+
+		$defaults = array(
+			'posts_per_page'      => 5,
+			'no_found_rows'       => true,
+			'post_type'           => DABC_Beer_Post_Type::POST_TYPE,
+			'post_status'         => 'publish',
+			'ignore_sticky_posts' => true
+		);
+
+		$args = wp_parse_args( $args, $defaults );
+
+		$r = new WP_Query( $args );
+
+		return $r;
+
+	}
+
+}
+
+register_widget( 'DABC_New_Beers_Widget' );
