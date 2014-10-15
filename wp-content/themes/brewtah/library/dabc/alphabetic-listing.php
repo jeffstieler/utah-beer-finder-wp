@@ -4,6 +4,7 @@ class Alphabetic_Listing {
 
 	const TAXONOMY     = 'first-letter';
 	const SUPPORT_TYPE = 'alphabetic-listing';
+	const REWRITE_SLUG = 'listing';
 
 	function init() {
 
@@ -45,9 +46,9 @@ class Alphabetic_Listing {
 
 				$post_type    = $type->name;
 
-				add_rewrite_rule( "{$archive_slug}/listing/([a-z]){1}/?\$", "index.php?post_type={$post_type}&first-letter=\$matches[1]", 'top' );
+				add_rewrite_rule( sprintf( '%s/%s/([a-z]){1}/?$', $archive_slug, self::REWRITE_SLUG ), "index.php?post_type={$post_type}&first-letter=\$matches[1]", 'top' );
 
-				add_rewrite_rule( "{$archive_slug}/listing/([a-z]){1}/page/([0-9]{1,})?\$", "index.php?post_type={$post_type}&first-letter=\$matches[1]&paged=\$matches[2]", 'top' );
+				add_rewrite_rule( sprintf( '%s/%s/([a-z]){1}/page/([0-9]{1,})?$', $archive_slug, self::REWRITE_SLUG ), "index.php?post_type={$post_type}&first-letter=\$matches[1]&paged=\$matches[2]", 'top' );
 
 			}
 
@@ -94,6 +95,74 @@ class Alphabetic_Listing {
 		$this->set_first_letter( $post_id, $letter );
 
 	}
+
+	function get_first_letter_terms() {
+
+		$terms = get_terms( self::TAXONOMY, array( 'fields' => 'names' ) );
+
+		return ( is_wp_error( $terms ) ? array() : $terms );
+
+	}
+
+	function get_letter_archive_link_for_post_type( $letter, $post_type, $page = null ) {
+
+		$post_type_object = get_post_type_object( $post_type );
+
+		if ( is_string( $post_type_object->has_archive ) ) {
+
+			$page = is_null( $page ) ? '' : 'page/' . $page;
+
+			$archive_slug = $post_type_object->has_archive;
+
+			$archive_link = sprintf( '%s/listing/%s/%s', $archive_slug, $letter, $page );
+
+		} else {
+
+			$archive_link = sprintf( 'listing/%s/', $letter );
+
+		}
+
+		return site_url( $archive_link );
+
+	}
+
+	function paginate_alphabetic_links( $post_type = '' ) {
+
+		$beer_letters  = $this->get_first_letter_terms();
+
+		$alphabet      = range( 'a', 'z' );
+
+		echo '<ul class="pagination">', "\n";
+
+		foreach ( $alphabet as $letter ) {
+
+			if ( in_array( $letter, $beer_letters ) ) {
+
+				$class = ( $letter === get_query_var( self::TAXONOMY ) ) ? 'current' : '';
+
+				$link  = $this->get_letter_archive_link_for_post_type( $letter, $post_type );
+
+				printf( '<li class="%s letter-%s"><a href="%s">%s</a></li>', $class, $letter, $link, strtoupper( $letter ) );
+
+			} else {
+
+				printf( '<li class="letter-%s">%s</li>', $letter, strtoupper( $letter ) );
+
+			}
+
+		}
+
+		echo '</ul>', "\n";
+
+	}
+
+}
+
+function paginate_alphabetic_links( $post_type = '' ) {
+
+	$alpha_listing = new Alphabetic_Listing();
+
+	echo $alpha_listing->paginate_alphabetic_links( $post_type );
 
 }
 
