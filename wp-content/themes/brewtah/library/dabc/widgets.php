@@ -5,9 +5,14 @@
  */
 class DABC_Top_Rated_Beers_Widget extends WP_Widget {
 
-	const CACHE_KEY = 'widget_top_beers';
+	var $cache_key;
+	var $default_title;
 
 	public function __construct() {
+
+		$this->default_title = 'Top Rated Beers';
+
+		$this->cache_key = 'widget_top_beers';
 
 		$widget_ops = array(
 			'classname' => 'widget_top_beers',
@@ -21,12 +26,33 @@ class DABC_Top_Rated_Beers_Widget extends WP_Widget {
 
 	}
 
+	protected function query( $args = array() ) {
+
+		$defaults = array(
+			'posts_per_page'      => 5,
+			'no_found_rows'       => true,
+			'post_type'           => DABC_Beer_Post_Type::POST_TYPE,
+			'post_status'         => 'publish',
+			'ignore_sticky_posts' => true,
+			'meta_key'            => DABC_Beer_Post_Type::TITAN_NAMESPACE . '_' . DABC_Beer_Post_Type::RATEBEER_OVERALL_SCORE,
+			'orderby'             => 'meta_value_num post_date_gmt',
+			'order'               => 'DESC'
+		);
+
+		$args = wp_parse_args( $args, $defaults );
+
+		$r = new WP_Query( $args );
+
+		return $r;
+
+	}
+
 	public function widget( $args, $instance ) {
 
 		$cache = array();
 
 		if ( ! $this->is_preview() ) {
-			$cache = wp_cache_get( self::CACHE_KEY, 'widget' );
+			$cache = wp_cache_get( $this->cache_key, 'widget' );
 		}
 
 		if ( ! is_array( $cache ) ) {
@@ -44,7 +70,7 @@ class DABC_Top_Rated_Beers_Widget extends WP_Widget {
 
 		ob_start();
 
-		$title = ( ! empty( $instance['title'] ) ) ? $instance['title'] : 'Top Rated Beers';
+		$title = ( ! empty( $instance['title'] ) ) ? $instance['title'] : $this->default_title;
 
 		/** This filter is documented in wp-includes/default-widgets.php */
 		$title = apply_filters( 'widget_title', $title, $instance, $this->id_base );
@@ -53,16 +79,7 @@ class DABC_Top_Rated_Beers_Widget extends WP_Widget {
 		if ( ! $number )
 			$number = 5;
 
-		$r = new WP_Query( array(
-			'posts_per_page'      => $number,
-			'no_found_rows'       => true,
-			'post_type'           => DABC_Beer_Post_Type::POST_TYPE,
-			'post_status'         => 'publish',
-			'ignore_sticky_posts' => true,
-			'meta_key'            => DABC_Beer_Post_Type::TITAN_NAMESPACE . '_' . DABC_Beer_Post_Type::RATEBEER_OVERALL_SCORE,
-			'orderby'             => 'meta_value_num',
-			'order'               => 'DESC'
-		) );
+		$r = $this->query( array( 'posts_per_page' => $number ) );
 
 		if ( $r->have_posts() ) :
 ?>
@@ -87,7 +104,7 @@ class DABC_Top_Rated_Beers_Widget extends WP_Widget {
 		if ( ! $this->is_preview() ) {
 
 			$cache[ $args['widget_id'] ] = ob_get_flush();
-			wp_cache_set( self::CACHE_KEY, $cache, 'widget' );
+			wp_cache_set( $this->cache_key, $cache, 'widget' );
 
 		} else {
 
@@ -112,7 +129,7 @@ class DABC_Top_Rated_Beers_Widget extends WP_Widget {
 
 	public function flush_widget_cache() {
 
-		wp_cache_delete( self::CACHE_KEY, 'widget' );
+		wp_cache_delete( $this->cache_key, 'widget' );
 
 	}
 
