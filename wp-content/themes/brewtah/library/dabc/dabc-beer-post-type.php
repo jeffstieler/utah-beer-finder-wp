@@ -40,6 +40,7 @@ class DABC_Beer_Post_Type {
 	var $titan;
 	var $dabc_column_map;
 	var $ratebeer_search_column_map;
+	var $dabc_status_map;
 
 	function __construct() {
 
@@ -62,6 +63,18 @@ class DABC_Beer_Post_Type {
 			2 => 'status',
 			3 => 'score',
 			4 => 'ratings',
+		);
+
+		$this->dabc_status_map = array(
+			'1' => 'General Distribution',
+			'D' => 'Discontinued General Item',
+			'S' => 'Special Order',
+			'L' => 'Regular Limited Item',
+			'X' => 'Limited Discontinued',
+			'N' => 'Unavailable General Item',
+			'A' => 'Limited Allocated Product',
+			'U' => 'Unavailable Limited Item',
+			'T' => 'Trial'
 		);
 
 	}
@@ -452,6 +465,10 @@ class DABC_Beer_Post_Type {
 			'size'   => self::SIZE_TAXONOMY,
 			'status' => self::STATUS_TAXONOMY
 		);
+
+		// map status code to label before creating taxonomy terms
+		$status = $beer_info['status'];
+		$beer_info['status'] = isset( $this->dabc_status_map[$status] ) ? $this->dabc_status_map[$status] : 'N/A';
 
 		foreach ( $taxonomy_map as $info_key => $taxonomy ) {
 
