@@ -46,9 +46,9 @@ class Alphabetic_Listing {
 
 				$post_type    = $type->name;
 
-				add_rewrite_rule( sprintf( '%s/%s/([a-z]){1}/?$', $archive_slug, self::REWRITE_SLUG ), "index.php?post_type={$post_type}&first-letter=\$matches[1]", 'top' );
+				add_rewrite_rule( sprintf( '%s/%s/([a-z]){1}/?$', $archive_slug, self::REWRITE_SLUG ), "index.php?post_type={$post_type}&first-letter=\$matches[1]&orderby=post_title&order=ASC", 'top' );
 
-				add_rewrite_rule( sprintf( '%s/%s/([a-z]){1}/page/([0-9]{1,})?$', $archive_slug, self::REWRITE_SLUG ), "index.php?post_type={$post_type}&first-letter=\$matches[1]&paged=\$matches[2]", 'top' );
+				add_rewrite_rule( sprintf( '%s/%s/([a-z]){1}/page/([0-9]{1,})?$', $archive_slug, self::REWRITE_SLUG ), "index.php?post_type={$post_type}&first-letter=\$matches[1]&paged=\$matches[2]&orderby=post_title&order=ASC", 'top' );
 
 			}
 
