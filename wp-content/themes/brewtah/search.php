@@ -2,7 +2,7 @@
 <div class="row">
 	<div class="small-12 large-8 columns" role="main">
 
-		<?php do_action('foundationPress_before_content'); ?>
+		<?php do_action('brewtah_before_content'); ?>
 
 		<h2><?php _e('Search Results for', 'brewtah'); ?> "<?php echo get_search_query(); ?>"</h2>
 
@@ -17,7 +17,7 @@
 
 	<?php endif;?>
 
-	<?php do_action('foundationPress_before_pagination'); ?>
+	<?php do_action('brewtah_before_pagination'); ?>
 
 	<?php if ( function_exists('brewtah_pagination') ) { brewtah_pagination(); } else if ( is_paged() ) { ?>
 
@@ -27,7 +27,7 @@
 		</nav>
 	<?php } ?>
 
-	<?php do_action('foundationPress_after_content'); ?>
+	<?php do_action('brewtah_after_content'); ?>
 
 	</div>
 	<?php get_sidebar(); ?>
