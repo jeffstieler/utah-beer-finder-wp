@@ -353,15 +353,15 @@
         },
         {
             "name": "wpackagist-plugin/titan-framework",
-            "version": "1.6",
+            "version": "1.6.1",
             "source": {
                 "type": "svn",
                 "url": "http://plugins.svn.wordpress.org/titan-framework/",
-                "reference": "tags/1.6"
+                "reference": "tags/1.6.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "http://downloads.wordpress.org/plugin/titan-framework.1.6.zip",
+                "url": "http://downloads.wordpress.org/plugin/titan-framework.1.6.1.zip",
                 "reference": null,
                 "shasum": null
             },
