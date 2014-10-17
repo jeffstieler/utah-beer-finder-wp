@@ -128,7 +128,7 @@ class Alphabetic_Listing {
 
 	function paginate_alphabetic_links( $post_type = '' ) {
 
-		$beer_letters  = $this->get_first_letter_terms();
+		$letter_terms  = $this->get_first_letter_terms();
 
 		$alphabet      = range( 'a', 'z' );
 
@@ -136,19 +136,31 @@ class Alphabetic_Listing {
 
 		foreach ( $alphabet as $letter ) {
 
-			if ( in_array( $letter, $beer_letters ) ) {
+			$letter_has_term = in_array( $letter, $letter_terms );
 
-				$class = ( $letter === get_query_var( self::TAXONOMY ) ) ? 'current' : '';
+			$classes = array();
 
-				$link  = $this->get_letter_archive_link_for_post_type( $letter, $post_type );
+			$link    = 'href';
 
-				printf( '<li class="%s letter-%s"><a href="%s">%s</a></li>', $class, $letter, $link, strtoupper( $letter ) );
+			if ( $letter === get_query_var( self::TAXONOMY ) ) {
+
+				$classes[] = 'current';
+
+			}
+
+			if ( $letter_has_term ) {
+
+				$link .= sprintf( '="%s"', $this->get_letter_archive_link_for_post_type( $letter, $post_type ) );
 
 			} else {
 
-				printf( '<li class="letter-%s">%s</li>', $letter, strtoupper( $letter ) );
+				$classes[] = 'unavailable';
 
 			}
+
+			$class = implode( ' ', $classes );
+
+			printf( '<li class="%s letter-%s"><a %s>%s</a></li>', $class, $letter, $link, strtoupper( $letter ) );
 
 		}
 
