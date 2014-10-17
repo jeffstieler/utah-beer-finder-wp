@@ -9,7 +9,17 @@
 	<?php if ( have_posts() ) : ?>
 
 		<?php while ( have_posts() ) : the_post(); ?>
-			<?php get_template_part( 'content', get_post_format() ); ?>
+
+			<?php if ( DABC_Beer_Post_Type::POST_TYPE === get_post_type() ) : ?>
+
+				<?php get_template_part( 'parts/beer-info' ); ?>
+
+			<?php else : ?>
+
+				<?php get_template_part( 'content', get_post_format() ); ?>
+
+			<?php endif; ?>
+
 		<?php endwhile; ?>
 
 		<?php else : ?>
