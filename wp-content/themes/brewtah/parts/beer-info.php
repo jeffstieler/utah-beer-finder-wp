@@ -23,19 +23,19 @@
 		</div>
 		<div class="row">
 			<div class="large-3 small-3 columns">
-				<span>94</span>
+				<span><?php dabc_the_overall_rating(); ?></span>
 				<p>Overall Score</p>
 			</div>
 			<div class="large-3 small-3 columns">
-				<span>98</span>
+				<span><?php dabc_the_style_rating(); ?></span>
 				<p>Style Score</p>
 			</div>
 			<div class="large-3 small-3 columns">
-				<span>94</span>
+				<span><?php dabc_the_abv(); ?></span>
 				<p>ABV</p>
 			</div>
 			<div class="large-3 small-3 columns">
-				<span>94</span>
+				<span><?php dabc_the_calories(); ?></span>
 				<p>Calories</p>
 			</div>
 		</div>
