@@ -1318,4 +1318,28 @@ class DABC_Beer_Post_Type {
 
 	}
 
+	function get_overall_rating( $post_id ) {
+
+		return $this->titan->getOption( self::RATEBEER_OVERALL_SCORE, $post_id );
+
+	}
+
+	function get_style_rating( $post_id ) {
+
+		return $this->titan->getOption( self::RATEBEER_STYLE_SCORE, $post_id );
+
+	}
+
+	function get_calories( $post_id ) {
+
+		return $this->titan->getOption( self::RATEBEER_CALORIES, $post_id );
+
+	}
+
+	function get_abv( $post_id ) {
+
+		return $this->titan->getOption( self::RATEBEER_ABV, $post_id );
+
+	}
+
 }
