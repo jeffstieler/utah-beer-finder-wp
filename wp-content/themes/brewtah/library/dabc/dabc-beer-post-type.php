@@ -1189,11 +1189,20 @@ class DABC_Beer_Post_Type {
 
 		if ( iterator_count( $rows ) ) {
 
-			$inventory = $rows->each( function( Crawler $row ) {
+			$inventory_data = $rows->each( function( Crawler $row ) {
 				return $this->parse_dabc_inventory_search_result_row( $row );
 			} );
 
-			$inventory = array_filter( $inventory );
+			$inventory_data = array_filter( $inventory_data );
+
+			/**
+			 * Switch inventory to array of [ store # => quantity ]
+			 */
+			foreach ( $inventory_data as $inventory_info ) {
+
+				$inventory[$inventory_info['store']] = $inventory_info['quantity'];
+
+			}
 
 		}
 
