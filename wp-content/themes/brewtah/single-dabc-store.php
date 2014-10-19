@@ -8,7 +8,13 @@
 		<article <?php post_class() ?> id="post-<?php the_ID(); ?>">
 			<header>
 				<h1 class="entry-title"><?php the_title(); ?></h1>
-				<?php brewtah_entry_meta(); ?>
+				<span class="phone">
+					<a href="<?php dabc_the_store_tel_link(); ?>"><?php dabc_the_store_phone_number(); ?></a>
+				</span>
+				<span class="address">
+					<?php dabc_the_store_address(); ?>
+				</span>
+
 			</header>
 			<?php do_action('brewtah_post_before_entry_content'); ?>
 			<div class="entry-content">
@@ -23,10 +29,6 @@
 
 			<?php the_content(); ?>
 			</div>
-			<footer>
-				<?php wp_link_pages(array('before' => '<nav id="page-nav"><p>' . __('Pages:', 'brewtah'), 'after' => '</p></nav>' )); ?>
-				<p><?php the_tags(); ?></p>
-			</footer>
 			<?php do_action('brewtah_post_before_comments'); ?>
 			<?php comments_template(); ?>
 			<?php do_action('brewtah_post_after_comments'); ?>
