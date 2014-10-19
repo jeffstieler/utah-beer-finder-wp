@@ -315,7 +315,7 @@ class DABC_Store_Post_Type {
 
 		$line2 = $this->titan->getOption( self::ADDRESS_2, $post_id );
 
-		return $line1 . '<br/>' . $line2;
+		return $line1 . '<br>' . $line2;
 
 	}
 
