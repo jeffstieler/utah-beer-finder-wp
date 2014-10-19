@@ -152,28 +152,31 @@ class DABC_Store_Post_Type {
 	}
 
 	/**
-	 * Get a store post by it's DABC number
+	 * Get store(s) by their DABC number
 	 *
-	 * @param string $store_number DABC store number
-	 * @return boolean|WP_Post false on no store found, store post otherwise
+	 * @param string|array $store_number DABC store number(s)
+	 * @return WP_Query
 	 */
-	function get_store_by_store_number( $store_number ) {
+	function query_stores_by_number( $store_number ) {
+
+		$store_number = (array) $store_number;
 
 		$store_query = new WP_Query( array(
 			'post_type'      => self::POST_TYPE,
-			'meta_key'       => self::TITAN_NAMESPACE . '_' . self::STORE_NUMBER,
-			'meta_value'     => $store_number,
+			'meta_query'     => array(
+				array(
+					'key'     => self::TITAN_NAMESPACE . '_' . self::STORE_NUMBER,
+					'value'   => $store_number,
+					'compare' => 'IN'
+				)
+			),
 			'no_found_rows'  => true,
-			'posts_per_page' => 1
+			'posts_per_page' => count( $store_number ),
+			'orderby'        => 'post_title',
+			'order'          => 'ASC'
 		) );
 
-		if ( $store_query->have_posts() ) {
-
-			return $store_query->next_post();
-
-		}
-
-		return false;
+		return $store_query;
 
 	}
 

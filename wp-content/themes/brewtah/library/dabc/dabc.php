@@ -89,9 +89,11 @@ class DABC {
 
 		foreach ( $inventory as $store_inventory ) {
 
-			$store_post = $this->stores->get_store_by_store_number( $store_inventory['store'] );
+			$stores = $this->stores->query_stores_by_number( $store_inventory['store'] );
 
-			if ( $store_post ) {
+			if ( $stores->have_posts() ) {
+
+				$store_post = $stores->next_post();
 
 				// TODO: only add beer to store if it isn't already associated
 				$this->connections->add_beer_to_store( $beer_post_id, $store_post->ID );
@@ -197,6 +199,14 @@ function dabc_get_calories( $post_id = null ) {
 function dabc_the_calories( $post_id = null ) {
 
 	echo dabc_get_calories( $post_id );
+
+}
+
+function dabc_query_stores_by_number( $store_number ) {
+
+	$dabc = new DABC();
+
+	return $dabc->stores->query_stores_by_number( $store_number );
 
 }
 
