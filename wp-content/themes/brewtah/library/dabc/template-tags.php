@@ -93,3 +93,31 @@ function dabc_the_store_address( $post_id ) {
 	echo dabc_get_store_address( $post_id );
 
 }
+
+function dabc_get_store_phone_number( $post_id ) {
+
+	$dabc = new DABC();
+
+	return $dabc->stores->get_store_phone_number( $post_id );
+
+}
+
+function dabc_the_store_phone_number( $post_id ) {
+
+	echo dabc_get_store_phone_number( $post_id );
+
+}
+
+function dabc_get_store_tel_link( $post_id ) {
+
+	$dabc = new DABC();
+
+	return $dabc->stores->get_store_tel_link( $post_id );
+
+}
+
+function dabc_the_store_tel_link( $post_id ) {
+
+	echo dabc_get_store_tel_link( $post_id );
+
+}
