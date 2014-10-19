@@ -22,14 +22,13 @@ if ( $inventory['inventory'] ) :
 			<?php while ( $stores->have_posts() ) : ?>
 				<?php $stores->the_post(); ?>
 				<?php $store_post_id = get_the_ID(); ?>
-				<?php $store_number  = TitanFramework::getInstance('dabc-store')->getOption('dabc-store-number', $store_post_id); ?>
+				<?php $store_number  = dabc_get_store_number( $store_post_id ); ?>
 			<tr>
 				<td>
 					<a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
 				</td>
 				<td>
-					<?php echo TitanFramework::getInstance('dabc-store')->getOption('dabc-store-address-1', $store_post_id); ?>
-					<?php echo TitanFramework::getInstance('dabc-store')->getOption('dabc-store-address-2', $store_post_id); ?>
+					<?php dabc_the_store_address( $store_post_id ); ?>
 				</td>
 				<td><?php echo $inventory['inventory'][$store_number]; ?></td>
 			</tr>

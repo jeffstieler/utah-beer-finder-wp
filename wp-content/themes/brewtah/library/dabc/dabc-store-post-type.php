@@ -303,4 +303,20 @@ class DABC_Store_Post_Type {
 
 	}
 
+	function get_store_number( $post_id ) {
+
+		return $this->titan->getOption( self::STORE_NUMBER, $post_id );
+
+	}
+
+	function get_store_address( $post_id ) {
+
+		$line1 = $this->titan->getOption( self::ADDRESS_1, $post_id );
+
+		$line2 = $this->titan->getOption( self::ADDRESS_2, $post_id );
+
+		return $line1 . '<br/>' . $line2;
+
+	}
+
 }

@@ -71,3 +71,25 @@ function dabc_query_stores_by_number( $store_number ) {
 	return $dabc->stores->query_stores_by_number( $store_number );
 
 }
+
+function dabc_get_store_number( $post_id ) {
+
+	$dabc = new DABC();
+
+	return $dabc->stores->get_store_number( $post_id );
+
+}
+
+function dabc_get_store_address( $post_id ) {
+
+	$dabc = new DABC();
+
+	return $dabc->stores->get_store_address( $post_id );
+
+}
+
+function dabc_the_store_address( $post_id ) {
+
+	echo dabc_get_store_address( $post_id );
+
+}
