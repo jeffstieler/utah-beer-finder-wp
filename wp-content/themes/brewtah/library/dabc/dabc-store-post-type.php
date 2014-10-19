@@ -319,4 +319,20 @@ class DABC_Store_Post_Type {
 
 	}
 
+	function get_store_phone_number( $post_id ) {
+
+		return $this->titan->getOption( self::PHONE_NUMBER, $post_id );
+
+	}
+
+	function get_store_tel_link( $post_id ) {
+
+		$phone_number = $this->get_store_phone_number( $post_id );
+
+		$phone_number = str_replace( array( '(', ')', ' ' ), array( '', '', '-' ), $phone_number );
+
+		return sprintf( 'tel:+1-%s', esc_attr( $phone_number ) );
+
+	}
+
 }
