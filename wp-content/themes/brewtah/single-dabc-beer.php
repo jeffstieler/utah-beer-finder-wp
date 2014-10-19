@@ -11,16 +11,13 @@
 			<div class="entry-content">
 
 				<?php get_template_part( 'parts/beer-info' ); ?>
-				
+
 				<div class="row beer-description">
 					<?php the_content(); ?>
 				</div>
 
 			</div>
-			<footer>
-				<?php wp_link_pages(array('before' => '<nav id="page-nav"><p>' . __('Pages:', 'brewtah'), 'after' => '</p></nav>' )); ?>
-				<p><?php the_tags(); ?></p>
-			</footer>
+			<?php get_template_part( 'parts/beer-availability' ); ?>
 			<?php do_action('brewtah_post_before_comments'); ?>
 			<?php comments_template(); ?>
 			<?php do_action('brewtah_post_after_comments'); ?>
