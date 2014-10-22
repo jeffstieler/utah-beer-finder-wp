@@ -28,6 +28,7 @@
 			<?php endif; ?>
 
 			<?php the_content(); ?>
+			<?php get_template_part( 'parts/store-inventory' ); ?>
 			</div>
 			<?php do_action('brewtah_post_before_comments'); ?>
 			<?php comments_template(); ?>
