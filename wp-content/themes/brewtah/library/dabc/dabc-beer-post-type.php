@@ -1351,4 +1351,40 @@ class DABC_Beer_Post_Type {
 
 	}
 
+	function _get_inventory_meta( $post_id ) {
+
+		return get_post_meta( $post_id, self::DABC_INVENTORY, true );
+
+	}
+
+	function get_inventory( $post_id ) {
+
+		$inventory = $this->_get_inventory_meta( $post_id );
+
+		return isset( $inventory['inventory'] ) ? $inventory['inventory'] : false;
+
+	}
+
+	function get_inventory_last_updated( $post_id ) {
+
+		$inventory = $this->_get_inventory_meta( $post_id );
+
+		return isset( $inventory['last_updated'] ) ? $inventory['last_updated'] : false;
+
+	}
+
+	function get_quantity_for_store( $post_id, $store_number ) {
+
+		$inventory = $this->get_inventory( $post_id );
+
+		if ( $inventory && isset( $inventory[$store_number] ) ) {
+
+			return $inventory[$store_number];
+
+		}
+
+		return false;
+
+	}
+
 }
