@@ -173,3 +173,11 @@ function dabc_the_quantity_for_store( $store_number, $post_id = null ) {
 	echo $store_quantity ?: '-';
 
 }
+
+function dabc_get_store_beers( $store_post_id ) {
+
+	$dabc = new DABC();
+
+	return $dabc->get_store_beers( $store_post_id );
+
+}

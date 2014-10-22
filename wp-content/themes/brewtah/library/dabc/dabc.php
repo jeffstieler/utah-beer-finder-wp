@@ -141,6 +141,33 @@ class DABC {
 
 	}
 
+	/**
+	 * Retreive beers connected to a given store
+	 *
+	 * @param int $store_post_id
+	 * @return WP_Query
+	 */
+	function get_store_beers( $store_post_id ) {
+
+		$beers = new WP_Query( array(
+			'post_type' => DABC_Beer_Post_Type::POST_TYPE,
+			'o2o_query' => array(
+				'connection' => DABC_O2O_Connections::DABC_STORE_BEERS,
+				'direction'  => 'to',
+				'id'         => $store_post_id,
+			),
+			'orderby'   => array(
+				'meta_value_num' => 'DESC',
+				'post_title'     => 'ASC'
+			),
+			'meta_key'       => DABC_Beer_Post_Type::TITAN_NAMESPACE . '_' . DABC_Beer_Post_Type::RATEBEER_OVERALL_SCORE,
+			'posts_per_page' => -1
+		) );
+
+		return $beers;
+
+	}
+
 }
 
 add_action( 'init', array( new DABC(), 'init' ) );
