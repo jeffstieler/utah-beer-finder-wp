@@ -129,3 +129,47 @@ function dabc_the_store_tel_link( $post_id = null ) {
 	echo dabc_get_store_tel_link( $post_id );
 
 }
+
+function dabc_get_inventory( $post_id = null ) {
+
+	$post_id = $post_id ?: get_the_ID();
+
+	$dabc = new DABC();
+
+	return $dabc->beers->get_inventory( $post_id );
+
+}
+
+function dabc_get_inventory_last_updated( $post_id = null ) {
+
+	$post_id = $post_id ?: get_the_ID();
+
+	$dabc = new DABC();
+
+	return $dabc->beers->get_inventory_last_updated( $post_id );
+
+}
+
+function dabc_the_inventory_last_updated( $post_id = null ) {
+
+	echo dabc_get_inventory_last_updated( $post_id );
+
+}
+
+function dabc_get_quantity_for_store( $store_number, $post_id = null ) {
+
+	$post_id = $post_id ?: get_the_ID();
+
+	$dabc = new DABC();
+
+	return $dabc->beers->get_quantity_for_store( $post_id, $store_number );
+
+}
+
+function dabc_the_quantity_for_store( $store_number, $post_id = null ) {
+
+	$store_quantity = dabc_get_quantity_for_store( $store_number, $post_id );
+
+	echo $store_quantity ?: '-';
+
+}
