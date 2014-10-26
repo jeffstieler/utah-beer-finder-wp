@@ -258,9 +258,10 @@ class DABC_Store_Post_Type {
 
 				$store = json_decode( $store_json, ARRAY_A );
 
+				// remove store type designation from address field
 				if ( isset( $store['address01'] ) ) {
 
-					$store['address01'] = preg_replace( '/^\(Wine Store\) /', '', $store['address01'] );
+					$store['address01'] = preg_replace( '/^\([[:word:]\s]+\)\s/', '', $store['address01'] );
 
 				}
 
