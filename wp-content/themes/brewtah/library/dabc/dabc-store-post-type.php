@@ -344,4 +344,16 @@ class DABC_Store_Post_Type {
 
 	}
 
+	function get_store_latitude( $post_id ) {
+
+		return $this->titan->getOption( self::LATITUDE, $post_id );
+
+	}
+
+	function get_store_longitude( $post_id ) {
+
+		return $this->titan->getOption( self::LONGITUDE, $post_id );
+
+	}
+
 }
