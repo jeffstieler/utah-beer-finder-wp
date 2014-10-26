@@ -258,6 +258,12 @@ class DABC_Store_Post_Type {
 
 				$store = json_decode( $store_json, ARRAY_A );
 
+				if ( isset( $store['address01'] ) ) {
+
+					$store['address01'] = preg_replace( '/^\(Wine Store\) /', '', $store['address01'] );
+
+				}
+
 				if ( ! is_null( $store['storeNumber'] ) ) {
 
 					$stores[] = $store;
@@ -283,6 +289,8 @@ class DABC_Store_Post_Type {
 			$stores = $this->parse_dabc_store_map_js( $map_js );
 
 			foreach ( $stores as $store ) {
+
+				// TODO: only create the store if it doesn't already exist
 
 				$this->create_store( array(
 					'label'       => $store['label'],
