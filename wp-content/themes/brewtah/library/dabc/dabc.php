@@ -64,6 +64,8 @@ class DABC {
 
 		add_action( self::BEER_INVENTORY_CRON, array( $this, 'sync_inventory_for_beer' ) );
 
+		add_action( 'wp_enqueue_scripts', array( $this, 'add_store_data_to_maps_script' ) );
+
 	}
 
 	/**
@@ -165,6 +167,36 @@ class DABC {
 		) );
 
 		return $beers;
+
+	}
+
+	/**
+	 * Add location data for all stores to be used on the homepage map
+	 */
+	function add_store_data_to_maps_script() {
+
+		if ( ! is_front_page() ) {
+			return;
+		}
+
+		$stores = new WP_Query( array(
+			'post_type'      => DABC_Store_Post_Type::POST_TYPE,
+			'posts_per_page' => -1
+		) );
+
+		$store_data = array();
+
+		foreach ( $stores->posts as $store_post ) {
+
+			$store_data[] = array(
+				'name' => $store_post->post_title,
+				'lat'  => $this->stores->get_store_latitude( $store_post->ID ),
+				'lng'  => $this->stores->get_store_longitude( $store_post->ID ),
+			);
+
+		}
+
+		wp_localize_script( 'google-maps', 'storeLocations', $store_data );
 
 	}
 
