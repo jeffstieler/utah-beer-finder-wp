@@ -9,7 +9,7 @@ if (!function_exists('brewtah_scripts')) :
     // register scripts
     wp_register_script( 'modernizr', get_template_directory_uri() . '/js/modernizr/modernizr.min.js', array(), '1.0.0', true );
     wp_register_script( 'jquery', get_template_directory_uri() . '/js/jquery/dist/jquery.min.js', array(), '1.0.0', true );
-    wp_register_script( 'foundation', get_template_directory_uri() . '/js/app.js', array('jquery'), '1.0.0', true );
+    wp_register_script( 'foundation', get_template_directory_uri() . '/js/app.js', array('jquery', 'underscore'), '1.0.0', true );
 
 	if ( defined( 'BREWTAH_GOOGLE_MAPS_API' ) && BREWTAH_GOOGLE_MAPS_API ) {
 
