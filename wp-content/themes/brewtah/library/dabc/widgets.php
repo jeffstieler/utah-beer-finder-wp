@@ -89,8 +89,14 @@ class DABC_Top_Rated_Beers_Widget extends WP_Widget {
 		} ?>
 		<ul>
 		<?php while ( $r->have_posts() ) : $r->the_post(); ?>
-			<li>
-				<a href="<?php the_permalink(); ?>"><?php get_the_title() ? the_title() : the_ID(); ?></a>
+			<li class="row">
+				<div class="small-8 columns">
+					<a href="<?php the_permalink(); ?>"><?php get_the_title() ? the_title() : the_ID(); ?></a>
+				</div>
+				<div class="small-4 columns">
+					<span class="ratebeer_overall score"><?php echo dabc_get_overall_rating() ?: '-'; ?></span>
+					<span class="ratebeer_style score"><?php echo dabc_get_style_rating() ?: '-'; ?></span>
+				</div>
 			</li>
 		<?php endwhile; ?>
 		</ul>

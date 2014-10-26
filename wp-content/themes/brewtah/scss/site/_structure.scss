@@ -132,16 +132,16 @@ img.alignright {
 		text-align: left;
 		height: auto;
 
-			h1 a, h4 { color: #fff; }
+		h1 a, h4 { color: #fff; }
 
-			.floatingyeti img {
-				max-width: 30%;
-				position: absolute;
-				right: rem-calc(100);
-			}
-
-			.download { margin-top: rem-calc(20); }
+		.floatingyeti img {
+			max-width: 30%;
+			position: absolute;
+			right: rem-calc(100);
 		}
+
+		.download { margin-top: rem-calc(20); }
+	}
 
 
 	/**
@@ -157,7 +157,15 @@ img.alignright {
 	 * ------------------------------------
 	 */
 
-	// Insert styles here
+	// Top Rated Beers and Newest Beers widgets
+	.widget_top_beers, .widget_new_beers {
+		
+		ul {
+			list-style-type: none;
+			margin-left: 0rem;
+		}
+		
+	}
 
 
 	/**
