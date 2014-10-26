@@ -7,17 +7,20 @@
 
 class DABC_Store_Post_Type {
 
-	const POST_TYPE       = 'dabc-store';
-	const TITAN_NAMESPACE = 'dabc-store';
-	const CITY_TAXONOMY   = 'dabc-store-city';
-	const STORE_NUMBER    = 'dabc-store-number';
-	const GOOGLE_ZOOM     = 'dabc-store-google-zoom';
-	const ADDRESS_1       = 'dabc-store-address-1';
-	const ADDRESS_2       = 'dabc-store-address-2';
-	const PHONE_NUMBER    = 'dabc-store-phone';
-	const LATITUDE        = 'dabc-store-latitude';
-	const LONGITUDE       = 'dabc-store-longitude';
-	const STORES_JS_URL   = 'http://abc.utah.gov/common/script/abcMap.js';
+	const POST_TYPE           = 'dabc-store';
+	const TITAN_NAMESPACE     = 'dabc-store';
+	const CITY_TAXONOMY       = 'dabc-store-city';
+	const STORE_NUMBER        = 'dabc-store-number';
+	const GOOGLE_ZOOM         = 'dabc-store-google-zoom';
+	const ADDRESS_1           = 'dabc-store-address-1';
+	const ADDRESS_2           = 'dabc-store-address-2';
+	const PHONE_NUMBER        = 'dabc-store-phone';
+	const LATITUDE            = 'dabc-store-latitude';
+	const LONGITUDE           = 'dabc-store-longitude';
+	const DABC_IMAGE_CRON     = 'image_dabc_store';
+	const DABC_IMG_SEARCHED   = 'has-dabc-image';
+	const STORES_JS_URL       = 'http://abc.utah.gov/common/script/abcMap.js';
+	const STORE_IMGURL_FORMAT = 'http://abc.utah.gov/stores/images/store%s.jpg';
 
 	var $titan;
 
@@ -34,6 +37,8 @@ class DABC_Store_Post_Type {
 		$this->register_post_meta();
 
 		$this->register_taxonomies();
+
+		$this->attach_hooks();
 
 	}
 
@@ -123,6 +128,12 @@ class DABC_Store_Post_Type {
 		register_taxonomy( self::CITY_TAXONOMY, self::POST_TYPE, array(
 			'label' => 'City'
 		) );
+
+	}
+
+	function attach_hooks() {
+
+		add_action( self::DABC_IMAGE_CRON, array( $this, 'sync_featured_image_with_dabc' ), 10, 2 );
 
 	}
 
@@ -353,6 +364,128 @@ class DABC_Store_Post_Type {
 	function get_store_longitude( $post_id ) {
 
 		return $this->titan->getOption( self::LONGITUDE, $post_id );
+
+	}
+
+	/**
+	 * Grab featured images from DABC
+	 */
+	function sync_featured_images_with_dabc() {
+
+		$no_image_stores = new WP_Query( array(
+			'post_type'      => self::POST_TYPE,
+			'posts_per_page' => -1,
+			'fields'         => 'ids',
+			'meta_query'     => array(
+				array(
+					'key'     => '_thumbnail_id',
+					'value'   => '',
+					'compare' => 'NOT EXISTS'
+				)
+			)
+		) );
+
+		foreach ( $no_image_stores->posts as $post_id ) {
+
+			$store_number = $this->get_store_number( $post_id );
+
+			$image_synced = $this->titan->getOption( self::DABC_IMG_SEARCHED, $post_id );
+
+			if ( $store_number && ! $image_synced ) {
+
+				$this->schedule_dabc_image_sync_for_store( $store_number, $post_id );
+
+			}
+
+		}
+
+	}
+
+	/**
+	 * Schedule a job to download a store image from the DABC
+	 *
+	 * @param int $store_number DABC store number
+	 * @param int $post_id store post ID
+	 * @param int $offset_in_minutes optional. delay (from right now) of cron job
+	 */
+	function schedule_dabc_image_sync_for_store( $store_number, $post_id, $offset_in_minutes = 0 ) {
+
+		$timestamp = ( time() + ( $offset_in_minutes * MINUTE_IN_SECONDS ) );
+
+		wp_schedule_single_event( $timestamp, self::DABC_IMAGE_CRON, array( $store_number, $post_id ) );
+
+	}
+
+	/**
+	 * Build a store image URL from it's Store Number
+	 *
+	 * @param int $number
+	 * @return string URL for DABC Store image
+	 */
+	function get_dabc_store_image_url( $number ) {
+
+		return sprintf( self::STORE_IMGURL_FORMAT, $number );
+
+	}
+
+	/**
+	 * Download a store's image from the DABC and set as it's featured image
+	 *
+	 * @param int $post_id
+	 */
+	function sync_featured_image_with_dabc( $store_number, $post_id ) {
+
+		if ( ! function_exists( 'media_sideload_image' ) ) {
+
+			require_once( trailingslashit( ABSPATH ) . 'wp-admin/includes/media.php' );
+
+			require_once( trailingslashit( ABSPATH ) . 'wp-admin/includes/file.php' );
+
+		}
+
+		$image_url = $this->get_dabc_store_image_url( $store_number );
+
+		$result    = media_sideload_image( $image_url, $post_id );
+
+		if ( is_wp_error( $result ) ) {
+
+			if ( 'http_404' === $result->get_error_code() ) {
+
+				$this->mark_store_as_image_searched( $post_id );
+
+			} else {
+
+				$this->schedule_dabc_image_sync_for_store( $store_number, $post_id, 10 );
+
+			}
+
+		} else {
+
+			$images = get_attached_media( 'image', $post_id );
+
+			$thumbnail = array_shift( $images );
+
+			if ( ! is_null( $thumbnail ) ) {
+
+				set_post_thumbnail( $post_id, $thumbnail->ID );
+
+			}
+
+			$this->mark_store_as_image_searched( $post_id );
+
+		}
+
+	}
+
+	/**
+	 * Flag a store as having an image sync attempt with the DABC
+	 *
+	 * @param int $post_id store post ID
+	 * @return bool success
+	 */
+	function mark_store_as_image_searched( $post_id ) {
+
+		return (bool) update_post_meta( $post_id, self::DABC_IMG_SEARCHED, true );
 
 	}
 
