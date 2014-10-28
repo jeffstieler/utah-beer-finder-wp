@@ -121,6 +121,27 @@ img.alignright {
 	// Front Page Store Map
 	#store-map {
 		height: rem-calc(400);
+
+		img {
+			max-width: none;
+		}
+	}
+
+	#store-info-window {
+
+		width: 26rem;
+		padding: 1rem;
+
+		img {
+			max-width: 8rem;
+			float: left;
+			margin-right: 1rem;
+		}
+
+		p {
+			font-size: inherit;
+		}
+
 	}
 
 	// Hero
@@ -159,12 +180,12 @@ img.alignright {
 
 	// Top Rated Beers and Newest Beers widgets
 	.widget_top_beers, .widget_new_beers {
-		
+
 		ul {
 			list-style-type: none;
 			margin-left: 0rem;
 		}
-		
+
 	}
 
 
