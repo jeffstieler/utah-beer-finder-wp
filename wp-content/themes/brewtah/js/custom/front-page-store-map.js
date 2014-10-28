@@ -1,6 +1,21 @@
 (function(){
 
-	var map, mapOptions, mapDiv;
+	var map, mapOptions, mapDiv, markers, infoWindow;
+	
+	var infoWindowTemplate = _.template(
+		'<div id="store-info-window">' +
+			'<div>' +
+				'<a href="<%= permalink %>">' +
+					'<%= image %>' +
+				'</a>' +
+			'</div>' +
+			'<div class="store-details">' +
+				'<h4><a href="<%= permalink %>"><%= name %></a></h4>' +
+				'<a href="<%= telLink %>"><%= phoneNumber %></a>' +
+				'<p><%= hours %></p>' +
+			'</div>' +
+		'</div>'
+	);
 
 	function initialize() {
 
@@ -13,12 +28,16 @@
 
 		map = new google.maps.Map( mapDiv, mapOptions );
 
+		infoWindow = new google.maps.InfoWindow( {
+			maxWidth: 400
+		} );
+
 		if ( ! _.isUndefined( storeLocations ) ) {
 
-			_.each( storeLocations, function( store, i ) {
+			markers = _.map( storeLocations, function( store, idx ) {
 
-				var storeLat = parseFloat( store.lat );
-				var storeLng = parseFloat( store.lng );
+				var storeLat = parseFloat( store.latitude );
+				var storeLng = parseFloat( store.longitude );
 				var position = new google.maps.LatLng( storeLat, storeLng );
 
 				var marker = new google.maps.Marker( {
@@ -27,9 +46,23 @@
 					map: map
 				} );
 
+				google.maps.event.addListener( marker, 'click', function() {
+					openStoreInfo( idx );
+				} );
+
+				return marker;
+
 			} );
 
 		}
+
+	}
+
+	function openStoreInfo( markerIdx ) {
+
+		infoWindow.close();
+		infoWindow.setContent( infoWindowTemplate( storeLocations[markerIdx] ) );
+		infoWindow.open( map, markers[markerIdx] );
 
 	}
 
