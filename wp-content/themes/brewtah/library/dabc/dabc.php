@@ -189,9 +189,14 @@ class DABC {
 		foreach ( $stores->posts as $store_post ) {
 
 			$store_data[] = array(
-				'name' => $store_post->post_title,
-				'lat'  => $this->stores->get_store_latitude( $store_post->ID ),
-				'lng'  => $this->stores->get_store_longitude( $store_post->ID ),
+				'name'        => $store_post->post_title,
+				'latitude'    => $this->stores->get_store_latitude( $store_post->ID ),
+				'longitude'   => $this->stores->get_store_longitude( $store_post->ID ),
+				'image'       => get_the_post_thumbnail( $store_post->ID ),
+				'hours'       => $store_post->post_content,
+				'telLink'     => $this->stores->get_store_tel_link( $store_post->ID ),
+				'phoneNumber' => $this->stores->get_store_phone_number( $store_post->ID ),
+				'permalink'   => get_permalink( $store_post->ID )
 			);
 
 		}
