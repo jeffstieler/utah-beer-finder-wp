@@ -119,7 +119,8 @@ class DABC_Beer_Post_Type {
 					'thumbnail',
 					'comments',
 					'revisions',
-					'alphabetic-listing'
+					'alphabetic-listing',
+					'untappd'
 				),
 				'rewrite'     => array(
 					'slug' => 'beer'
