@@ -33,6 +33,8 @@ class DABC_Beer_Post_Type {
 	const RATEBEER_IMGURL_FORMAT = 'http://res.cloudinary.com/ratebeer/image/upload/beer_%s.jpg';
 	const RATEBEER_IMG_SEARCHED  = 'has-ratebeer-image';
 	const RATEBEER_BASE_URL      = 'http://www.ratebeer.com';
+	const UNTAPPD_SEARCHED       = 'has-untappd-searched';
+	const UNTAPPD_ID             = 'untappd-id';
 	const DABC_URL_BASE          = 'http://www.webapps.abc.utah.gov/Production';
 	const DABC_BEER_LIST_URL     = '/OnlinePriceList/DisplayPriceList.aspx?DivCd=T';
 	const DABC_INVENTORY_URL     = '/OnlineInventoryQuery/IQ/InventoryQuery.aspx';
@@ -190,6 +192,17 @@ class DABC_Beer_Post_Type {
 		$rb_box->createOption( array(
 			'name' => 'ABV',
 			'id'   => self::RATEBEER_ABV
+		) );
+
+		$untappd_box = $this->titan->createMetaBox( array(
+			'name'      => 'Untappd Info',
+			'id'        => 'untappd-info',
+			'post_type' => self::POST_TYPE
+		) );
+
+		$untappd_box->createOption( array(
+			'name' => 'ID',
+			'id'   => self::UNTAPPD_ID
 		) );
 
 	}
@@ -1381,6 +1394,50 @@ class DABC_Beer_Post_Type {
 		if ( $inventory && isset( $inventory[$store_number] ) ) {
 
 			return $inventory[$store_number];
+
+		}
+
+		return false;
+
+	}
+
+	/**
+	 * Search for beers on Untappd
+	 *
+	 * @param string $query
+	 * @return bool|WP_Error|array
+	 */
+	function search_untappd( $query ) {
+
+		if ( ! defined( 'UNTAPPD_CLIENT_ID' ) || ! defined( 'UNTAPPD_CLIENT_SECRET' ) ) {
+
+			return false;
+
+		}
+
+		$url = add_query_arg(
+			array(
+				'q'             => urlencode( $query ),
+				'sort'          => 'count',
+				'client_id'     => UNTAPPD_CLIENT_ID,
+				'client_secret' => UNTAPPD_CLIENT_SECRET
+			),
+			'https://api.untappd.com/v4/search/beer'
+		);
+
+		$response = $this->_make_http_request( $url );
+
+		if ( ( false === $response ) || is_wp_error( $response ) ) {
+
+			return false;
+
+		}
+
+		$response_data = json_decode( $response );
+
+		if ( isset( $response_data->response->beers->items ) ) {
+
+			return $response_data->response->beers->items;
 
 		}
 

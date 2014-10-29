@@ -1,11 +1,6 @@
 <?php
 
 /**
- * Include Untappd Sync
- */
-require_once( __DIR__ . '/untappd-sync.php' );
-
-/**
  * Include the DABC beer post type
  */
 require_once( __DIR__ . '/dabc-beer-post-type.php' );
@@ -42,7 +37,6 @@ class DABC {
 	var $beers;
 	var $stores;
 	var $connections;
-	var $untappd;
 
 	function __construct() {
 
@@ -51,8 +45,6 @@ class DABC {
 		$this->stores = new DABC_Store_Post_Type();
 
 		$this->connections = new DABC_O2O_Connections();
-
-		$this->untappd = new Untappd_Sync();
 
 	}
 
@@ -63,8 +55,6 @@ class DABC {
 		$this->stores->init();
 
 		$this->connections->init();
-
-		$this->untappd->init();
 
 		$this->attach_hooks();
 
