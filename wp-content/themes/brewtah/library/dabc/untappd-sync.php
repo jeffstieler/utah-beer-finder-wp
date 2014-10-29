@@ -76,7 +76,7 @@ class Untappd_Sync {
 	 * Search for beers on Untappd
 	 *
 	 * @param string $query
-	 * @return bool|WP_Error|string
+	 * @return bool|WP_Error|array
 	 */
 	function search( $query ) {
 
@@ -98,7 +98,21 @@ class Untappd_Sync {
 
 		$response = $this->_make_http_request( $url );
 
-		return $response;
+		if ( ( false === $response ) || is_wp_error( $response ) ) {
+
+			return false;
+
+		}
+
+		$response_data = json_decode( $response );
+
+		if ( isset( $response_data->response->beers->items ) ) {
+
+			return $response_data->response->beers->items;
+
+		}
+
+		return false;
 
 	}
 
