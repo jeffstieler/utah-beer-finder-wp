@@ -36,6 +36,12 @@ class Ratebeer_Sync {
 
 	}
 
+	function _get_titan_meta_key( $option_name ) {
+
+		return ( self::TITAN_NAMESPACE . '_' . $option_name );
+
+	}
+
 	/**
 	 * HTTP request helper
 	 *
@@ -520,7 +526,7 @@ class Ratebeer_Sync {
 	 */
 	function sync_post_beer_info_on_url_add( $object_id, $meta_key, $meta_value ) {
 
-		$ratebeer_url_key = $this->get_titan_meta_key( self::RATEBEER_URL_OPTION );
+		$ratebeer_url_key = $this->_get_titan_meta_key( self::URL );
 
 		if ( ( $ratebeer_url_key === $meta_key ) && !empty( $meta_value ) ) {
 

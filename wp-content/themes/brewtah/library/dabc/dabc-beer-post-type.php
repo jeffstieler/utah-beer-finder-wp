@@ -251,12 +251,6 @@ class DABC_Beer_Post_Type {
 
 	}
 
-	function get_titan_meta_key( $option_name ) {
-
-		return ( self::TITAN_NAMESPACE . '_' . $option_name );
-
-	}
-
 	/**
 	 * Beautify common ugliness in DABC beer descriptions
 	 *
