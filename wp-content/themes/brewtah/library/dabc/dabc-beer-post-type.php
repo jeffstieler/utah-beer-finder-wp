@@ -1795,7 +1795,11 @@ EOB;
 
 			}
 
+			if ( isset( $beer_info->brewery->country_name ) ) {
 
+				wp_set_object_terms( $post_id, $beer_info->brewery->country_name, self::COUNTRY_TAXONOMY );
+
+			}
 
 			return true;
 
