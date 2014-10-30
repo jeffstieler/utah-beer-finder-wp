@@ -4,15 +4,15 @@ use Symfony\Component\DomCrawler\Crawler;
 
 class Ratebeer_Sync {
 
-	const TITAN_NAMESPACE        = 'ratebeer';
-	const RATEBEER_ID            = 'id';
-	const RATEBEER_URL_OPTION    = 'url';
-	const RATEBEER_OVERALL_SCORE = 'overall-score';
-	const RATEBEER_STYLE_SCORE   = 'style-score';
-	const RATEBEER_CALORIES      = 'calories';
-	const RATEBEER_ABV           = 'abv';
-	const RATEBEER_IMGURL_FORMAT = 'http://res.cloudinary.com/ratebeer/image/upload/beer_%s.jpg';
-	const RATEBEER_BASE_URL      = 'http://www.ratebeer.com';
+	const TITAN_NAMESPACE = 'ratebeer';
+	const ID              = 'id';
+	const URL             = 'url';
+	const OVERALL_SCORE   = 'overall-score';
+	const STYLE_SCORE     = 'style-score';
+	const CALORIES        = 'calories';
+	const ABV             = 'abv';
+	const IMGURL_FORMAT   = 'http://res.cloudinary.com/ratebeer/image/upload/beer_%s.jpg';
+	const BASE_URL        = 'http://www.ratebeer.com';
 
 	var $post_type;
 	var $titan;
@@ -109,9 +109,9 @@ class Ratebeer_Sync {
 
 				$titan = TitanFramework::getInstance( self::TITAN_NAMESPACE );
 
-				$titan->setOption( self::RATEBEER_URL_OPTION, $beer['url'], $post_id );
+				$titan->setOption( self::URL, $beer['url'], $post_id );
 
-				$titan->setOption( self::RATEBEER_ID, $beer['id'], $post_id );
+				$titan->setOption( self::ID, $beer['id'], $post_id );
 
 			}
 
@@ -222,7 +222,7 @@ class Ratebeer_Sync {
 	function ratebeer_search_request( $query ) {
 
 		$result = $this->_make_http_request(
-			self::RATEBEER_BASE_URL . '/findbeer.asp',
+			self::BASE_URL . '/findbeer.asp',
 			array(
 				'method'  => 'POST',
 				'headers' => array(
@@ -249,32 +249,32 @@ class Ratebeer_Sync {
 
 		$rb_box->createOption( array(
 			'name' => 'ID',
-			'id'   => self::RATEBEER_ID
+			'id'   => self::ID
 		) );
 
 		$rb_box->createOption( array(
 			'name' => 'URL',
-			'id'   => self::RATEBEER_URL_OPTION
+			'id'   => self::URL
 		) );
 
 		$rb_box->createOption( array(
 			'name' => 'Overall Score',
-			'id'   => self::RATEBEER_OVERALL_SCORE
+			'id'   => self::OVERALL_SCORE
 		) );
 
 		$rb_box->createOption( array(
 			'name' => 'Style Score',
-			'id'   => self::RATEBEER_STYLE_SCORE
+			'id'   => self::STYLE_SCORE
 		) );
 
 		$rb_box->createOption( array(
 			'name' => 'Calories',
-			'id'   => self::RATEBEER_CALORIES
+			'id'   => self::CALORIES
 		) );
 
 		$rb_box->createOption( array(
 			'name' => 'ABV',
-			'id'   => self::RATEBEER_ABV
+			'id'   => self::ABV
 		) );
 
 	}
