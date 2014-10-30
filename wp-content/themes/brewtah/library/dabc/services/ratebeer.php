@@ -11,7 +11,7 @@ class Ratebeer_Sync {
 	const STYLE_SCORE     = 'style-score';
 	const CALORIES        = 'calories';
 	const ABV             = 'abv';
-	const MAP_CRON        = 'map_ratebeer';
+	const SEARCH_CRON     = 'search_ratebeer';
 	const SEARCHED        = 'has-ratebeer-searched';
 	const IMGURL_FORMAT   = 'http://res.cloudinary.com/ratebeer/image/upload/beer_%s.jpg';
 	const BASE_URL        = 'http://www.ratebeer.com';
@@ -62,7 +62,7 @@ class Ratebeer_Sync {
 
 	function attach_hooks() {
 
-		add_action( self::MAP_CRON, array( $this, 'cron_map_dabc_beer_to_ratebeer' ) );
+		add_action( self::SEARCH_CRON, array( $this, 'cron_map_post_to_beer' ) );
 
 	}
 
@@ -72,17 +72,17 @@ class Ratebeer_Sync {
 	 *
 	 * @param int $post_id beer post ID
 	 */
-	function cron_map_dabc_beer_to_ratebeer( $post_id ) {
+	function cron_map_post_to_beer( $post_id ) {
 
-		$success = $this->map_dabc_beer_to_ratebeer( $post_id );
+		$success = $this->map_post_to_beer( $post_id );
 
 		if ( $success ) {
 
-			$this->mark_beer_as_ratebeer_searched( $post_id );
+			$this->mark_post_as_searched( $post_id );
 
 		} else {
 
-			$this->schedule_ratebeer_search_for_beer( $post_id, 10 );
+			$this->schedule_search_for_post( $post_id, 10 );
 
 		}
 
@@ -103,13 +103,13 @@ class Ratebeer_Sync {
 	 * @param int $post_id
 	 * @return bool success
 	 */
-	function map_dabc_beer_to_ratebeer( $post_id ) {
+	function map_post_to_beer( $post_id ) {
 
 		$post = get_post( $post_id );
 
 		$beer_name = $post->post_title;
 
-		$search_results = $this->search_ratebeer( $beer_name );
+		$search_results = $this->search( $beer_name );
 
 		if ( is_array( $search_results ) ) {
 
@@ -140,7 +140,7 @@ class Ratebeer_Sync {
 	 * @param int $post_id beer post ID
 	 * @return bool success
 	 */
-	function mark_beer_as_ratebeer_searched( $post_id ) {
+	function mark_post_as_searched( $post_id ) {
 
 		return (bool) update_post_meta( $post_id, self::SEARCHED, true );
 
@@ -152,7 +152,7 @@ class Ratebeer_Sync {
 	 * @param string $html HTML search results from Ratebeer
 	 * @return array beers found in Ratebeer html response
 	 */
-	function parse_ratebeer_search_response( $html ) {
+	function parse_search_results_page( $html ) {
 
 		$beers = array();
 
@@ -174,7 +174,7 @@ class Ratebeer_Sync {
 
 			$beers = $result_rows->each( function( Crawler $row ) {
 
-				return $this->parse_ratebeer_search_results_table_row( $row );
+				return $this->parse_search_results_table_row( $row );
 
 			} );
 
@@ -191,7 +191,7 @@ class Ratebeer_Sync {
 	 * @param \Symfony\Component\DomCrawler\Crawler $row
 	 * @return array beer information from ratebeer
 	 */
-	function parse_ratebeer_search_results_table_row( Crawler $row ) {
+	function parse_search_results_table_row( Crawler $row ) {
 
 		$beer = false;
 
@@ -229,7 +229,7 @@ class Ratebeer_Sync {
 	 * @param string $query - search query for ratebeer
 	 * @return bool|WP_Error|string boolean false if non 200, WP_Error on request error, HTML string on success
 	 */
-	function ratebeer_search_request( $query ) {
+	function search_request( $query ) {
 
 		$result = $this->_make_http_request(
 			self::BASE_URL . '/findbeer.asp',
@@ -295,25 +295,25 @@ class Ratebeer_Sync {
 	 * @param int $post_id beer post ID
 	 * @param int $offset_in_minutes optional. delay (from right now) of cron job
 	 */
-	function schedule_ratebeer_search_for_beer( $post_id, $offset_in_minutes = 0 ) {
+	function schedule_search_for_post( $post_id, $offset_in_minutes = 0 ) {
 
 		$timestamp = ( time() + ( $offset_in_minutes * MINUTE_IN_SECONDS ) );
 
-		wp_schedule_single_event( $timestamp, self::RATEBEER_MAP_CRON, array( $post_id ) );
+		wp_schedule_single_event( $timestamp, self::SEARCH_CRON, array( $post_id ) );
 
 	}
 
 	/**
-	 * Find all beers that haven't been searched for on Ratebeer
+	 * Find all posts that haven't been searched for on Ratebeer
 	 * successfully and schedule a cron job to map them
 	 */
-	function search_beers_on_ratebeer() {
+	function schedule_search_for_all_posts() {
 
-		$unmapped_beers = new WP_Query( array(
-			'post_type'      => self::POST_TYPE,
+		$unmapped_posts = new WP_Query( array(
+			'post_type'      => $this->post_type,
 			'meta_query'     => array(
 				array(
-					'key'     => self::RATEBEER_SEARCHED,
+					'key'     => self::SEARCHED,
 					'value'   => '',
 					'compare' => 'NOT EXISTS'
 				)
@@ -323,7 +323,7 @@ class Ratebeer_Sync {
 			'fields'         => 'ids'
 		) );
 
-		array_map( array( $this, 'schedule_ratebeer_search_for_beer' ), $unmapped_beers->posts );
+		array_map( array( $this, 'schedule_search_for_post' ), $unmapped_posts->posts );
 
 	}
 
@@ -333,9 +333,9 @@ class Ratebeer_Sync {
 	 * @param string $query search query
 	 * @return boolean|array boolean false on error, array of beers on success
 	 */
-	function search_ratebeer( $query ) {
+	function search( $query ) {
 
-		$response = $this->ratebeer_search_request( $query );
+		$response = $this->search_request( $query );
 
 		if ( ( false === $response ) || is_wp_error( $response ) ) {
 
@@ -343,7 +343,7 @@ class Ratebeer_Sync {
 
 		}
 
-		$beers = $this->parse_ratebeer_search_response( $response );
+		$beers = $this->parse_search_results_page( $response );
 
 		$beers = array_filter( $beers, function( $beer ) {
 
