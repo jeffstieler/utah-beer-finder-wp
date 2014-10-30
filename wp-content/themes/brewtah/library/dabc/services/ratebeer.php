@@ -364,7 +364,7 @@ class Ratebeer_Sync {
 	 * @param int $post_id beer post ID
 	 * @return bool success
 	 */
-	function mark_beer_as_ratebeer_synced( $post_id ) {
+	function mark_post_as_synced( $post_id ) {
 
 		return (bool) update_post_meta( $post_id, self::SYNCED, true );
 
@@ -393,7 +393,7 @@ class Ratebeer_Sync {
 
 			if ( $this->titan->getOption( self::RATEBEER_URL_OPTION, $post_id ) ) {
 
-				$this->schedule_ratebeer_sync_for_beer( $post_id );
+				$this->schedule_sync_for_post( $post_id );
 
 			}
 
@@ -407,7 +407,7 @@ class Ratebeer_Sync {
 	 * @param int $post_id beer post ID
 	 * @param int $offset_in_minutes optional. delay (from right now) of cron job
 	 */
-	function schedule_ratebeer_sync_for_beer( $post_id, $offset_in_minutes = 0 ) {
+	function schedule_sync_for_post( $post_id, $offset_in_minutes = 0 ) {
 
 		$timestamp = ( time() + ( $offset_in_minutes * MINUTE_IN_SECONDS ) );
 
@@ -423,15 +423,15 @@ class Ratebeer_Sync {
 	 */
 	function cron_sync_post_beer_info( $post_id ) {
 
-		$success = $this->sync_dabc_beer_with_ratebeer( $post_id );
+		$success = $this->sync_post_beer_info( $post_id );
 
 		if ( $success ) {
 
-			$this->mark_beer_as_ratebeer_synced( $post_id );
+			$this->mark_post_as_synced( $post_id );
 
 		} else {
 
-			$this->schedule_ratebeer_sync_for_beer( $post_id, 10 );
+			$this->schedule_sync_for_post( $post_id, 10 );
 
 		}
 
@@ -443,7 +443,7 @@ class Ratebeer_Sync {
 	 * @param int $post_id
 	 * @return bool success
 	 */
-	function sync_dabc_beer_with_ratebeer( $post_id ) {
+	function sync_post_beer_info( $post_id ) {
 
 		$beer_path = $this->titan->getOption( self::RATEBEER_URL_OPTION, $post_id );
 
@@ -484,7 +484,7 @@ class Ratebeer_Sync {
 	 */
 	function sync_ratebeer( $path ) {
 
-		$response = $this->ratebeer_sync_request( $path );
+		$response = $this->sync_request( $path );
 
 		if ( ( false === $response ) || is_wp_error( $response ) ) {
 
@@ -492,7 +492,7 @@ class Ratebeer_Sync {
 
 		}
 
-		$info = $this->parse_ratebeer_sync_response( $response );
+		$info = $this->parse_single_beer_page( $response );
 
 		return $info;
 
@@ -504,7 +504,7 @@ class Ratebeer_Sync {
 	 * @param string $path - beer path on ratebeer
 	 * @return bool|WP_Error|string boolean false if non 200, WP_Error on request error, HTML string on success
 	 */
-	function ratebeer_sync_request( $path ) {
+	function sync_request( $path ) {
 
 		$result = $this->_make_http_request(
 			self::RATEBEER_BASE_URL . $path,
@@ -523,7 +523,7 @@ class Ratebeer_Sync {
 	 * @param string $html HTML beer page from Ratebeer
 	 * @return array beer info found in Ratebeer html response
 	 */
-	function parse_ratebeer_sync_response( $html ) {
+	function parse_single_beer_page( $html ) {
 
 		$crawler = new Crawler( $html );
 
