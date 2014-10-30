@@ -34,6 +34,7 @@ class DABC_Beer_Post_Type {
 	const RATEBEER_IMG_SEARCHED  = 'has-ratebeer-image';
 	const RATEBEER_BASE_URL      = 'http://www.ratebeer.com';
 	const UNTAPPD_SEARCHED       = 'has-untappd-searched';
+	const UNTAPPD_MAP_CRON       = 'map_untappd';
 	const UNTAPPD_ID             = 'untappd-id';
 	const DABC_URL_BASE          = 'http://www.webapps.abc.utah.gov/Production';
 	const DABC_BEER_LIST_URL     = '/OnlinePriceList/DisplayPriceList.aspx?DivCd=T';
@@ -1476,6 +1477,55 @@ class DABC_Beer_Post_Type {
 		}
 
 		return false;
+
+	}
+
+	/**
+	 * Flag a beer as having attempted to be mapped with Untappd
+	 * NOTE: many won't be found and we don't want to keep looking
+	 *
+	 * @param int $post_id beer post ID
+	 * @return bool success
+	 */
+	function mark_beer_as_untappd_searched( $post_id ) {
+
+		return (bool) update_post_meta( $post_id, self::UNTAPPD_SEARCHED, true );
+
+	}
+
+	/**
+	 * Schedule a job to search a single beer on Untappd
+	 *
+	 * @param int $post_id beer post ID
+	 * @param int $offset_in_minutes optional. delay (from right now) of cron job
+	 */
+	function schedule_untappd_search_for_beer( $post_id, $offset_in_minutes = 0 ) {
+
+		$timestamp = ( time() + ( $offset_in_minutes * MINUTE_IN_SECONDS ) );
+
+		wp_schedule_single_event( $timestamp, self::UNTAPPD_MAP_CRON, array( $post_id ) );
+
+	}
+
+	/**
+	 * WP-Cron hook callback for searching a beer on Untappd
+	 * Marks beer as processed on success, or rescedules itself on failure
+	 *
+	 * @param int $post_id beer post ID
+	 */
+	function cron_map_dabc_beer_to_untappd( $post_id ) {
+
+		$success = $this->map_dabc_beer_to_untappd( $post_id );
+
+		if ( $success ) {
+
+			$this->mark_beer_as_untappd_searched( $post_id );
+
+		} else {
+
+			$this->schedule_untappd_search_for_beer( $post_id, 10 );
+
+		}
 
 	}
 
