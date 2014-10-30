@@ -439,7 +439,7 @@ class Ratebeer_Sync {
 
 		foreach ( $unsynced_beers->posts as $post_id ) {
 
-			if ( $this->titan->getOption( self::RATEBEER_URL_OPTION, $post_id ) ) {
+			if ( $this->titan->getOption( self::URL, $post_id ) ) {
 
 				$this->schedule_sync_for_post( $post_id );
 
@@ -560,19 +560,19 @@ class Ratebeer_Sync {
 	 */
 	function sync_post_beer_info( $post_id ) {
 
-		$beer_path = $this->titan->getOption( self::RATEBEER_URL_OPTION, $post_id );
+		$beer_path = $this->titan->getOption( self::URL, $post_id );
 
 		$beer_info = $this->get_beer_info( $beer_path );
 
 		if ( is_array( $beer_info ) && $beer_info ) {
 
-			$this->titan->setOption( self::RATEBEER_OVERALL_SCORE, $beer_info['overall_score'], $post_id );
+			$this->titan->setOption( self::OVERALL_SCORE, $beer_info['overall_score'], $post_id );
 
-			$this->titan->setOption( self::RATEBEER_STYLE_SCORE, $beer_info['style_score'], $post_id );
+			$this->titan->setOption( self::STYLE_SCORE, $beer_info['style_score'], $post_id );
 
-			$this->titan->setOption( self::RATEBEER_ABV, $beer_info['abv'], $post_id );
+			$this->titan->setOption( self::ABV, $beer_info['abv'], $post_id );
 
-			$this->titan->setOption( self::RATEBEER_CALORIES, $beer_info['calories'], $post_id );
+			$this->titan->setOption( self::CALORIES, $beer_info['calories'], $post_id );
 
 			if ( ! empty( $beer_info['description'] ) ) {
 
@@ -600,7 +600,7 @@ class Ratebeer_Sync {
 	function sync_request( $path ) {
 
 		$result = $this->_make_http_request(
-			self::RATEBEER_BASE_URL . $path,
+			self::BASE_URL . $path,
 			array(
 				'timeout' => 10
 			)
