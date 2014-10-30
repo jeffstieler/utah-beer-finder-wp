@@ -277,6 +277,8 @@ class DABC_Beer_Post_Type {
 
 		add_action( self::UNTAPPD_MAP_CRON, array( $this, 'cron_map_dabc_beer_to_untappd' ) );
 
+		add_action( self::UNTAPPD_SYNC_CRON, array( $this, 'sync_dabc_beer_with_untappd' ) );
+
 		add_action( 'update_postmeta', array( $this, 'sync_ratebeer_on_url_update' ), 10, 4 );
 
 		add_action( 'add_post_meta', array( $this, 'sync_ratebeer_on_url_add' ), 10, 3 );
