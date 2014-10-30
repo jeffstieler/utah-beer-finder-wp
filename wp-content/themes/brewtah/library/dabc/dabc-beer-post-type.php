@@ -35,8 +35,10 @@ class DABC_Beer_Post_Type {
 	const RATEBEER_BASE_URL      = 'http://www.ratebeer.com';
 	const UNTAPPD_SEARCHED       = 'has-untappd-searched';
 	const UNTAPPD_MAP_CRON       = 'map_untappd';
+	const UNTAPPD_SYNC_CRON      = 'sync_untappd';
 	const UNTAPPD_ID             = 'untappd-id';
 	const UNTAPPD_HIT_LIMIT      = 'untappd-hit-limit';
+	const UNTAPPD_SYNCED         = 'has-untappd-sync';
 	const DABC_URL_BASE          = 'http://www.webapps.abc.utah.gov/Production';
 	const DABC_BEER_LIST_URL     = '/OnlinePriceList/DisplayPriceList.aspx?DivCd=T';
 	const DABC_INVENTORY_URL     = '/OnlineInventoryQuery/IQ/InventoryQuery.aspx';
@@ -1589,6 +1591,52 @@ class DABC_Beer_Post_Type {
 		) );
 
 		array_map( array( $this, 'schedule_untappd_search_for_beer' ), $unmapped_beers->posts );
+
+	}
+
+	/**
+	 * Schedule a job to sync a single beer with Untappd
+	 *
+	 * @param int $post_id beer post ID
+	 * @param int $offset_in_minutes optional. delay (from right now) of cron job
+	 */
+	function schedule_untappd_sync_for_beer( $post_id, $offset_in_minutes = 0 ) {
+
+		$timestamp = ( time() + ( $offset_in_minutes * MINUTE_IN_SECONDS ) );
+
+		wp_schedule_single_event( $timestamp, self::UNTAPPD_SYNC_CRON, array( $post_id ) );
+
+	}
+
+
+	/**
+	 * Retrieve info and ratings from Untappd for beers that have been mapped
+	 */
+	function sync_beers_with_untappd() {
+
+		$unsynced_beers = new WP_Query( array(
+			'post_type'      => self::POST_TYPE,
+			'meta_query'     => array(
+				array(
+					'key'     => self::UNTAPPD_SYNCED,
+					'value'   => '',
+					'compare' => 'NOT EXISTS'
+				)
+			),
+			'no_found_rows'  => true,
+			'posts_per_page' => -1,
+			'fields'         => 'ids'
+		) );
+
+		foreach ( $unsynced_beers->posts as $post_id ) {
+
+			if ( $this->titan->getOption( self::UNTAPPD_ID, $post_id ) ) {
+
+				$this->schedule_untappd_sync_for_beer( $post_id );
+
+			}
+
+		}
 
 	}
 
