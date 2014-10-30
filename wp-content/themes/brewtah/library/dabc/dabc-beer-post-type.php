@@ -1400,12 +1400,13 @@ class DABC_Beer_Post_Type {
 	}
 
 	/**
-	 * Search for beers on Untappd
+	 * Untappd HTTP request helper, handles API keys and rate limit automatically
 	 *
-	 * @param string $query
-	 * @return bool|WP_Error|array
+	 * @param string $path
+	 * @param array $query_params
+	 * @return boolean|WP_Error|array
 	 */
-	function search_untappd( $query ) {
+	function _untappd_make_http_request( $path, $query_params = array() ) {
 
 		if (
 			( false === defined( 'UNTAPPD_CLIENT_ID' ) ) ||
@@ -1417,21 +1418,21 @@ class DABC_Beer_Post_Type {
 
 		}
 
-		$url = add_query_arg(
+		$query_params = array_merge(
 			array(
-				'q'             => urlencode( $query ),
-				'sort'          => 'count',
 				'client_id'     => UNTAPPD_CLIENT_ID,
 				'client_secret' => UNTAPPD_CLIENT_SECRET
 			),
-			'https://api.untappd.com/v4/search/beer'
+			$query_params
 		);
+
+		$url      = add_query_arg( $query_params, 'https://api.untappd.com/v4/' . $path );
 
 		$response = wp_remote_request( $url );
 
 		if ( is_wp_error( $response ) ) {
 
-			return false;
+			return $response;
 
 		}
 
@@ -1449,7 +1450,32 @@ class DABC_Beer_Post_Type {
 				$this->set_hit_untappd_rate_limit();
 			}
 
-		} else if ( ( 200 === $response_code ) && isset( $body_data->response->beers->items ) ) {
+		} else if ( 200 === $response_code ) {
+
+			return $body_data;
+
+		}
+
+		return false;
+
+	}
+
+	/**
+	 * Search for beers on Untappd
+	 *
+	 * @param string $query
+	 * @return bool|WP_Error|array
+	 */
+	function search_untappd( $query ) {
+
+		$args = array(
+			'q'    => urlencode( $query ),
+			'sort' => 'count'
+		);
+
+		$response = $this->_untappd_make_http_request( 'search/beer', $args );
+
+		if ( $response && ! is_wp_error( $response ) && isset( $body_data->response->beers->items ) ) {
 
 			return $body_data->response->beers->items;
 
