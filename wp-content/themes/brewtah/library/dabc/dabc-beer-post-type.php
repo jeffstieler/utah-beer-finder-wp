@@ -507,12 +507,6 @@ class DABC_Beer_Post_Type {
 
 		foreach ( $taxonomy_map as $info_key => $taxonomy ) {
 
-			if ( ! term_exists( $beer_info[$info_key], $taxonomy ) ) {
-
-				wp_insert_term( $beer_info[$info_key], $taxonomy );
-
-			}
-
 			wp_set_object_terms( $post_id, $beer_info[$info_key], $taxonomy );
 
 		}
