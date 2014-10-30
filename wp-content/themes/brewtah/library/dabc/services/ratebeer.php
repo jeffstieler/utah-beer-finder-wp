@@ -3,12 +3,12 @@
 class Ratebeer_Sync {
 
 	const TITAN_NAMESPACE        = 'ratebeer';
-	const RATEBEER_ID            = 'ratebeer-id';
-	const RATEBEER_URL_OPTION    = 'ratebeer-url';
-	const RATEBEER_OVERALL_SCORE = 'ratebeer-overall-score';
-	const RATEBEER_STYLE_SCORE   = 'ratebeer-style-score';
-	const RATEBEER_CALORIES      = 'ratebeer-calories';
-	const RATEBEER_ABV           = 'ratebeer-abv';
+	const RATEBEER_ID            = 'id';
+	const RATEBEER_URL_OPTION    = 'url';
+	const RATEBEER_OVERALL_SCORE = 'overall-score';
+	const RATEBEER_STYLE_SCORE   = 'style-score';
+	const RATEBEER_CALORIES      = 'calories';
+	const RATEBEER_ABV           = 'abv';
 	const RATEBEER_IMGURL_FORMAT = 'http://res.cloudinary.com/ratebeer/image/upload/beer_%s.jpg';
 	const RATEBEER_BASE_URL      = 'http://www.ratebeer.com';
 
