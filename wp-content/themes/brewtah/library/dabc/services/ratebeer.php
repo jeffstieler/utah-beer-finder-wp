@@ -12,6 +12,7 @@ class Ratebeer_Sync {
 	const CALORIES        = 'calories';
 	const ABV             = 'abv';
 	const MAP_CRON        = 'map_ratebeer';
+	const SEARCHED        = 'has-ratebeer-searched';
 	const IMGURL_FORMAT   = 'http://res.cloudinary.com/ratebeer/image/upload/beer_%s.jpg';
 	const BASE_URL        = 'http://www.ratebeer.com';
 
@@ -141,7 +142,7 @@ class Ratebeer_Sync {
 	 */
 	function mark_beer_as_ratebeer_searched( $post_id ) {
 
-		return (bool) update_post_meta( $post_id, self::RATEBEER_SEARCHED, true );
+		return (bool) update_post_meta( $post_id, self::SEARCHED, true );
 
 	}
 

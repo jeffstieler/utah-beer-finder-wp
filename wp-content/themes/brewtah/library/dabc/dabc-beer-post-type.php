@@ -27,7 +27,6 @@ class DABC_Beer_Post_Type {
 	const CS_CODE_OPTION         = 'cs-code';
 	const PRICE_OPTION           = 'price';
 	const DABC_INVENTORY         = 'dabc-store-inventory';
-	const RATEBEER_SEARCHED      = 'has-ratebeer-searched';
 	const RATEBEER_SYNC_CRON     = 'sync_ratebeer';
 	const RATEBEER_SYNCED        = 'has-ratebeer-sync';
 	const UNTAPPD_SEARCHED       = 'has-untappd-searched';
