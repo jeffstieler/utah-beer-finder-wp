@@ -507,14 +507,6 @@ class Ratebeer_Sync {
 
 	}
 
-
-
-
-
-
-
-
-
 	/**
 	 * For a given DABC beer post ID, sync date with ratebeer
 	 *
@@ -554,8 +546,6 @@ class Ratebeer_Sync {
 
 	}
 
-
-
 	/**
 	 * Make sync request to Ratebeer
 	 *
@@ -574,7 +564,5 @@ class Ratebeer_Sync {
 		return $result;
 
 	}
-
-
 
 }
