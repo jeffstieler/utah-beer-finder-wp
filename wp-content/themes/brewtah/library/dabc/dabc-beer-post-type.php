@@ -1744,8 +1744,6 @@ EOB;
 
 		if ( is_object( $beer_info ) ) {
 
-			var_dump($beer_info);
-
 			if ( isset( $beer_info->rating_count ) ) {
 
 				$this->titan->setOption( self::UNTAPPD_RATING_COUNT, $beer_info->rating_count, $post_id );
