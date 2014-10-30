@@ -145,6 +145,24 @@ class Ratebeer_Sync {
 
 	}
 
+	function get_calories( $post_id ) {
+
+		return $this->titan->getOption( self::CALORIES, $post_id );
+
+	}
+
+	function get_overall_rating( $post_id ) {
+
+		return $this->titan->getOption( self::OVERALL_SCORE, $post_id );
+
+	}
+
+	function get_style_rating( $post_id ) {
+
+		return $this->titan->getOption( self::STYLE_SCORE, $post_id );
+
+	}
+
 	function init() {
 
 		$this->register_post_meta();
