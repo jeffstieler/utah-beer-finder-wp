@@ -1801,6 +1801,12 @@ EOB;
 
 			}
 
+			if ( isset( $beer_info->brewery->location->brewery_state ) ) {
+
+				wp_set_object_terms( $post_id, $beer_info->brewery->location->brewery_state, self::STATE_TAXONOMY );
+
+			}
+
 			return true;
 
 		}
