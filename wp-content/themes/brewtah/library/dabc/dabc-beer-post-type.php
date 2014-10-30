@@ -14,6 +14,8 @@ class DABC_Beer_Post_Type {
 	const SIZE_TAXONOMY          = 'beer-size';
 	const STATUS_TAXONOMY        = 'dabc-status';
 	const STYLE_TAXONOMY         = 'beer-style';
+	const BREWERY_TAXONOMY       = 'beer-brewery';
+	const STATE_TAXONOMY         = 'beer-state';
 	const TITAN_NAMESPACE        = 'dabc-beer';
 	const DABC_NAME_OPTION       = 'dabc-name';
 	const CS_CODE_OPTION         = 'cs-code';
@@ -231,6 +233,14 @@ class DABC_Beer_Post_Type {
 
 		register_taxonomy( self::STYLE_TAXONOMY, self::POST_TYPE, array(
 			'label' => 'Style'
+		) );
+
+		register_taxonomy( self::BREWERY_TAXONOMY, self::POST_TYPE, array(
+			'label' => 'Brewery'
+		) );
+
+		register_taxonomy( self::STATE_TAXONOMY, self::POST_TYPE, array(
+			'label' => 'State'
 		) );
 
 	}
