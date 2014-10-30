@@ -1797,4 +1797,17 @@ EOB;
 
 	}
 
+	function _create_and_set_term_for_post( $term, $taxonomy, $post_id ) {
+
+		if ( ! term_exists( $term, $taxonomy ) ) {
+
+			wp_insert_term( $term, $taxonomy );
+
+		}
+
+		return wp_set_object_terms( $post_id, $term, $taxonomy );
+
+	}
+
 }
+
