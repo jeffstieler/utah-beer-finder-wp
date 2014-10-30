@@ -223,32 +223,6 @@ class Ratebeer_Sync {
 
 	}
 
-	/**
-	 * Make search request to Ratebeer
-	 *
-	 * @param string $query - search query for ratebeer
-	 * @return bool|WP_Error|string boolean false if non 200, WP_Error on request error, HTML string on success
-	 */
-	function search_request( $query ) {
-
-		$result = $this->_make_http_request(
-			self::BASE_URL . '/findbeer.asp',
-			array(
-				'method'  => 'POST',
-				'headers' => array(
-					'Content-Type' => 'application/x-www-form-urlencoded'
-				),
-				'body' => array(
-					'BeerName' => $query
-				),
-				'timeout' => 10
-			)
-		);
-
-		return $result;
-
-	}
-
 	function register_post_meta() {
 
 		$rb_box = $this->titan->createMetaBox( array(
@@ -290,20 +264,6 @@ class Ratebeer_Sync {
 	}
 
 	/**
-	 * Schedule a job to search a single beer on Ratebeer
-	 *
-	 * @param int $post_id beer post ID
-	 * @param int $offset_in_minutes optional. delay (from right now) of cron job
-	 */
-	function schedule_search_for_post( $post_id, $offset_in_minutes = 0 ) {
-
-		$timestamp = ( time() + ( $offset_in_minutes * MINUTE_IN_SECONDS ) );
-
-		wp_schedule_single_event( $timestamp, self::SEARCH_CRON, array( $post_id ) );
-
-	}
-
-	/**
 	 * Find all posts that haven't been searched for on Ratebeer
 	 * successfully and schedule a cron job to map them
 	 */
@@ -324,6 +284,20 @@ class Ratebeer_Sync {
 		) );
 
 		array_map( array( $this, 'schedule_search_for_post' ), $unmapped_posts->posts );
+
+	}
+
+	/**
+	 * Schedule a job to search a single beer on Ratebeer
+	 *
+	 * @param int $post_id beer post ID
+	 * @param int $offset_in_minutes optional. delay (from right now) of cron job
+	 */
+	function schedule_search_for_post( $post_id, $offset_in_minutes = 0 ) {
+
+		$timestamp = ( time() + ( $offset_in_minutes * MINUTE_IN_SECONDS ) );
+
+		wp_schedule_single_event( $timestamp, self::SEARCH_CRON, array( $post_id ) );
 
 	}
 
@@ -352,6 +326,32 @@ class Ratebeer_Sync {
 		} );
 
 		return $beers;
+
+	}
+
+	/**
+	 * Make search request to Ratebeer
+	 *
+	 * @param string $query - search query for ratebeer
+	 * @return bool|WP_Error|string boolean false if non 200, WP_Error on request error, HTML string on success
+	 */
+	function search_request( $query ) {
+
+		$result = $this->_make_http_request(
+			self::BASE_URL . '/findbeer.asp',
+			array(
+				'method'  => 'POST',
+				'headers' => array(
+					'Content-Type' => 'application/x-www-form-urlencoded'
+				),
+				'body' => array(
+					'BeerName' => $query
+				),
+				'timeout' => 10
+			)
+		);
+
+		return $result;
 
 	}
 
