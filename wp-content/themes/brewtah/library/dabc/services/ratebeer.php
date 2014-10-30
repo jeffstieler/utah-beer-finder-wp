@@ -12,6 +12,8 @@ class Ratebeer_Sync {
 	const CALORIES        = 'calories';
 	const ABV             = 'abv';
 	const SEARCH_CRON     = 'search_ratebeer';
+	const SYNC_CRON       = 'sync_ratebeer';
+	const SYNCED          = 'has-ratebeer-sync';
 	const SEARCHED        = 'has-ratebeer-searched';
 	const BASE_URL        = 'http://www.ratebeer.com';
 
@@ -62,6 +64,8 @@ class Ratebeer_Sync {
 	function attach_hooks() {
 
 		add_action( self::SEARCH_CRON, array( $this, 'cron_map_post_to_beer' ) );
+
+		add_action( self::SYNC_CRON, array( $this, 'cron_sync_dabc_beer_with_ratebeer' ) );
 
 	}
 
@@ -351,6 +355,213 @@ class Ratebeer_Sync {
 		);
 
 		return $result;
+
+	}
+
+	/**
+	 * Flag a beer as having been synced with Ratebeer (single beer page)
+	 *
+	 * @param int $post_id beer post ID
+	 * @return bool success
+	 */
+	function mark_beer_as_ratebeer_synced( $post_id ) {
+
+		return (bool) update_post_meta( $post_id, self::SYNCED, true );
+
+	}
+
+	/**
+	 * Retrieve info and ratings from Ratebeer for beers that have been mapped
+	 */
+	function sync_beers_with_ratebeer() {
+
+		$unsynced_beers = new WP_Query( array(
+			'post_type'      => $this->post_type,
+			'meta_query'     => array(
+				array(
+					'key'     => self::SYNCED,
+					'value'   => '',
+					'compare' => 'NOT EXISTS'
+				)
+			),
+			'no_found_rows'  => true,
+			'posts_per_page' => -1,
+			'fields'         => 'ids'
+		) );
+
+		foreach ( $unsynced_beers->posts as $post_id ) {
+
+			if ( $this->titan->getOption( self::RATEBEER_URL_OPTION, $post_id ) ) {
+
+				$this->schedule_ratebeer_sync_for_beer( $post_id );
+
+			}
+
+		}
+
+	}
+
+	/**
+	 * Schedule a job to sync a single beer with Ratebeer
+	 *
+	 * @param int $post_id beer post ID
+	 * @param int $offset_in_minutes optional. delay (from right now) of cron job
+	 */
+	function schedule_ratebeer_sync_for_beer( $post_id, $offset_in_minutes = 0 ) {
+
+		$timestamp = ( time() + ( $offset_in_minutes * MINUTE_IN_SECONDS ) );
+
+		wp_schedule_single_event( $timestamp, self::SYNC_CRON, array( $post_id ) );
+
+	}
+
+	/**
+	 * WP-Cron hook callback for syncing a beer with Ratebeer
+	 * Marks beer as processed on success, or rescedules itself on failure
+	 *
+	 * @param int $post_id beer post ID
+	 */
+	function cron_sync_dabc_beer_with_ratebeer( $post_id ) {
+
+		$success = $this->sync_dabc_beer_with_ratebeer( $post_id );
+
+		if ( $success ) {
+
+			$this->mark_beer_as_ratebeer_synced( $post_id );
+
+		} else {
+
+			$this->schedule_ratebeer_sync_for_beer( $post_id, 10 );
+
+		}
+
+	}
+
+	/**
+	 * For a given DABC beer post ID, sync date with ratebeer
+	 *
+	 * @param int $post_id
+	 * @return bool success
+	 */
+	function sync_dabc_beer_with_ratebeer( $post_id ) {
+
+		$beer_path = $this->titan->getOption( self::RATEBEER_URL_OPTION, $post_id );
+
+		$beer_info = $this->sync_ratebeer( $beer_path );
+
+		if ( is_array( $beer_info ) && $beer_info ) {
+
+			$this->titan->setOption( self::RATEBEER_OVERALL_SCORE, $beer_info['overall_score'], $post_id );
+
+			$this->titan->setOption( self::RATEBEER_STYLE_SCORE, $beer_info['style_score'], $post_id );
+
+			$this->titan->setOption( self::RATEBEER_ABV, $beer_info['abv'], $post_id );
+
+			$this->titan->setOption( self::RATEBEER_CALORIES, $beer_info['calories'], $post_id );
+
+			if ( ! empty( $beer_info['description'] ) ) {
+
+				wp_update_post( array(
+					'ID'           => $post_id,
+					'post_content' => $beer_info['description']
+				) );
+
+			}
+
+			return true;
+
+		}
+
+		return false;
+
+	}
+
+	/**
+	 * Sync Ratebeer
+	 *
+	 * @param string $path beer path on Ratebeer
+	 * @return boolean|array boolean false on error, array of beer info on success
+	 */
+	function sync_ratebeer( $path ) {
+
+		$response = $this->ratebeer_sync_request( $path );
+
+		if ( ( false === $response ) || is_wp_error( $response ) ) {
+
+			return false;
+
+		}
+
+		$info = $this->parse_ratebeer_sync_response( $response );
+
+		return $info;
+
+	}
+
+	/**
+	 * Make sync request to Ratebeer
+	 *
+	 * @param string $path - beer path on ratebeer
+	 * @return bool|WP_Error|string boolean false if non 200, WP_Error on request error, HTML string on success
+	 */
+	function ratebeer_sync_request( $path ) {
+
+		$result = $this->_make_http_request(
+			self::RATEBEER_BASE_URL . $path,
+			array(
+				'timeout' => 10
+			)
+		);
+
+		return $result;
+
+	}
+
+	/**
+	 * Produce an array of beer info from Ratebeer single beer page markup
+	 *
+	 * @param string $html HTML beer page from Ratebeer
+	 * @return array beer info found in Ratebeer html response
+	 */
+	function parse_ratebeer_sync_response( $html ) {
+
+		$crawler = new Crawler( $html );
+
+		// overall score
+		$overall_score = $crawler->filter( 'span[itemprop="rating"] span:not([style])' );
+
+		$overall_score = iterator_count( $overall_score ) ? $overall_score->text() : 'N/A';
+
+		// style score
+		$style_score   = $crawler->filter( 'span[itemprop="average"]' );
+
+		$style_score   = iterator_count( $style_score ) ? $style_score->text() : 'N/A';
+
+		// commerical description
+		$description   = $crawler->filter( 'td[width=650] > div > div > div' );
+
+		$description   = iterator_count( $description ) ? $description->last()->text() : '';
+
+		$description   = preg_replace( '/^COMMERCIAL DESCRIPTION/', '', $description );
+
+		// "info" bar: ratings, weighted avg, calories, abv
+		$info     = $crawler->filter( 'td[width=650] > div > div > small > big' );
+		$calories = '';
+		$abv      = '';
+
+		if ( $info_count = iterator_count( $info ) ) {
+
+			// calories (per 12oz)
+			$calories = $info->eq( $info_count - 2 )->text();
+
+			// abv %
+			$abv = $info->last()->text();
+
+		}
+
+		$beer_info = compact( 'overall_score', 'style_score', 'description', 'calories', 'abv' );
+
+		return $beer_info;
 
 	}
 
