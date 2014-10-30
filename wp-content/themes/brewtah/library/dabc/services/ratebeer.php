@@ -65,7 +65,7 @@ class Ratebeer_Sync {
 
 		add_action( self::SEARCH_CRON, array( $this, 'cron_map_post_to_beer' ) );
 
-		add_action( self::SYNC_CRON, array( $this, 'cron_sync_dabc_beer_with_ratebeer' ) );
+		add_action( self::SYNC_CRON, array( $this, 'cron_sync_post_beer_info' ) );
 
 	}
 
@@ -421,7 +421,7 @@ class Ratebeer_Sync {
 	 *
 	 * @param int $post_id beer post ID
 	 */
-	function cron_sync_dabc_beer_with_ratebeer( $post_id ) {
+	function cron_sync_post_beer_info( $post_id ) {
 
 		$success = $this->sync_dabc_beer_with_ratebeer( $post_id );
 
