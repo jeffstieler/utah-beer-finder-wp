@@ -26,7 +26,6 @@ class DABC_Beer_Post_Type {
 	const RATEBEER_SEARCHED      = 'has-ratebeer-searched';
 	const RATEBEER_MAP_CRON      = 'map_ratebeer';
 	const RATEBEER_SYNC_CRON     = 'sync_ratebeer';
-	const RATEBEER_IMAGE_CRON    = 'image_ratebeer';
 	const RATEBEER_SYNCED        = 'has-ratebeer-sync';
 	const RATEBEER_ID            = 'ratebeer-id';
 	const RATEBEER_OVERALL_SCORE = 'ratebeer-overall-score';
@@ -34,17 +33,18 @@ class DABC_Beer_Post_Type {
 	const RATEBEER_CALORIES      = 'ratebeer-calories';
 	const RATEBEER_ABV           = 'ratebeer-abv';
 	const RATEBEER_IMGURL_FORMAT = 'http://res.cloudinary.com/ratebeer/image/upload/beer_%s.jpg';
-	const RATEBEER_IMG_SEARCHED  = 'has-ratebeer-image';
 	const RATEBEER_BASE_URL      = 'http://www.ratebeer.com';
 	const UNTAPPD_SEARCHED       = 'has-untappd-searched';
 	const UNTAPPD_MAP_CRON       = 'map_untappd';
 	const UNTAPPD_SYNC_CRON      = 'sync_untappd';
+	const UNTAPPD_IMAGE_CRON     = 'image_untappd';
 	const UNTAPPD_ID             = 'untappd-id';
 	const UNTAPPD_RATING_SCORE   = 'untappd-rating-score';
 	const UNTAPPD_RATING_COUNT   = 'untappd-rating-count';
 	const UNTAPPD_ABV            = 'untappd-abv';
 	const UNTAPPD_HIT_LIMIT      = 'untappd-hit-limit';
 	const UNTAPPD_SYNCED         = 'has-untappd-sync';
+	const UNTAPPD_IMG_SEARCHED   = 'has-untappd-image';
 	const DABC_URL_BASE          = 'http://www.webapps.abc.utah.gov/Production';
 	const DABC_BEER_LIST_URL     = '/OnlinePriceList/DisplayPriceList.aspx?DivCd=T';
 	const DABC_INVENTORY_URL     = '/OnlineInventoryQuery/IQ/InventoryQuery.aspx';
@@ -274,7 +274,7 @@ class DABC_Beer_Post_Type {
 
 		add_action( self::RATEBEER_SYNC_CRON, array( $this, 'cron_sync_dabc_beer_with_ratebeer' ) );
 
-		add_action( self::RATEBEER_IMAGE_CRON, array( $this, 'sync_featured_image_with_ratebeer' ), 10, 2 );
+		add_action( self::UNTAPPD_IMAGE_CRON, array( $this, 'sync_featured_image_with_untappd' ), 10, 2 );
 
 		add_action( self::UNTAPPD_MAP_CRON, array( $this, 'cron_map_dabc_beer_to_untappd' ) );
 
@@ -1024,71 +1024,27 @@ class DABC_Beer_Post_Type {
 	}
 
 	/**
-	 * Grab featured images from Ratebeer
-	 */
-	function sync_featured_images_with_ratebeer() {
-
-		$no_image_beers = new WP_Query( array(
-			'post_type'      => self::POST_TYPE,
-			'posts_per_page' => -1,
-			'fields'         => 'ids',
-			'meta_query'     => array(
-				array(
-					'key'     => '_thumbnail_id',
-					'value'   => '',
-					'compare' => 'NOT EXISTS'
-				)
-			)
-		) );
-
-		foreach ( $no_image_beers->posts as $post_id ) {
-
-			$ratebeer_id  = $this->titan->getOption( self::RATEBEER_ID, $post_id );
-
-			$image_synced = $this->titan->getOption( self::RATEBEER_IMG_SEARCHED, $post_id );
-
-			if ( $ratebeer_id && ! $image_synced ) {
-
-				$this->schedule_ratebeer_image_sync_for_beer( $ratebeer_id, $post_id );
-
-			}
-
-		}
-
-	}
-
-	/**
-	 * Schedule a job to download a beer image from Ratebeer
+	 * Schedule a job to download a beer image from Untappd
 	 *
+	 * @param sting $image_url
 	 * @param int $post_id beer post ID
 	 * @param int $offset_in_minutes optional. delay (from right now) of cron job
 	 */
-	function schedule_ratebeer_image_sync_for_beer( $ratebeer_id, $post_id, $offset_in_minutes = 0 ) {
+	function schedule_untappd_image_sync_for_beer( $image_url, $post_id, $offset_in_minutes = 0 ) {
 
 		$timestamp = ( time() + ( $offset_in_minutes * MINUTE_IN_SECONDS ) );
 
-		wp_schedule_single_event( $timestamp, self::RATEBEER_IMAGE_CRON, array( $ratebeer_id, $post_id ) );
+		wp_schedule_single_event( $timestamp, self::UNTAPPD_IMAGE_CRON, array( $image_url, $post_id ) );
 
 	}
 
 	/**
-	 * Flag a beer as having an image sync attempt with Ratebeer
+	 * Download a beer's image from Untappd and set as it's featured image
 	 *
-	 * @param int $post_id beer post ID
-	 * @return bool success
-	 */
-	function mark_beer_as_image_searched( $post_id ) {
-
-		return (bool) update_post_meta( $post_id, self::RATEBEER_IMG_SEARCHED, true );
-
-	}
-
-	/**
-	 * Download a beer's image from Ratebeer and set as it's featured image
-	 *
+	 * @param int $image_url
 	 * @param int $post_id
 	 */
-	function sync_featured_image_with_ratebeer( $ratebeer_id, $post_id ) {
+	function sync_featured_image_with_untappd( $image_url, $post_id ) {
 
 		if ( ! function_exists( 'media_sideload_image' ) ) {
 
@@ -1098,21 +1054,11 @@ class DABC_Beer_Post_Type {
 
 		}
 
-		$image_url = $this->get_ratebeer_image_url( $ratebeer_id );
-
-		$result    = media_sideload_image( $image_url, $post_id );
+		$result = media_sideload_image( $image_url, $post_id );
 
 		if ( is_wp_error( $result ) ) {
 
-			if ( 'http_404' === $result->get_error_code() ) {
-
-				$this->mark_beer_as_image_searched( $post_id );
-
-			} else {
-
-				$this->schedule_ratebeer_image_sync_for_beer( $ratebeer_id, $post_id, 10 );
-
-			}
+			$this->schedule_untappd_image_sync_for_beer( $image_url, $post_id, 10 );
 
 		} else {
 
@@ -1125,8 +1071,6 @@ class DABC_Beer_Post_Type {
 				set_post_thumbnail( $post_id, $thumbnail->ID );
 
 			}
-
-			$this->mark_beer_as_image_searched( $post_id );
 
 		}
 
@@ -1840,6 +1784,12 @@ EOB;
 			if ( isset( $beer_info->brewery->location->brewery_state ) ) {
 
 				wp_set_object_terms( $post_id, $beer_info->brewery->location->brewery_state, self::STATE_TAXONOMY );
+
+			}
+
+			if ( isset( $beer_info->beer_label ) ) {
+
+				$this->sync_featured_image_with_untappd( $beer_info->beer_label, $post_id );
 
 			}
 
