@@ -1531,4 +1531,28 @@ class DABC_Beer_Post_Type {
 
 	}
 
+	/**
+	 * Find all beers that haven't been searched for on Untappd
+	 * successfully and schedule a cron job to map them
+	 */
+	function search_beers_on_untappd() {
+
+		$unmapped_beers = new WP_Query( array(
+			'post_type'      => self::POST_TYPE,
+			'meta_query'     => array(
+				array(
+					'key'     => self::UNTAPPD_SEARCHED,
+					'value'   => '',
+					'compare' => 'NOT EXISTS'
+				)
+			),
+			'no_found_rows'  => true,
+			'posts_per_page' => -1,
+			'fields'         => 'ids'
+		) );
+
+		array_map( array( $this, 'schedule_untappd_search_for_beer' ), $unmapped_beers->posts );
+
+	}
+
 }
