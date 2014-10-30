@@ -49,6 +49,7 @@ class DABC_Beer_Post_Type {
 	var $titan;
 	var $dabc_column_map;
 	var $dabc_status_map;
+	var $ratebeer_sync;
 
 	function __construct() {
 
@@ -78,6 +79,8 @@ class DABC_Beer_Post_Type {
 			'T' => 'Trial'
 		);
 
+		$this->ratebeer_sync = new Ratebeer_Sync( self::POST_TYPE );
+
 	}
 
 	function init() {
@@ -91,6 +94,8 @@ class DABC_Beer_Post_Type {
 		$this->attach_hooks();
 
 		$this->add_post_columns();
+
+		$this->ratebeer_sync->init();
 
 	}
 
@@ -154,42 +159,6 @@ class DABC_Beer_Post_Type {
 		$dabc_box->createOption( array(
 			'name' => 'Price',
 			'id'   => self::PRICE_OPTION
-		) );
-
-		$rb_box = $this->titan->createMetaBox( array(
-			'name'      => 'Ratebeer Info',
-			'id'        => 'ratebeer-info',
-			'post_type' => self::POST_TYPE
-		) );
-
-		$rb_box->createOption( array(
-			'name' => 'ID',
-			'id'   => self::RATEBEER_ID
-		) );
-
-		$rb_box->createOption( array(
-			'name' => 'URL',
-			'id'   => self::RATEBEER_URL_OPTION
-		) );
-
-		$rb_box->createOption( array(
-			'name' => 'Overall Score',
-			'id'   => self::RATEBEER_OVERALL_SCORE
-		) );
-
-		$rb_box->createOption( array(
-			'name' => 'Style Score',
-			'id'   => self::RATEBEER_STYLE_SCORE
-		) );
-
-		$rb_box->createOption( array(
-			'name' => 'Calories',
-			'id'   => self::RATEBEER_CALORIES
-		) );
-
-		$rb_box->createOption( array(
-			'name' => 'ABV',
-			'id'   => self::RATEBEER_ABV
 		) );
 
 		$untappd_box = $this->titan->createMetaBox( array(
