@@ -1801,6 +1801,24 @@ EOB;
 
 			var_dump($beer_info);
 
+			if ( isset( $beer_info->rating_count ) ) {
+
+				$this->titan->setOption( self::UNTAPPD_RATING_COUNT, $beer_info->rating_count, $post_id );
+
+			}
+
+			if ( isset( $beer_info->rating_score ) ) {
+
+				$this->titan->setOption( self::UNTAPPD_RATING_SCORE, $beer_info->rating_score, $post_id );
+
+			}
+
+			if ( isset( $beer_info->beer_abv ) ) {
+
+				$this->titan->setOption( self::UNTAPPD_ABV, $beer_info->beer_abv, $post_id );
+
+			}
+
 			if ( isset( $beer_info->beer_style ) ) {
 
 				wp_set_object_terms( $post_id, $beer_info->beer_style, self::STYLE_TAXONOMY );
