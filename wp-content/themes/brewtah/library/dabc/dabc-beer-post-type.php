@@ -1787,6 +1787,20 @@ EOB;
 
 		if ( is_object( $beer_info ) ) {
 
+			var_dump($beer_info);
+
+			if ( isset( $beer_info->beer_style ) ) {
+
+				wp_set_object_terms( $post_id, $beer_info->beer_style, self::STYLE_TAXONOMY );
+
+			}
+
+			if ( isset( $beer_info->brewery->brewery_name ) ) {
+
+				wp_set_object_terms( $post_id, $beer_info->brewery->brewery_name, self::BREWERY_TAXONOMY );
+
+			}
+
 
 
 			return true;
@@ -1794,18 +1808,6 @@ EOB;
 		}
 
 		return false;
-
-	}
-
-	function _create_and_set_term_for_post( $term, $taxonomy, $post_id ) {
-
-		if ( ! term_exists( $term, $taxonomy ) ) {
-
-			wp_insert_term( $term, $taxonomy );
-
-		}
-
-		return wp_set_object_terms( $post_id, $term, $taxonomy );
 
 	}
 
