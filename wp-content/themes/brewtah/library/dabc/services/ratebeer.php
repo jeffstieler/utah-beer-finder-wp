@@ -65,14 +65,6 @@ class Ratebeer_Sync {
 
 	}
 
-	function init() {
-
-		$this->register_post_meta();
-
-		$this->attach_hooks();
-
-	}
-
 	/**
 	 * WP-Cron hook callback for searching a beer on Ratebeer
 	 * Marks beer as processed on success, or rescedules itself on failure
@@ -92,6 +84,14 @@ class Ratebeer_Sync {
 			$this->schedule_ratebeer_search_for_beer( $post_id, 10 );
 
 		}
+
+	}
+
+	function init() {
+
+		$this->register_post_meta();
+
+		$this->attach_hooks();
 
 	}
 
