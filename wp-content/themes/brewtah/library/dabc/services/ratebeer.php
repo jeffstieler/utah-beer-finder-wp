@@ -13,7 +13,6 @@ class Ratebeer_Sync {
 	const ABV             = 'abv';
 	const SEARCH_CRON     = 'search_ratebeer';
 	const SEARCHED        = 'has-ratebeer-searched';
-	const IMGURL_FORMAT   = 'http://res.cloudinary.com/ratebeer/image/upload/beer_%s.jpg';
 	const BASE_URL        = 'http://www.ratebeer.com';
 
 	var $post_type;

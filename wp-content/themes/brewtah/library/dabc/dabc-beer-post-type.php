@@ -726,18 +726,6 @@ class DABC_Beer_Post_Type {
 	}
 
 	/**
-	 * Build a beer image URL from it's Ratebeer ID
-	 *
-	 * @param int $id
-	 * @return string URL for Ratebeer image
-	 */
-	function get_ratebeer_image_url( $id ) {
-
-		return sprintf( self::RATEBEER_IMGURL_FORMAT, $id );
-
-	}
-
-	/**
 	 * Schedule a job to download a beer image from Untappd
 	 *
 	 * @param sting $image_url
