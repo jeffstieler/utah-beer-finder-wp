@@ -67,6 +67,10 @@ class Ratebeer_Sync {
 
 		add_action( self::SYNC_CRON, array( $this, 'cron_sync_post_beer_info' ) );
 
+		add_action( 'update_postmeta', array( $this, 'sync_post_beer_info_on_url_update' ), 10, 4 );
+
+		add_action( 'add_post_meta', array( $this, 'sync_post_beer_info_on_url_add' ), 10, 3 );
+
 	}
 
 	/**
@@ -506,6 +510,41 @@ class Ratebeer_Sync {
 		return $result;
 
 	}
+
+	/**
+	 * Schedule a Ratebeer sync if a URL is added for a beer
+	 *
+	 * @param int $object_id
+	 * @param string $meta_key
+	 * @param mixed $meta_value
+	 */
+	function sync_post_beer_info_on_url_add( $object_id, $meta_key, $meta_value ) {
+
+		$ratebeer_url_key = $this->get_titan_meta_key( self::RATEBEER_URL_OPTION );
+
+		if ( ( $ratebeer_url_key === $meta_key ) && !empty( $meta_value ) ) {
+
+			$this->schedule_sync_for_post( $object_id );
+
+		}
+
+	}
+
+	/**
+	 * Schedule a Ratebeer sync if the URL changes for a beer
+	 *
+	 * @param int $meta_id
+	 * @param int $object_id
+	 * @param string $meta_key
+	 * @param mixed $meta_value
+	 */
+	function sync_post_beer_info_on_url_update( $meta_id, $object_id, $meta_key, $meta_value ) {
+
+		$this->sync_post_beer_info_on_url_add( $object_id, $meta_key, $meta_value );
+
+	}
+
+
 
 	/**
 	 * For a given DABC beer post ID, sync date with ratebeer

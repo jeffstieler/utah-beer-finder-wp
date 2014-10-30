@@ -229,10 +229,6 @@ class DABC_Beer_Post_Type {
 
 		add_action( self::UNTAPPD_SYNC_CRON, array( $this, 'cron_sync_dabc_beer_with_untappd' ) );
 
-		add_action( 'update_postmeta', array( $this, 'sync_ratebeer_on_url_update' ), 10, 4 );
-
-		add_action( 'add_post_meta', array( $this, 'sync_ratebeer_on_url_add' ), 10, 3 );
-
 	}
 
 	function add_post_columns() {
@@ -733,39 +729,6 @@ class DABC_Beer_Post_Type {
 		$inventory = get_post_meta( $beer_post_id, self::DABC_INVENTORY, true );
 
 		return $inventory;
-
-	}
-
-	/**
-	 * Schedule a Ratebeer sync if the URL changes for a beer
-	 *
-	 * @param int $meta_id
-	 * @param int $object_id
-	 * @param string $meta_key
-	 * @param mixed $meta_value
-	 */
-	function sync_ratebeer_on_url_update( $meta_id, $object_id, $meta_key, $meta_value ) {
-
-		$this->sync_ratebeer_on_url_add( $object_id, $meta_key, $meta_value );
-
-	}
-
-	/**
-	 * Schedule a Ratebeer sync if a URL is added for a beer
-	 *
-	 * @param int $object_id
-	 * @param string $meta_key
-	 * @param mixed $meta_value
-	 */
-	function sync_ratebeer_on_url_add( $object_id, $meta_key, $meta_value ) {
-
-		$ratebeer_url_key = $this->get_titan_meta_key( self::RATEBEER_URL_OPTION );
-
-		if ( ( $ratebeer_url_key === $meta_key ) && !empty( $meta_value ) ) {
-
-			$this->schedule_ratebeer_sync_for_beer( $object_id );
-
-		}
 
 	}
 
