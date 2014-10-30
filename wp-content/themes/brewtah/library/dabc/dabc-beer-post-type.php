@@ -6,6 +6,11 @@
  */
 use Symfony\Component\DomCrawler\Crawler;
 
+/**
+ * Include Ratebeer syncing
+ */
+require_once( __DIR__ . '/services/ratebeer.php' );
+
 class DABC_Beer_Post_Type {
 
 	const POST_TYPE              = 'dabc-beer';
@@ -22,18 +27,10 @@ class DABC_Beer_Post_Type {
 	const CS_CODE_OPTION         = 'cs-code';
 	const PRICE_OPTION           = 'price';
 	const DABC_INVENTORY         = 'dabc-store-inventory';
-	const RATEBEER_URL_OPTION    = 'ratebeer-url';
 	const RATEBEER_SEARCHED      = 'has-ratebeer-searched';
 	const RATEBEER_MAP_CRON      = 'map_ratebeer';
 	const RATEBEER_SYNC_CRON     = 'sync_ratebeer';
 	const RATEBEER_SYNCED        = 'has-ratebeer-sync';
-	const RATEBEER_ID            = 'ratebeer-id';
-	const RATEBEER_OVERALL_SCORE = 'ratebeer-overall-score';
-	const RATEBEER_STYLE_SCORE   = 'ratebeer-style-score';
-	const RATEBEER_CALORIES      = 'ratebeer-calories';
-	const RATEBEER_ABV           = 'ratebeer-abv';
-	const RATEBEER_IMGURL_FORMAT = 'http://res.cloudinary.com/ratebeer/image/upload/beer_%s.jpg';
-	const RATEBEER_BASE_URL      = 'http://www.ratebeer.com';
 	const UNTAPPD_SEARCHED       = 'has-untappd-searched';
 	const UNTAPPD_MAP_CRON       = 'map_untappd';
 	const UNTAPPD_SYNC_CRON      = 'sync_untappd';
@@ -51,7 +48,6 @@ class DABC_Beer_Post_Type {
 
 	var $titan;
 	var $dabc_column_map;
-	var $ratebeer_search_column_map;
 	var $dabc_status_map;
 
 	function __construct() {
@@ -68,13 +64,6 @@ class DABC_Beer_Post_Type {
 			'price',
 			'status',
 			'spa_on',
-		);
-
-		$this->ratebeer_search_column_map = array(
-			0 => 'name',
-			2 => 'status',
-			3 => 'score',
-			4 => 'ratings',
 		);
 
 		$this->dabc_status_map = array(
