@@ -40,6 +40,9 @@ class DABC_Beer_Post_Type {
 	const UNTAPPD_MAP_CRON       = 'map_untappd';
 	const UNTAPPD_SYNC_CRON      = 'sync_untappd';
 	const UNTAPPD_ID             = 'untappd-id';
+	const UNTAPPD_RATING_SCORE   = 'untappd-rating-score';
+	const UNTAPPD_RATING_COUNT   = 'untappd-rating-count';
+	const UNTAPPD_ABV            = 'untappd-abv';
 	const UNTAPPD_HIT_LIMIT      = 'untappd-hit-limit';
 	const UNTAPPD_SYNCED         = 'has-untappd-sync';
 	const DABC_URL_BASE          = 'http://www.webapps.abc.utah.gov/Production';
@@ -210,6 +213,21 @@ class DABC_Beer_Post_Type {
 		$untappd_box->createOption( array(
 			'name' => 'ID',
 			'id'   => self::UNTAPPD_ID
+		) );
+
+		$untappd_box->createOption( array(
+			'name' => 'Rating Score',
+			'id'   => self::UNTAPPD_RATING_SCORE
+		) );
+
+		$untappd_box->createOption( array(
+			'name' => 'Ratings Count',
+			'id'   => self::UNTAPPD_RATING_COUNT
+		) );
+
+		$untappd_box->createOption( array(
+			'name' => 'ABV',
+			'id'   => self::UNTAPPD_ABV
 		) );
 
 	}
