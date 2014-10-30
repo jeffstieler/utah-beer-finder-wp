@@ -28,7 +28,6 @@ class DABC_Beer_Post_Type {
 	const PRICE_OPTION           = 'price';
 	const DABC_INVENTORY         = 'dabc-store-inventory';
 	const RATEBEER_SEARCHED      = 'has-ratebeer-searched';
-	const RATEBEER_MAP_CRON      = 'map_ratebeer';
 	const RATEBEER_SYNC_CRON     = 'sync_ratebeer';
 	const RATEBEER_SYNCED        = 'has-ratebeer-sync';
 	const UNTAPPD_SEARCHED       = 'has-untappd-searched';
@@ -226,8 +225,6 @@ class DABC_Beer_Post_Type {
 	}
 
 	function attach_hooks() {
-
-		add_action( self::RATEBEER_MAP_CRON, array( $this, 'cron_map_dabc_beer_to_ratebeer' ) );
 
 		add_action( self::RATEBEER_SYNC_CRON, array( $this, 'cron_sync_dabc_beer_with_ratebeer' ) );
 

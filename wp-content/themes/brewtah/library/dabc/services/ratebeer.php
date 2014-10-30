@@ -11,6 +11,7 @@ class Ratebeer_Sync {
 	const STYLE_SCORE     = 'style-score';
 	const CALORIES        = 'calories';
 	const ABV             = 'abv';
+	const MAP_CRON        = 'map_ratebeer';
 	const IMGURL_FORMAT   = 'http://res.cloudinary.com/ratebeer/image/upload/beer_%s.jpg';
 	const BASE_URL        = 'http://www.ratebeer.com';
 
@@ -58,9 +59,17 @@ class Ratebeer_Sync {
 
 	}
 
+	function attach_hooks() {
+
+		add_action( self::MAP_CRON, array( $this, 'cron_map_dabc_beer_to_ratebeer' ) );
+
+	}
+
 	function init() {
 
 		$this->register_post_meta();
+
+		$this->attach_hooks();
 
 	}
 
