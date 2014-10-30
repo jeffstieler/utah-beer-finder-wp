@@ -16,7 +16,9 @@ class Ratebeer_Sync {
 	var $titan;
 	var $search_column_map;
 	
-	function __construct() {
+	function __construct( $post_type ) {
+		
+		$this->post_type = $post_type;
 		
 		$this->titan = TitanFramework::getInstance( self::TITAN_NAMESPACE );
 
