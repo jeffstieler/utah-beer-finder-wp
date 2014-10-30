@@ -36,6 +36,7 @@ class DABC_Beer_Post_Type {
 	const UNTAPPD_SEARCHED       = 'has-untappd-searched';
 	const UNTAPPD_MAP_CRON       = 'map_untappd';
 	const UNTAPPD_ID             = 'untappd-id';
+	const UNTAPPD_HIT_LIMIT      = 'untappd-hit-limit';
 	const DABC_URL_BASE          = 'http://www.webapps.abc.utah.gov/Production';
 	const DABC_BEER_LIST_URL     = '/OnlinePriceList/DisplayPriceList.aspx?DivCd=T';
 	const DABC_INVENTORY_URL     = '/OnlineInventoryQuery/IQ/InventoryQuery.aspx';
@@ -1405,6 +1406,26 @@ class DABC_Beer_Post_Type {
 	}
 
 	/**
+	 * Set a flag that we've hit the Untappd API rate limit
+	 */
+	function set_hit_untappd_rate_limit() {
+
+		set_transient( self::UNTAPPD_HIT_LIMIT, true, HOUR_IN_SECONDS );
+
+	}
+
+	/**
+	 * Have we hit the Untappd API rate limit?
+	 *
+	 * @return bool
+	 */
+	function have_hit_untappd_rate_limit() {
+
+		return get_transient( self::UNTAPPD_HIT_LIMIT );
+
+	}
+
+	/**
 	 * Search for beers on Untappd
 	 *
 	 * @param string $query
@@ -1412,7 +1433,11 @@ class DABC_Beer_Post_Type {
 	 */
 	function search_untappd( $query ) {
 
-		if ( ! defined( 'UNTAPPD_CLIENT_ID' ) || ! defined( 'UNTAPPD_CLIENT_SECRET' ) ) {
+		if (
+			( false === defined( 'UNTAPPD_CLIENT_ID' ) ) ||
+			( false === defined( 'UNTAPPD_CLIENT_SECRET' ) ) ||
+			$this->have_hit_untappd_rate_limit()
+		) {
 
 			return false;
 
@@ -1428,19 +1453,31 @@ class DABC_Beer_Post_Type {
 			'https://api.untappd.com/v4/search/beer'
 		);
 
-		$response = $this->_make_http_request( $url );
+		$response = wp_remote_request( $url );
 
-		if ( ( false === $response ) || is_wp_error( $response ) ) {
+		if ( is_wp_error( $response ) ) {
 
 			return false;
 
 		}
 
-		$response_data = json_decode( $response );
+		$response_code = wp_remote_retrieve_response_code( $response );
+		$response_body = wp_remote_retrieve_body( $response );
+		$body_data     = json_decode( $response_body );
 
-		if ( isset( $response_data->response->beers->items ) ) {
+		// handle rate limit
+		if ( 500 === $response_code ) {
 
-			return $response_data->response->beers->items;
+			if (
+				isset( $body_data->meta->error_type ) &&
+				( 'invalid_limit' === $body_data->meta->error_type )
+			) {
+				$this->set_hit_untappd_rate_limit();
+			}
+
+		} else if ( ( 200 === $response_code ) && isset( $body_data->response->beers->items ) ) {
+
+			return $body_data->response->beers->items;
 
 		}
 
