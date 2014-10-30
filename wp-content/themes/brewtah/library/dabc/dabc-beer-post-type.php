@@ -1445,4 +1445,38 @@ class DABC_Beer_Post_Type {
 
 	}
 
+	/**
+	 * For a given DABC beer post ID, search Untappd and associate ID if found
+	 *
+	 * @param int $post_id
+	 * @return bool success
+	 */
+	function map_dabc_beer_to_untappd( $post_id ) {
+
+		$post = get_post( $post_id );
+
+		$beer_name = $post->post_title;
+
+		$search_results = $this->search_untappd( $beer_name );
+
+		if ( is_array( $search_results ) ) {
+
+			$beer = array_shift( $search_results );
+
+			if ( $beer ) {
+
+				$titan = TitanFramework::getInstance( self::TITAN_NAMESPACE );
+
+				$titan->setOption( self::UNTAPPD_ID, $beer->beer->bid, $post_id );
+
+			}
+
+			return true;
+
+		}
+
+		return false;
+
+	}
+
 }
