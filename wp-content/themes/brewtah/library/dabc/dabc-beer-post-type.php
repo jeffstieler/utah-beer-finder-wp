@@ -235,6 +235,8 @@ class DABC_Beer_Post_Type {
 
 		add_action( self::UNTAPPD_MAP_CRON, array( $this, 'cron_map_dabc_beer_to_untappd' ) );
 
+		add_action( self::UNTAPPD_SYNC_CRON, array( $this, 'cron_sync_dabc_beer_with_untappd' ) );
+
 		add_action( 'update_postmeta', array( $this, 'sync_ratebeer_on_url_update' ), 10, 4 );
 
 		add_action( 'add_post_meta', array( $this, 'sync_ratebeer_on_url_add' ), 10, 3 );
@@ -1356,12 +1358,13 @@ class DABC_Beer_Post_Type {
 	}
 
 	/**
-	 * Search for beers on Untappd
+	 * Untappd HTTP request helper, handles API keys and rate limit automatically
 	 *
-	 * @param string $query
-	 * @return bool|WP_Error|array
+	 * @param string $path
+	 * @param array $query_params
+	 * @return boolean|WP_Error|array
 	 */
-	function search_untappd( $query ) {
+	function _untappd_make_http_request( $path, $query_params = array() ) {
 
 		if (
 			( false === defined( 'UNTAPPD_CLIENT_ID' ) ) ||
@@ -1373,21 +1376,21 @@ class DABC_Beer_Post_Type {
 
 		}
 
-		$url = add_query_arg(
+		$query_params = array_merge(
 			array(
-				'q'             => urlencode( $query ),
-				'sort'          => 'count',
 				'client_id'     => UNTAPPD_CLIENT_ID,
 				'client_secret' => UNTAPPD_CLIENT_SECRET
 			),
-			'https://api.untappd.com/v4/search/beer'
+			$query_params
 		);
+
+		$url      = add_query_arg( $query_params, 'https://api.untappd.com/v4/' . $path );
 
 		$response = wp_remote_request( $url );
 
 		if ( is_wp_error( $response ) ) {
 
-			return false;
+			return $response;
 
 		}
 
@@ -1405,7 +1408,32 @@ class DABC_Beer_Post_Type {
 				$this->set_hit_untappd_rate_limit();
 			}
 
-		} else if ( ( 200 === $response_code ) && isset( $body_data->response->beers->items ) ) {
+		} else if ( 200 === $response_code ) {
+
+			return $body_data;
+
+		}
+
+		return false;
+
+	}
+
+	/**
+	 * Search for beers on Untappd
+	 *
+	 * @param string $query
+	 * @return bool|WP_Error|array
+	 */
+	function search_untappd( $query ) {
+
+		$args = array(
+			'q'    => urlencode( $query ),
+			'sort' => 'count'
+		);
+
+		$response = $this->_untappd_make_http_request( 'search/beer', $args );
+
+		if ( $response && ! is_wp_error( $response ) && isset( $body_data->response->beers->items ) ) {
 
 			return $body_data->response->beers->items;
 
@@ -1423,75 +1451,11 @@ class DABC_Beer_Post_Type {
 	 */
 	function get_untappd_beer_info( $beer_id ) {
 
-		// mock response for now..
+		$response = $this->_untappd_make_http_request( "beer/info/{$beer_id}" );
 
-		$response_body = <<<EOB
-{
-	"response":{
-      "beer":{
-         "bid":3558,
-         "beer_name":"Brooklyn Lager",
-         "beer_label":"https://untappd.s3.amazonaws.com/site/beer_logos/beer-BrooklynLager_3558.jpeg",
-         "beer_abv":5.2,
-         "beer_description":"Brooklyn Lager is a wonderfully flavorful beer, smooth, refreshing and very versatile with food. It is amber-gold in color and displays a firm malt center supported by a refreshing bitterness and floral hop aroma. Caramel malts show in the finish. The aromatic qualities of the beer are enhanced by “dry-hopping”, the centuries-old practice of steeping the beer with fresh hops as it undergoes a long, cold maturation.",
-         "beer_style":"Vienna Lager",
-         "is_in_production":1,
-         "beer_slug":"brooklyn-brewery-brooklyn-lager",
-         "is_homebrew":0,
-         "created_at":"Sat, 21 Aug 2010 07:26:35 +0000",
-         "rating_count":4757,
-         "rating_score":3.42,
-         "stats":{
-            "total_count":12682,
-            "monthly_count":1333,
-            "user_count":24,
-            "total_user_count":7332
-         },
-         "brewery":{
-            "brewery_id":259,
-            "brewery_name":"Brooklyn Brewery",
-            "brewery_label":"https://untappd.s3.amazonaws.com/site/brewery_logos/brewery-BrooklynBrewery_259.jpeg",
-            "country_name":"United States",
-            "contact":{
-               "twitter":"brooklynbrewery",
-               "facebook":"https://www.facebook.com/thebrooklynbrewery",
-               "url":"http://brooklynbrewery.com"
-            },
-            "location":{
-               "brewery_city":"Brooklyn",
-               "brewery_state":"NY",
-               "lat":40.7215,
-               "lng":-73.9575
-            }
-         },
-         "auth_rating":3,
-         "wish_list":false,
-         "media":{
-            "count":10,
-            "items":[
-               {
-                  "photo_id":738199,
-                  "photo":{
-                     "photo_img_sm":"https://untappd.s3.amazonaws.com/photo/2012_07_29/6520952d6e365dd8d32dda3151a38466_100x100.jpg",
-                     "photo_img_md":"https://untappd.s3.amazonaws.com/photo/2012_07_29/6520952d6e365dd8d32dda3151a38466_320x320.jpg",
-                     "photo_img_lg":"https://untappd.s3.amazonaws.com/photo/2012_07_29/6520952d6e365dd8d32dda3151a38466_640x640.jpg",
-                     "photo_img_og":"https://untappd.s3.amazonaws.com/photo/2012_07_29/6520952d6e365dd8d32dda3151a38466_raw.jpg"
-                  }
-				}
-			]
-          },
-          "checkins": {}
-         }
-     },
-     "meta": {}
-}
-EOB;
+		if ( $response && ! is_wp_error( $response ) && isset( $response->response->beer ) ) {
 
-		$body_data = json_decode( $response_body );
-
-		if ( isset( $body_data->response->beer ) ) {
-
-			return $body_data->response->beer;
+			return $response->response->beer;
 
 		}
 
@@ -1699,8 +1663,6 @@ EOB;
 		$beer_info  = $this->get_untappd_beer_info( $untappd_id );
 
 		if ( is_object( $beer_info ) ) {
-
-			var_dump($beer_info);
 
 			if ( isset( $beer_info->rating_count ) ) {
 
