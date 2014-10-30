@@ -1650,4 +1650,62 @@ class DABC_Beer_Post_Type {
 
 	}
 
+	/**
+	 * Flag a beer as having been synced with Untappd
+	 *
+	 * @param int $post_id beer post ID
+	 * @return bool success
+	 */
+	function mark_beer_as_untappd_synced( $post_id ) {
+
+		return (bool) update_post_meta( $post_id, self::UNTAPPD_SYNCED, true );
+
+	}
+
+	/**
+	 * WP-Cron hook callback for syncing a beer with Untappd
+	 * Marks beer as processed on success, or rescedules itself on failure
+	 *
+	 * @param int $post_id beer post ID
+	 */
+	function cron_sync_dabc_beer_with_untappd( $post_id ) {
+
+		$success = $this->sync_dabc_beer_with_untappd( $post_id );
+
+		if ( $success ) {
+
+			$this->mark_beer_as_untappd_synced( $post_id );
+
+		} else {
+
+			$this->schedule_untappd_sync_for_beer( $post_id, 10 );
+
+		}
+
+	}
+
+	/**
+	 * For a given DABC beer post ID, sync date with Untappd
+	 *
+	 * @param int $post_id
+	 * @return bool success
+	 */
+	function sync_dabc_beer_with_untappd( $post_id ) {
+
+		$untappd_id = $this->titan->getOption( self::UNTAPPD_ID, $post_id );
+
+		$beer_info  = $this->get_untappd_beer_info( $untappd_id );
+
+		if ( is_object( $beer_info ) ) {
+
+
+
+			return true;
+
+		}
+
+		return false;
+
+	}
+
 }
