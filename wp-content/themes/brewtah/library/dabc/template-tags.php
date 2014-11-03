@@ -36,9 +36,9 @@ function dabc_get_abv( $post_id = null ) {
 
 	$post_id = $post_id ?: get_the_ID();
 
-	$dabc = new DABC();
+	$ratebeer = new Ratebeer_Sync();
 
-	return $dabc->beers->get_abv( $post_id );
+	return $ratebeer->get_abv( $post_id );
 
 }
 

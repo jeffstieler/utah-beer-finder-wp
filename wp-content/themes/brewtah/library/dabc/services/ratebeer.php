@@ -123,6 +123,12 @@ class Ratebeer_Sync {
 
 	}
 
+	function get_abv( $post_id ) {
+
+		return $this->titan->getOption( self::ABV, $post_id );
+
+	}
+
 	/**
 	 * Get info for a single beer from Ratebeer by path
 	 *
