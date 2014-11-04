@@ -32,7 +32,7 @@ class Ratebeer_Sync extends Base_Beer_Service {
 
 	function _get_titan_meta_key( $option_name ) {
 
-		return ( self::TITAN_NAMESPACE . '_' . $option_name );
+		return ( $this->service_name . '_' . $option_name );
 
 	}
 
