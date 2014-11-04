@@ -7,9 +7,10 @@
 use Symfony\Component\DomCrawler\Crawler;
 
 /**
- * Include Ratebeer syncing
+ * Include beer service syncing
  */
 require_once( __DIR__ . '/services/ratebeer.php' );
+require_once( __DIR__ . '/services/untappd.php' );
 
 class DABC_Beer_Post_Type {
 
@@ -27,17 +28,6 @@ class DABC_Beer_Post_Type {
 	const CS_CODE_OPTION         = 'cs-code';
 	const PRICE_OPTION           = 'price';
 	const DABC_INVENTORY         = 'dabc-store-inventory';
-	const UNTAPPD_SEARCHED       = 'has-untappd-searched';
-	const UNTAPPD_MAP_CRON       = 'map_untappd';
-	const UNTAPPD_SYNC_CRON      = 'sync_untappd';
-	const UNTAPPD_IMAGE_CRON     = 'image_untappd';
-	const UNTAPPD_ID             = 'untappd-id';
-	const UNTAPPD_RATING_SCORE   = 'untappd-rating-score';
-	const UNTAPPD_RATING_COUNT   = 'untappd-rating-count';
-	const UNTAPPD_ABV            = 'untappd-abv';
-	const UNTAPPD_HIT_LIMIT      = 'untappd-hit-limit';
-	const UNTAPPD_SYNCED         = 'has-untappd-sync';
-	const UNTAPPD_IMG_SEARCHED   = 'has-untappd-image';
 	const DABC_URL_BASE          = 'http://www.webapps.abc.utah.gov/Production';
 	const DABC_BEER_LIST_URL     = '/OnlinePriceList/DisplayPriceList.aspx?DivCd=T';
 	const DABC_INVENTORY_URL     = '/OnlineInventoryQuery/IQ/InventoryQuery.aspx';
@@ -46,6 +36,7 @@ class DABC_Beer_Post_Type {
 	var $dabc_column_map;
 	var $dabc_status_map;
 	var $ratebeer_sync;
+	var $untappd_sync;
 
 	function __construct() {
 
@@ -77,6 +68,8 @@ class DABC_Beer_Post_Type {
 
 		$this->ratebeer_sync = new Ratebeer_Sync( self::POST_TYPE );
 
+		$this->untappd_sync  = new Untappd_Sync( self::POST_TYPE );
+
 	}
 
 	function init() {
@@ -92,6 +85,8 @@ class DABC_Beer_Post_Type {
 		$this->add_post_columns();
 
 		$this->ratebeer_sync->init();
+
+		$this->untappd_sync->init();
 
 	}
 
@@ -155,32 +150,6 @@ class DABC_Beer_Post_Type {
 		$dabc_box->createOption( array(
 			'name' => 'Price',
 			'id'   => self::PRICE_OPTION
-		) );
-
-		$untappd_box = $this->titan->createMetaBox( array(
-			'name'      => 'Untappd Info',
-			'id'        => 'untappd-info',
-			'post_type' => self::POST_TYPE
-		) );
-
-		$untappd_box->createOption( array(
-			'name' => 'ID',
-			'id'   => self::UNTAPPD_ID
-		) );
-
-		$untappd_box->createOption( array(
-			'name' => 'Rating Score',
-			'id'   => self::UNTAPPD_RATING_SCORE
-		) );
-
-		$untappd_box->createOption( array(
-			'name' => 'Ratings Count',
-			'id'   => self::UNTAPPD_RATING_COUNT
-		) );
-
-		$untappd_box->createOption( array(
-			'name' => 'ABV',
-			'id'   => self::UNTAPPD_ABV
 		) );
 
 	}
