@@ -4,18 +4,18 @@ use Symfony\Component\DomCrawler\Crawler;
 
 class Untappd_Sync {
 
-	const TITAN_NAMESPACE        = 'untappd';
-	const UNTAPPD_SEARCHED       = 'has-untappd-searched';
-	const UNTAPPD_MAP_CRON       = 'map_untappd';
-	const UNTAPPD_SYNC_CRON      = 'sync_untappd';
-	const UNTAPPD_IMAGE_CRON     = 'image_untappd';
-	const UNTAPPD_ID             = 'untappd-id';
-	const UNTAPPD_RATING_SCORE   = 'untappd-rating-score';
-	const UNTAPPD_RATING_COUNT   = 'untappd-rating-count';
-	const UNTAPPD_ABV            = 'untappd-abv';
-	const UNTAPPD_HIT_LIMIT      = 'untappd-hit-limit';
-	const UNTAPPD_SYNCED         = 'has-untappd-sync';
-	const UNTAPPD_IMG_SEARCHED   = 'has-untappd-image';
+	const TITAN_NAMESPACE = 'untappd';
+	const SEARCHED        = 'has-untappd-searched';
+	const SEARCH_CRON     = 'search_untappd';
+	const SYNC_CRON       = 'sync_untappd';
+	const IMAGE_CRON      = 'image_untappd';
+	const ID              = 'id';
+	const RATING_SCORE    = 'rating-score';
+	const RATING_COUNT    = 'rating-count';
+	const ABV             = 'abv';
+	const HIT_RATE_LIMIT  = 'untappd-hit-limit';
+	const SYNCED          = 'has-untappd-sync';
+	const IMAGE_SYNCED    = 'has-untappd-image';
 
 	var $post_type;
 	var $titan;
@@ -91,11 +91,11 @@ class Untappd_Sync {
 
 	function attach_hooks() {
 
-		add_action( self::UNTAPPD_IMAGE_CRON, array( $this, 'sync_featured_image_with_untappd' ), 10, 2 );
+		add_action( self::IMAGE_CRON, array( $this, 'sync_featured_image_with_untappd' ), 10, 2 );
 
-		add_action( self::UNTAPPD_MAP_CRON, array( $this, 'cron_map_dabc_beer_to_untappd' ) );
+		add_action( self::SEARCH_CRON, array( $this, 'cron_map_dabc_beer_to_untappd' ) );
 
-		add_action( self::UNTAPPD_SYNC_CRON, array( $this, 'cron_sync_dabc_beer_with_untappd' ) );
+		add_action( self::SYNC_CRON, array( $this, 'cron_sync_dabc_beer_with_untappd' ) );
 
 	}
 
@@ -170,7 +170,7 @@ class Untappd_Sync {
 	 */
 	function have_hit_untappd_rate_limit() {
 
-		return get_transient( self::UNTAPPD_HIT_LIMIT );
+		return get_transient( self::HIT_RATE_LIMIT );
 
 	}
 
@@ -204,7 +204,7 @@ class Untappd_Sync {
 
 				$titan = TitanFramework::getInstance( self::TITAN_NAMESPACE );
 
-				$titan->setOption( self::UNTAPPD_ID, $beer->beer->bid, $post_id );
+				$titan->setOption( self::ID, $beer->beer->bid, $post_id );
 
 			}
 
@@ -225,7 +225,7 @@ class Untappd_Sync {
 	 */
 	function mark_beer_as_untappd_searched( $post_id ) {
 
-		return (bool) update_post_meta( $post_id, self::UNTAPPD_SEARCHED, true );
+		return (bool) update_post_meta( $post_id, self::SEARCHED, true );
 
 	}
 
@@ -237,7 +237,7 @@ class Untappd_Sync {
 	 */
 	function mark_beer_as_untappd_synced( $post_id ) {
 
-		return (bool) update_post_meta( $post_id, self::UNTAPPD_SYNCED, true );
+		return (bool) update_post_meta( $post_id, self::SYNCED, true );
 
 	}
 
@@ -251,22 +251,22 @@ class Untappd_Sync {
 
 		$untappd_box->createOption( array(
 			'name' => 'ID',
-			'id'   => self::UNTAPPD_ID
+			'id'   => self::ID
 		) );
 
 		$untappd_box->createOption( array(
 			'name' => 'Rating Score',
-			'id'   => self::UNTAPPD_RATING_SCORE
+			'id'   => self::RATING_SCORE
 		) );
 
 		$untappd_box->createOption( array(
 			'name' => 'Ratings Count',
-			'id'   => self::UNTAPPD_RATING_COUNT
+			'id'   => self::RATING_COUNT
 		) );
 
 		$untappd_box->createOption( array(
 			'name' => 'ABV',
-			'id'   => self::UNTAPPD_ABV
+			'id'   => self::ABV
 		) );
 
 	}
@@ -282,7 +282,7 @@ class Untappd_Sync {
 
 		$timestamp = ( time() + ( $offset_in_minutes * MINUTE_IN_SECONDS ) );
 
-		wp_schedule_single_event( $timestamp, self::UNTAPPD_IMAGE_CRON, array( $image_url, $post_id ) );
+		wp_schedule_single_event( $timestamp, self::IMAGE_CRON, array( $image_url, $post_id ) );
 
 	}
 
@@ -296,7 +296,7 @@ class Untappd_Sync {
 
 		$timestamp = ( time() + ( $offset_in_minutes * MINUTE_IN_SECONDS ) );
 
-		wp_schedule_single_event( $timestamp, self::UNTAPPD_MAP_CRON, array( $post_id ) );
+		wp_schedule_single_event( $timestamp, self::SEARCH_CRON, array( $post_id ) );
 
 	}
 
@@ -310,7 +310,7 @@ class Untappd_Sync {
 
 		$timestamp = ( time() + ( $offset_in_minutes * MINUTE_IN_SECONDS ) );
 
-		wp_schedule_single_event( $timestamp, self::UNTAPPD_SYNC_CRON, array( $post_id ) );
+		wp_schedule_single_event( $timestamp, self::SYNC_CRON, array( $post_id ) );
 
 	}
 
@@ -324,7 +324,7 @@ class Untappd_Sync {
 			'post_type'      => self::POST_TYPE,
 			'meta_query'     => array(
 				array(
-					'key'     => self::UNTAPPD_SEARCHED,
+					'key'     => self::SEARCHED,
 					'value'   => '',
 					'compare' => 'NOT EXISTS'
 				)
@@ -368,7 +368,7 @@ class Untappd_Sync {
 	 */
 	function set_hit_untappd_rate_limit() {
 
-		set_transient( self::UNTAPPD_HIT_LIMIT, true, HOUR_IN_SECONDS );
+		set_transient( self::HIT_RATE_LIMIT, true, HOUR_IN_SECONDS );
 
 	}
 
@@ -383,7 +383,7 @@ class Untappd_Sync {
 			'post_type'      => self::POST_TYPE,
 			'meta_query'     => array(
 				array(
-					'key'     => self::UNTAPPD_SYNCED,
+					'key'     => self::SYNCED,
 					'value'   => '',
 					'compare' => 'NOT EXISTS'
 				)
@@ -395,7 +395,7 @@ class Untappd_Sync {
 
 		foreach ( $unsynced_beers->posts as $post_id ) {
 
-			if ( $this->titan->getOption( self::UNTAPPD_ID, $post_id ) ) {
+			if ( $this->titan->getOption( self::ID, $post_id ) ) {
 
 				$this->schedule_untappd_sync_for_beer( $post_id );
 
@@ -413,7 +413,7 @@ class Untappd_Sync {
 	 */
 	function sync_dabc_beer_with_untappd( $post_id ) {
 
-		$untappd_id = $this->titan->getOption( self::UNTAPPD_ID, $post_id );
+		$untappd_id = $this->titan->getOption( self::ID, $post_id );
 
 		$beer_info  = $this->get_untappd_beer_info( $untappd_id );
 
@@ -421,19 +421,19 @@ class Untappd_Sync {
 
 			if ( isset( $beer_info->rating_count ) ) {
 
-				$this->titan->setOption( self::UNTAPPD_RATING_COUNT, $beer_info->rating_count, $post_id );
+				$this->titan->setOption( self::RATING_COUNT, $beer_info->rating_count, $post_id );
 
 			}
 
 			if ( isset( $beer_info->rating_score ) ) {
 
-				$this->titan->setOption( self::UNTAPPD_RATING_SCORE, $beer_info->rating_score, $post_id );
+				$this->titan->setOption( self::RATING_SCORE, $beer_info->rating_score, $post_id );
 
 			}
 
 			if ( isset( $beer_info->beer_abv ) ) {
 
-				$this->titan->setOption( self::UNTAPPD_ABV, $beer_info->beer_abv, $post_id );
+				$this->titan->setOption( self::ABV, $beer_info->beer_abv, $post_id );
 
 			}
 
