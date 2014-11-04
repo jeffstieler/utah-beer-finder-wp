@@ -1,30 +1,18 @@
 <?php
 
-class Untappd_Sync {
+require_once( __DIR__ . '/base-service.php' );
 
-	const TITAN_NAMESPACE = 'untappd';
-	const SEARCHED        = 'has-untappd-searched';
-	const SEARCH_CRON     = 'search_untappd';
-	const SYNC_CRON       = 'sync_untappd';
+class Untappd_Sync extends Base_Beer_Service {
+
 	const IMAGE_CRON      = 'image_untappd';
 	const ID              = 'id';
 	const RATING_SCORE    = 'rating-score';
 	const RATING_COUNT    = 'rating-count';
 	const ABV             = 'abv';
 	const HIT_RATE_LIMIT  = 'untappd-hit-limit';
-	const SYNCED          = 'has-untappd-sync';
 	const IMAGE_SYNCED    = 'has-untappd-image';
 
-	var $post_type;
-	var $titan;
-
-	function __construct( $post_type ) {
-
-		$this->post_type = $post_type;
-
-		$this->titan = TitanFramework::getInstance( self::TITAN_NAMESPACE );
-
-	}
+	protected $service_name = 'untappd';
 
 	/**
 	 * Untappd HTTP request helper, handles API keys and rate limit automatically
@@ -89,55 +77,9 @@ class Untappd_Sync {
 
 	function attach_hooks() {
 
+		parent::attach_hooks();
+
 		add_action( self::IMAGE_CRON, array( $this, 'sync_featured_image_with_untappd' ), 10, 2 );
-
-		add_action( self::SEARCH_CRON, array( $this, 'cron_map_post_to_beer' ) );
-
-		add_action( self::SYNC_CRON, array( $this, 'cron_sync_post_beer_info' ) );
-
-	}
-
-	/**
-	 * WP-Cron hook callback for searching a post on Untappd
-	 * Marks post as processed on success, or rescedules itself on failure
-	 *
-	 * @param int $post_id post ID
-	 */
-	function cron_map_post_to_beer( $post_id ) {
-
-		$success = $this->map_post_to_beer( $post_id );
-
-		if ( $success ) {
-
-			$this->mark_post_as_searched( $post_id );
-
-		} else {
-
-			$this->schedule_search_for_post( $post_id, 10 );
-
-		}
-
-	}
-
-	/**
-	 * WP-Cron hook callback for syncing a beer with Untappd
-	 * Marks beer as processed on success, or rescedules itself on failure
-	 *
-	 * @param int $post_id beer post ID
-	 */
-	function cron_sync_post_beer_info( $post_id ) {
-
-		$success = $this->sync_post_beer_info( $post_id );
-
-		if ( $success ) {
-
-			$this->mark_post_as_synced( $post_id );
-
-		} else {
-
-			$this->schedule_sync_for_post( $post_id, 10 );
-
-		}
 
 	}
 
@@ -172,68 +114,15 @@ class Untappd_Sync {
 
 	}
 
-	function init() {
-
-		$this->register_post_meta();
-
-		$this->attach_hooks();
-
-	}
-
 	/**
 	 * For a given DABC beer post ID, search Untappd and associate ID if found
 	 *
 	 * @param int $post_id
 	 * @return bool success
 	 */
-	function map_post_to_beer( $post_id ) {
+	function map_post_to_beer( $post_id, $beer ) {
 
-		$post = get_post( $post_id );
-
-		$beer_name = $post->post_title;
-
-		$search_results = $this->search( $beer_name );
-
-		if ( is_array( $search_results ) ) {
-
-			$beer = array_shift( $search_results );
-
-			if ( $beer ) {
-
-				$this->titan->setOption( self::ID, $beer->beer->bid, $post_id );
-
-			}
-
-			return true;
-
-		}
-
-		return false;
-
-	}
-
-	/**
-	 * Flag a beer as having attempted to be mapped with Untappd
-	 * NOTE: many won't be found and we don't want to keep looking
-	 *
-	 * @param int $post_id beer post ID
-	 * @return bool success
-	 */
-	function mark_post_as_searched( $post_id ) {
-
-		return (bool) update_post_meta( $post_id, self::SEARCHED, true );
-
-	}
-
-	/**
-	 * Flag a beer as having been synced with Untappd
-	 *
-	 * @param int $post_id beer post ID
-	 * @return bool success
-	 */
-	function mark_post_as_synced( $post_id ) {
-
-		return (bool) update_post_meta( $post_id, self::SYNCED, true );
+		$this->titan->setOption( self::ID, $beer->beer->bid, $post_id );
 
 	}
 
@@ -283,89 +172,6 @@ class Untappd_Sync {
 	}
 
 	/**
-	 * Find all posts that haven't been searched for on Untappd
-	 * successfully and schedule a cron job to map them
-	 */
-	function schedule_search_for_all_posts() {
-
-		$unmapped_beers = new WP_Query( array(
-			'post_type'      => $this->post_type,
-			'meta_query'     => array(
-				array(
-					'key'     => self::SEARCHED,
-					'value'   => '',
-					'compare' => 'NOT EXISTS'
-				)
-			),
-			'no_found_rows'  => true,
-			'posts_per_page' => -1,
-			'fields'         => 'ids'
-		) );
-
-		array_map( array( $this, 'schedule_search_for_post' ), $unmapped_beers->posts );
-
-	}
-
-	/**
-	 * Schedule a job to search a single beer on Untappd
-	 *
-	 * @param int $post_id beer post ID
-	 * @param int $offset_in_minutes optional. delay (from right now) of cron job
-	 */
-	function schedule_search_for_post( $post_id, $offset_in_minutes = 0 ) {
-
-		$timestamp = ( time() + ( $offset_in_minutes * MINUTE_IN_SECONDS ) );
-
-		wp_schedule_single_event( $timestamp, self::SEARCH_CRON, array( $post_id ) );
-
-	}
-
-	/**
-	 * Retrieve info and ratings from Untappd for beers that have been mapped
-	 */
-	function schedule_sync_for_all_posts() {
-
-		$unsynced_beers = new WP_Query( array(
-			'post_type'      => $this->post_type,
-			'meta_query'     => array(
-				array(
-					'key'     => self::SYNCED,
-					'value'   => '',
-					'compare' => 'NOT EXISTS'
-				)
-			),
-			'no_found_rows'  => true,
-			'posts_per_page' => -1,
-			'fields'         => 'ids'
-		) );
-
-		foreach ( $unsynced_beers->posts as $post_id ) {
-
-			if ( $this->titan->getOption( self::ID, $post_id ) ) {
-
-				$this->schedule_sync_for_post( $post_id );
-
-			}
-
-		}
-
-	}
-
-	/**
-	 * Schedule a job to sync a single beer with Untappd
-	 *
-	 * @param int $post_id beer post ID
-	 * @param int $offset_in_minutes optional. delay (from right now) of cron job
-	 */
-	function schedule_sync_for_post( $post_id, $offset_in_minutes = 0 ) {
-
-		$timestamp = ( time() + ( $offset_in_minutes * MINUTE_IN_SECONDS ) );
-
-		wp_schedule_single_event( $timestamp, self::SYNC_CRON, array( $post_id ) );
-
-	}
-
-	/**
 	 * Search for beers on Untappd
 	 *
 	 * @param string $query
@@ -380,9 +186,9 @@ class Untappd_Sync {
 
 		$response = $this->_make_http_request( 'search/beer', $args );
 
-		if ( $response && ! is_wp_error( $response ) && isset( $body_data->response->beers->items ) ) {
+		if ( $response && ! is_wp_error( $response ) && isset( $response->response->beers->items ) ) {
 
-			return $body_data->response->beers->items;
+			return $response->response->beers->items;
 
 		}
 
