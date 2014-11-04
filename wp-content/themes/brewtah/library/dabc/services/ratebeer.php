@@ -1,31 +1,25 @@
 <?php
 
+require_once( __DIR__ . '/base-service.php' );
+
 use Symfony\Component\DomCrawler\Crawler;
 
-class Ratebeer_Sync {
+class Ratebeer_Sync extends Base_Beer_Service {
 
-	const TITAN_NAMESPACE = 'ratebeer';
 	const ID              = 'id';
 	const URL             = 'url';
 	const OVERALL_SCORE   = 'overall-score';
 	const STYLE_SCORE     = 'style-score';
 	const CALORIES        = 'calories';
 	const ABV             = 'abv';
-	const SEARCH_CRON     = 'search_ratebeer';
-	const SYNC_CRON       = 'sync_ratebeer';
-	const SYNCED          = 'has-ratebeer-sync';
-	const SEARCHED        = 'has-ratebeer-searched';
 	const BASE_URL        = 'http://www.ratebeer.com';
 
-	var $post_type;
-	var $titan;
-	var $search_column_map;
+	protected $service_name = 'ratebeer';
+	protected $search_column_map;
 
 	function __construct( $post_type ) {
 
-		$this->post_type = $post_type;
-
-		$this->titan = TitanFramework::getInstance( self::TITAN_NAMESPACE );
+		parent::__construct( $post_type );
 
 		$this->search_column_map = array(
 			0 => 'name',
@@ -69,57 +63,11 @@ class Ratebeer_Sync {
 
 	function attach_hooks() {
 
-		add_action( self::SEARCH_CRON, array( $this, 'cron_map_post_to_beer' ) );
-
-		add_action( self::SYNC_CRON, array( $this, 'cron_sync_post_beer_info' ) );
+		parent::attach_hooks();
 
 		add_action( 'update_postmeta', array( $this, 'sync_post_beer_info_on_url_update' ), 10, 4 );
 
 		add_action( 'add_post_meta', array( $this, 'sync_post_beer_info_on_url_add' ), 10, 3 );
-
-	}
-
-	/**
-	 * WP-Cron hook callback for searching a beer on Ratebeer
-	 * Marks beer as processed on success, or rescedules itself on failure
-	 *
-	 * @param int $post_id beer post ID
-	 */
-	function cron_map_post_to_beer( $post_id ) {
-
-		$success = $this->map_post_to_beer( $post_id );
-
-		if ( $success ) {
-
-			$this->mark_post_as_searched( $post_id );
-
-		} else {
-
-			$this->schedule_search_for_post( $post_id, 10 );
-
-		}
-
-	}
-
-	/**
-	 * WP-Cron hook callback for syncing a beer with Ratebeer
-	 * Marks beer as processed on success, or rescedules itself on failure
-	 *
-	 * @param int $post_id beer post ID
-	 */
-	function cron_sync_post_beer_info( $post_id ) {
-
-		$success = $this->sync_post_beer_info( $post_id );
-
-		if ( $success ) {
-
-			$this->mark_post_as_synced( $post_id );
-
-		} else {
-
-			$this->schedule_sync_for_post( $post_id, 10 );
-
-		}
 
 	}
 
@@ -169,73 +117,17 @@ class Ratebeer_Sync {
 
 	}
 
-	function init() {
-
-		$this->register_post_meta();
-
-		$this->attach_hooks();
-
-	}
-
 	/**
-	 * For a given DABC beer post ID, search ratebeer for it
-	 * and associate the URL if found
+	 * Handler for when a beer is found on Ratebeer
 	 *
 	 * @param int $post_id
 	 * @return bool success
 	 */
-	function map_post_to_beer( $post_id ) {
+	function map_post_to_beer( $post_id, $beer ) {
 
-		$post = get_post( $post_id );
+		$this->titan->setOption( self::URL, $beer['url'], $post_id );
 
-		$beer_name = $post->post_title;
-
-		$search_results = $this->search( $beer_name );
-
-		if ( is_array( $search_results ) ) {
-
-			$beer = array_shift( $search_results );
-
-			if ( $beer ) {
-
-				$titan = TitanFramework::getInstance( self::TITAN_NAMESPACE );
-
-				$titan->setOption( self::URL, $beer['url'], $post_id );
-
-				$titan->setOption( self::ID, $beer['id'], $post_id );
-
-			}
-
-			return true;
-
-		}
-
-		return false;
-
-	}
-
-	/**
-	 * Flag a beer as having attempted to be mapped with Ratebeer
-	 * NOTE: many won't be found and we don't want to keep looking
-	 *
-	 * @param int $post_id beer post ID
-	 * @return bool success
-	 */
-	function mark_post_as_searched( $post_id ) {
-
-		return (bool) update_post_meta( $post_id, self::SEARCHED, true );
-
-	}
-
-	/**
-	 * Flag a beer as having been synced with Ratebeer (single beer page)
-	 *
-	 * @param int $post_id beer post ID
-	 * @return bool success
-	 */
-	function mark_post_as_synced( $post_id ) {
-
-		return (bool) update_post_meta( $post_id, self::SYNCED, true );
+		$this->titan->setOption( self::ID, $beer['id'], $post_id );
 
 	}
 
@@ -401,89 +293,6 @@ class Ratebeer_Sync {
 			'name' => 'ABV',
 			'id'   => self::ABV
 		) );
-
-	}
-
-	/**
-	 * Find all posts that haven't been searched for on Ratebeer
-	 * successfully and schedule a cron job to map them
-	 */
-	function schedule_search_for_all_posts() {
-
-		$unmapped_posts = new WP_Query( array(
-			'post_type'      => $this->post_type,
-			'meta_query'     => array(
-				array(
-					'key'     => self::SEARCHED,
-					'value'   => '',
-					'compare' => 'NOT EXISTS'
-				)
-			),
-			'no_found_rows'  => true,
-			'posts_per_page' => -1,
-			'fields'         => 'ids'
-		) );
-
-		array_map( array( $this, 'schedule_search_for_post' ), $unmapped_posts->posts );
-
-	}
-
-	/**
-	 * Schedule a job to search a single beer on Ratebeer
-	 *
-	 * @param int $post_id beer post ID
-	 * @param int $offset_in_minutes optional. delay (from right now) of cron job
-	 */
-	function schedule_search_for_post( $post_id, $offset_in_minutes = 0 ) {
-
-		$timestamp = ( time() + ( $offset_in_minutes * MINUTE_IN_SECONDS ) );
-
-		wp_schedule_single_event( $timestamp, self::SEARCH_CRON, array( $post_id ) );
-
-	}
-
-	/**
-	 * Retrieve info and ratings from Ratebeer for beers that have been mapped
-	 */
-	function schedule_sync_for_all_posts() {
-
-		$unsynced_beers = new WP_Query( array(
-			'post_type'      => $this->post_type,
-			'meta_query'     => array(
-				array(
-					'key'     => self::SYNCED,
-					'value'   => '',
-					'compare' => 'NOT EXISTS'
-				)
-			),
-			'no_found_rows'  => true,
-			'posts_per_page' => -1,
-			'fields'         => 'ids'
-		) );
-
-		foreach ( $unsynced_beers->posts as $post_id ) {
-
-			if ( $this->titan->getOption( self::URL, $post_id ) ) {
-
-				$this->schedule_sync_for_post( $post_id );
-
-			}
-
-		}
-
-	}
-
-	/**
-	 * Schedule a job to sync a single beer with Ratebeer
-	 *
-	 * @param int $post_id beer post ID
-	 * @param int $offset_in_minutes optional. delay (from right now) of cron job
-	 */
-	function schedule_sync_for_post( $post_id, $offset_in_minutes = 0 ) {
-
-		$timestamp = ( time() + ( $offset_in_minutes * MINUTE_IN_SECONDS ) );
-
-		wp_schedule_single_event( $timestamp, self::SYNC_CRON, array( $post_id ) );
 
 	}
 
