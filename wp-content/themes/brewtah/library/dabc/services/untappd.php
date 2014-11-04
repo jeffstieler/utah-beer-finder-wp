@@ -275,35 +275,13 @@ class Untappd_Sync extends Base_Beer_Service {
 
 			}
 
-			if ( isset( $beer_info->beer_style ) ) {
-
-				wp_set_object_terms( $post_id, $beer_info->beer_style, self::STYLE_TAXONOMY );
-
-			}
-
-			if ( isset( $beer_info->brewery->brewery_name ) ) {
-
-				wp_set_object_terms( $post_id, $beer_info->brewery->brewery_name, self::BREWERY_TAXONOMY );
-
-			}
-
-			if ( isset( $beer_info->brewery->country_name ) ) {
-
-				wp_set_object_terms( $post_id, $beer_info->brewery->country_name, self::COUNTRY_TAXONOMY );
-
-			}
-
-			if ( isset( $beer_info->brewery->location->brewery_state ) ) {
-
-				wp_set_object_terms( $post_id, $beer_info->brewery->location->brewery_state, self::STATE_TAXONOMY );
-
-			}
-
 			if ( isset( $beer_info->beer_label ) ) {
 
 				$this->sync_featured_image( $beer_info->beer_label, $post_id );
 
 			}
+
+			do_action( 'untappd_sync_post_beer_info', $post_id, $beer_info );
 
 			return true;
 

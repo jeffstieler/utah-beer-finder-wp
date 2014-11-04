@@ -72,7 +72,15 @@ class DABC_Beer_Post_Type {
 
 	}
 
+	function attach_hooks() {
+
+		add_action( 'untappd_sync_post_beer_info', array( $this, 'set_taxonomy_data_from_untappd' ), 10, 2 );
+
+	}
+
 	function init() {
+
+		$this->attach_hooks();
 
 		$this->register_post_type();
 
@@ -663,6 +671,40 @@ class DABC_Beer_Post_Type {
 		}
 
 		return false;
+
+	}
+
+	/**
+	 * Use Untappd data to set taxonomy terms for the beer
+	 *
+	 * @param int $post_id
+	 * @param object $beer_info
+	 */
+	function set_taxonomy_data_from_untappd( $post_id, $beer_info ) {
+
+		if ( isset( $beer_info->beer_style ) ) {
+
+			wp_set_object_terms( $post_id, $beer_info->beer_style, self::STYLE_TAXONOMY );
+
+		}
+
+		if ( isset( $beer_info->brewery->brewery_name ) ) {
+
+			wp_set_object_terms( $post_id, $beer_info->brewery->brewery_name, self::BREWERY_TAXONOMY );
+
+		}
+
+		if ( isset( $beer_info->brewery->country_name ) ) {
+
+			wp_set_object_terms( $post_id, $beer_info->brewery->country_name, self::COUNTRY_TAXONOMY );
+
+		}
+
+		if ( isset( $beer_info->brewery->location->brewery_state ) ) {
+
+			wp_set_object_terms( $post_id, $beer_info->brewery->location->brewery_state, self::STATE_TAXONOMY );
+
+		}
 
 	}
 
