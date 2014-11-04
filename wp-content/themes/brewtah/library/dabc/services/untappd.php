@@ -1,7 +1,5 @@
 <?php
 
-use Symfony\Component\DomCrawler\Crawler;
-
 class Untappd_Sync {
 
 	const TITAN_NAMESPACE = 'untappd';
