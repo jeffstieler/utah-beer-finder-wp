@@ -33,12 +33,12 @@ class Untappd_Sync {
 	 * @param array $query_params
 	 * @return boolean|WP_Error|array
 	 */
-	function _untappd_make_http_request( $path, $query_params = array() ) {
+	function _make_http_request( $path, $query_params = array() ) {
 
 		if (
 			( false === defined( 'UNTAPPD_CLIENT_ID' ) ) ||
 			( false === defined( 'UNTAPPD_CLIENT_SECRET' ) ) ||
-			$this->have_hit_untappd_rate_limit()
+			$this->have_hit_api_rate_limit()
 		) {
 
 			return false;
@@ -74,7 +74,7 @@ class Untappd_Sync {
 				isset( $body_data->meta->error_type ) &&
 				( 'invalid_limit' === $body_data->meta->error_type )
 			) {
-				$this->set_hit_untappd_rate_limit();
+				$this->set_hit_api_rate_limit();
 			}
 
 		} else if ( 200 === $response_code ) {
@@ -91,29 +91,29 @@ class Untappd_Sync {
 
 		add_action( self::IMAGE_CRON, array( $this, 'sync_featured_image_with_untappd' ), 10, 2 );
 
-		add_action( self::SEARCH_CRON, array( $this, 'cron_map_dabc_beer_to_untappd' ) );
+		add_action( self::SEARCH_CRON, array( $this, 'cron_map_post_to_beer' ) );
 
-		add_action( self::SYNC_CRON, array( $this, 'cron_sync_dabc_beer_with_untappd' ) );
+		add_action( self::SYNC_CRON, array( $this, 'cron_sync_post_beer_info' ) );
 
 	}
 
 	/**
-	 * WP-Cron hook callback for searching a beer on Untappd
-	 * Marks beer as processed on success, or rescedules itself on failure
+	 * WP-Cron hook callback for searching a post on Untappd
+	 * Marks post as processed on success, or rescedules itself on failure
 	 *
-	 * @param int $post_id beer post ID
+	 * @param int $post_id post ID
 	 */
-	function cron_map_dabc_beer_to_untappd( $post_id ) {
+	function cron_map_post_to_beer( $post_id ) {
 
-		$success = $this->map_dabc_beer_to_untappd( $post_id );
+		$success = $this->map_post_to_beer( $post_id );
 
 		if ( $success ) {
 
-			$this->mark_beer_as_untappd_searched( $post_id );
+			$this->mark_post_as_searched( $post_id );
 
 		} else {
 
-			$this->schedule_untappd_search_for_beer( $post_id, 10 );
+			$this->schedule_search_for_post( $post_id, 10 );
 
 		}
 
@@ -125,17 +125,17 @@ class Untappd_Sync {
 	 *
 	 * @param int $post_id beer post ID
 	 */
-	function cron_sync_dabc_beer_with_untappd( $post_id ) {
+	function cron_sync_post_beer_info( $post_id ) {
 
-		$success = $this->sync_dabc_beer_with_untappd( $post_id );
+		$success = $this->sync_post_beer_info( $post_id );
 
 		if ( $success ) {
 
-			$this->mark_beer_as_untappd_synced( $post_id );
+			$this->mark_post_as_synced( $post_id );
 
 		} else {
 
-			$this->schedule_untappd_sync_for_beer( $post_id, 10 );
+			$this->schedule_sync_for_post( $post_id, 10 );
 
 		}
 
@@ -147,9 +147,9 @@ class Untappd_Sync {
 	 * @param int $beer_id
 	 * @return booean|object false on failure, beer object on success
 	 */
-	function get_untappd_beer_info( $beer_id ) {
+	function get_beer_info( $beer_id ) {
 
-		$response = $this->_untappd_make_http_request( "beer/info/{$beer_id}" );
+		$response = $this->_make_http_request( "beer/info/{$beer_id}" );
 
 		if ( $response && ! is_wp_error( $response ) && isset( $response->response->beer ) ) {
 
@@ -166,7 +166,7 @@ class Untappd_Sync {
 	 *
 	 * @return bool
 	 */
-	function have_hit_untappd_rate_limit() {
+	function have_hit_api_rate_limit() {
 
 		return get_transient( self::HIT_RATE_LIMIT );
 
@@ -186,13 +186,13 @@ class Untappd_Sync {
 	 * @param int $post_id
 	 * @return bool success
 	 */
-	function map_dabc_beer_to_untappd( $post_id ) {
+	function map_post_to_beer( $post_id ) {
 
 		$post = get_post( $post_id );
 
 		$beer_name = $post->post_title;
 
-		$search_results = $this->search_untappd( $beer_name );
+		$search_results = $this->search( $beer_name );
 
 		if ( is_array( $search_results ) ) {
 
@@ -200,9 +200,7 @@ class Untappd_Sync {
 
 			if ( $beer ) {
 
-				$titan = TitanFramework::getInstance( self::TITAN_NAMESPACE );
-
-				$titan->setOption( self::ID, $beer->beer->bid, $post_id );
+				$this->titan->setOption( self::ID, $beer->beer->bid, $post_id );
 
 			}
 
@@ -221,7 +219,7 @@ class Untappd_Sync {
 	 * @param int $post_id beer post ID
 	 * @return bool success
 	 */
-	function mark_beer_as_untappd_searched( $post_id ) {
+	function mark_post_as_searched( $post_id ) {
 
 		return (bool) update_post_meta( $post_id, self::SEARCHED, true );
 
@@ -233,7 +231,7 @@ class Untappd_Sync {
 	 * @param int $post_id beer post ID
 	 * @return bool success
 	 */
-	function mark_beer_as_untappd_synced( $post_id ) {
+	function mark_post_as_synced( $post_id ) {
 
 		return (bool) update_post_meta( $post_id, self::SYNCED, true );
 
@@ -276,7 +274,7 @@ class Untappd_Sync {
 	 * @param int $post_id beer post ID
 	 * @param int $offset_in_minutes optional. delay (from right now) of cron job
 	 */
-	function schedule_untappd_image_sync_for_beer( $image_url, $post_id, $offset_in_minutes = 0 ) {
+	function schedule_image_sync_for_beer( $image_url, $post_id, $offset_in_minutes = 0 ) {
 
 		$timestamp = ( time() + ( $offset_in_minutes * MINUTE_IN_SECONDS ) );
 
@@ -285,41 +283,13 @@ class Untappd_Sync {
 	}
 
 	/**
-	 * Schedule a job to search a single beer on Untappd
-	 *
-	 * @param int $post_id beer post ID
-	 * @param int $offset_in_minutes optional. delay (from right now) of cron job
-	 */
-	function schedule_untappd_search_for_beer( $post_id, $offset_in_minutes = 0 ) {
-
-		$timestamp = ( time() + ( $offset_in_minutes * MINUTE_IN_SECONDS ) );
-
-		wp_schedule_single_event( $timestamp, self::SEARCH_CRON, array( $post_id ) );
-
-	}
-
-	/**
-	 * Schedule a job to sync a single beer with Untappd
-	 *
-	 * @param int $post_id beer post ID
-	 * @param int $offset_in_minutes optional. delay (from right now) of cron job
-	 */
-	function schedule_untappd_sync_for_beer( $post_id, $offset_in_minutes = 0 ) {
-
-		$timestamp = ( time() + ( $offset_in_minutes * MINUTE_IN_SECONDS ) );
-
-		wp_schedule_single_event( $timestamp, self::SYNC_CRON, array( $post_id ) );
-
-	}
-
-	/**
-	 * Find all beers that haven't been searched for on Untappd
+	 * Find all posts that haven't been searched for on Untappd
 	 * successfully and schedule a cron job to map them
 	 */
-	function search_beers_on_untappd() {
+	function schedule_search_for_all_posts() {
 
 		$unmapped_beers = new WP_Query( array(
-			'post_type'      => self::POST_TYPE,
+			'post_type'      => $this->post_type,
 			'meta_query'     => array(
 				array(
 					'key'     => self::SEARCHED,
@@ -332,53 +302,31 @@ class Untappd_Sync {
 			'fields'         => 'ids'
 		) );
 
-		array_map( array( $this, 'schedule_untappd_search_for_beer' ), $unmapped_beers->posts );
+		array_map( array( $this, 'schedule_search_for_post' ), $unmapped_beers->posts );
 
 	}
 
 	/**
-	 * Search for beers on Untappd
+	 * Schedule a job to search a single beer on Untappd
 	 *
-	 * @param string $query
-	 * @return bool|WP_Error|array
+	 * @param int $post_id beer post ID
+	 * @param int $offset_in_minutes optional. delay (from right now) of cron job
 	 */
-	function search_untappd( $query ) {
+	function schedule_search_for_post( $post_id, $offset_in_minutes = 0 ) {
 
-		$args = array(
-			'q'    => urlencode( $query ),
-			'sort' => 'count'
-		);
+		$timestamp = ( time() + ( $offset_in_minutes * MINUTE_IN_SECONDS ) );
 
-		$response = $this->_untappd_make_http_request( 'search/beer', $args );
-
-		if ( $response && ! is_wp_error( $response ) && isset( $body_data->response->beers->items ) ) {
-
-			return $body_data->response->beers->items;
-
-		}
-
-		return false;
+		wp_schedule_single_event( $timestamp, self::SEARCH_CRON, array( $post_id ) );
 
 	}
-
-	/**
-	 * Set a flag that we've hit the Untappd API rate limit
-	 */
-	function set_hit_untappd_rate_limit() {
-
-		set_transient( self::HIT_RATE_LIMIT, true, HOUR_IN_SECONDS );
-
-	}
-
-
 
 	/**
 	 * Retrieve info and ratings from Untappd for beers that have been mapped
 	 */
-	function sync_beers_with_untappd() {
+	function schedule_sync_for_all_posts() {
 
 		$unsynced_beers = new WP_Query( array(
-			'post_type'      => self::POST_TYPE,
+			'post_type'      => $this->post_type,
 			'meta_query'     => array(
 				array(
 					'key'     => self::SYNCED,
@@ -395,7 +343,93 @@ class Untappd_Sync {
 
 			if ( $this->titan->getOption( self::ID, $post_id ) ) {
 
-				$this->schedule_untappd_sync_for_beer( $post_id );
+				$this->schedule_sync_for_post( $post_id );
+
+			}
+
+		}
+
+	}
+
+	/**
+	 * Schedule a job to sync a single beer with Untappd
+	 *
+	 * @param int $post_id beer post ID
+	 * @param int $offset_in_minutes optional. delay (from right now) of cron job
+	 */
+	function schedule_sync_for_post( $post_id, $offset_in_minutes = 0 ) {
+
+		$timestamp = ( time() + ( $offset_in_minutes * MINUTE_IN_SECONDS ) );
+
+		wp_schedule_single_event( $timestamp, self::SYNC_CRON, array( $post_id ) );
+
+	}
+
+	/**
+	 * Search for beers on Untappd
+	 *
+	 * @param string $query
+	 * @return bool|WP_Error|array
+	 */
+	function search( $query ) {
+
+		$args = array(
+			'q'    => urlencode( $query ),
+			'sort' => 'count'
+		);
+
+		$response = $this->_make_http_request( 'search/beer', $args );
+
+		if ( $response && ! is_wp_error( $response ) && isset( $body_data->response->beers->items ) ) {
+
+			return $body_data->response->beers->items;
+
+		}
+
+		return false;
+
+	}
+
+	/**
+	 * Set a flag that we've hit the Untappd API rate limit
+	 */
+	function set_hit_api_rate_limit() {
+
+		set_transient( self::HIT_RATE_LIMIT, true, HOUR_IN_SECONDS );
+
+	}
+
+	/**
+	 * Download a beer's image from Untappd and set as it's featured image
+	 *
+	 * @param int $image_url
+	 * @param int $post_id
+	 */
+	function sync_featured_image( $image_url, $post_id ) {
+
+		if ( ! function_exists( 'media_sideload_image' ) ) {
+
+			require_once( trailingslashit( ABSPATH ) . 'wp-admin/includes/media.php' );
+
+			require_once( trailingslashit( ABSPATH ) . 'wp-admin/includes/file.php' );
+
+		}
+
+		$result = media_sideload_image( $image_url, $post_id );
+
+		if ( is_wp_error( $result ) ) {
+
+			$this->schedule_image_sync_for_beer( $image_url, $post_id, 10 );
+
+		} else {
+
+			$images = get_attached_media( 'image', $post_id );
+
+			$thumbnail = array_shift( $images );
+
+			if ( ! is_null( $thumbnail ) ) {
+
+				set_post_thumbnail( $post_id, $thumbnail->ID );
 
 			}
 
@@ -409,11 +443,11 @@ class Untappd_Sync {
 	 * @param int $post_id
 	 * @return bool success
 	 */
-	function sync_dabc_beer_with_untappd( $post_id ) {
+	function sync_post_beer_info( $post_id ) {
 
 		$untappd_id = $this->titan->getOption( self::ID, $post_id );
 
-		$beer_info  = $this->get_untappd_beer_info( $untappd_id );
+		$beer_info  = $this->get_beer_info( $untappd_id );
 
 		if ( is_object( $beer_info ) ) {
 
@@ -461,7 +495,7 @@ class Untappd_Sync {
 
 			if ( isset( $beer_info->beer_label ) ) {
 
-				$this->sync_featured_image_with_untappd( $beer_info->beer_label, $post_id );
+				$this->sync_featured_image( $beer_info->beer_label, $post_id );
 
 			}
 
@@ -470,44 +504,6 @@ class Untappd_Sync {
 		}
 
 		return false;
-
-	}
-
-	/**
-	 * Download a beer's image from Untappd and set as it's featured image
-	 *
-	 * @param int $image_url
-	 * @param int $post_id
-	 */
-	function sync_featured_image_with_untappd( $image_url, $post_id ) {
-
-		if ( ! function_exists( 'media_sideload_image' ) ) {
-
-			require_once( trailingslashit( ABSPATH ) . 'wp-admin/includes/media.php' );
-
-			require_once( trailingslashit( ABSPATH ) . 'wp-admin/includes/file.php' );
-
-		}
-
-		$result = media_sideload_image( $image_url, $post_id );
-
-		if ( is_wp_error( $result ) ) {
-
-			$this->schedule_untappd_image_sync_for_beer( $image_url, $post_id, 10 );
-
-		} else {
-
-			$images = get_attached_media( 'image', $post_id );
-
-			$thumbnail = array_shift( $images );
-
-			if ( ! is_null( $thumbnail ) ) {
-
-				set_post_thumbnail( $post_id, $thumbnail->ID );
-
-			}
-
-		}
 
 	}
 
