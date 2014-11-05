@@ -84,7 +84,7 @@ class DABC {
 
 		}
 
-		$inventory = $this->beers->search_dabc_inventory_for_cs_code( $cs_code );
+		$inventory = $this->beers->dabc_sync->search_inventory_for_cs_code( $cs_code );
 
 		if ( ! $inventory ) {
 
