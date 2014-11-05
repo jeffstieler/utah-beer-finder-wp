@@ -114,6 +114,10 @@ class DABC_Sync {
 
 			$beer['name'] = $this->pretty_up_beer_name( $beer['description'] );
 
+			// map status code to label
+			$status = $beer['status'];
+			$beer['status'] = isset( $this->status_map[$status] ) ? $this->status_map[$status] : 'N/A';
+
 		}
 
 		return $beer;

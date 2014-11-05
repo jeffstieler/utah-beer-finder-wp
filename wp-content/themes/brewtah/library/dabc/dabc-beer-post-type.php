@@ -261,10 +261,6 @@ class DABC_Beer_Post_Type {
 			'status' => self::STATUS_TAXONOMY
 		);
 
-		// map status code to label before creating taxonomy terms
-		$status = $beer_info['status'];
-		$beer_info['status'] = isset( $this->dabc_status_map[$status] ) ? $this->dabc_status_map[$status] : 'N/A';
-
 		foreach ( $taxonomy_map as $info_key => $taxonomy ) {
 
 			wp_set_object_terms( $post_id, $beer_info[$info_key], $taxonomy );
