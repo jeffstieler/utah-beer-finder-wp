@@ -28,13 +28,15 @@ class DABC_Top_Rated_Beers_Widget extends WP_Widget {
 
 	protected function query( $args = array() ) {
 
+		$ratebeer = new Ratebeer_Sync( DABC_Beer_Post_Type::POST_TYPE );
+
 		$defaults = array(
 			'posts_per_page'      => 5,
 			'no_found_rows'       => true,
 			'post_type'           => DABC_Beer_Post_Type::POST_TYPE,
 			'post_status'         => 'publish',
 			'ignore_sticky_posts' => true,
-			'meta_key'            => DABC_Beer_Post_Type::TITAN_NAMESPACE . '_' . DABC_Beer_Post_Type::RATEBEER_OVERALL_SCORE,
+			'meta_key'            => $ratebeer->_get_titan_meta_key( Ratebeer_Sync::OVERALL_SCORE ),
 			'orderby'             => 'meta_value_num post_date_gmt',
 			'order'               => 'DESC'
 		);
