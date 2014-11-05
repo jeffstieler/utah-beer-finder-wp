@@ -4,7 +4,7 @@ function dabc_get_overall_rating( $post_id = null ) {
 
 	$post_id = $post_id ?: get_the_ID();
 
-	$ratebeer = new Ratebeer_Sync();
+	$ratebeer = new Ratebeer_Sync( get_post_type( $post_id ) );
 
 	return $ratebeer->get_overall_rating( $post_id );
 
@@ -20,7 +20,7 @@ function dabc_get_style_rating( $post_id = null ) {
 
 	$post_id = $post_id ?: get_the_ID();
 
-	$ratebeer = new Ratebeer_Sync();
+	$ratebeer = new Ratebeer_Sync( get_post_type( $post_id ) );
 
 	return $ratebeer->get_style_rating( $post_id );
 
@@ -36,7 +36,7 @@ function dabc_get_abv( $post_id = null ) {
 
 	$post_id = $post_id ?: get_the_ID();
 
-	$ratebeer = new Ratebeer_Sync();
+	$ratebeer = new Ratebeer_Sync( get_post_type( $post_id ) );
 
 	return $ratebeer->get_abv( $post_id );
 
@@ -52,7 +52,7 @@ function dabc_get_calories( $post_id = null ) {
 
 	$post_id = $post_id ?: get_the_ID();
 
-	$ratebeer = new Ratebeer_Sync();
+	$ratebeer = new Ratebeer_Sync( get_post_type( $post_id ) );
 
 	return $ratebeer->get_calories( $post_id );
 
