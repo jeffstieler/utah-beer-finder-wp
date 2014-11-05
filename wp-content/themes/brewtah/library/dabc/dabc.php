@@ -151,6 +151,8 @@ class DABC {
 	 */
 	function get_store_beers( $store_post_id ) {
 
+		$ratebeer = new Ratebeer_Sync( DABC_Beer_Post_Type::POST_TYPE );
+
 		$beers = new WP_Query( array(
 			'post_type' => DABC_Beer_Post_Type::POST_TYPE,
 			'o2o_query' => array(
@@ -162,7 +164,7 @@ class DABC {
 				'meta_value_num' => 'DESC',
 				'post_title'     => 'ASC'
 			),
-			'meta_key'       => DABC_Beer_Post_Type::TITAN_NAMESPACE . '_' . DABC_Beer_Post_Type::RATEBEER_OVERALL_SCORE,
+			'meta_key'       => $ratebeer->_get_titan_meta_key( Ratebeer_Sync::OVERALL_SCORE ),
 			'posts_per_page' => -1
 		) );
 
