@@ -104,6 +104,30 @@ class Untappd_Sync extends Base_Beer_Service {
 	}
 
 	/**
+	 * Get a post's Untappd rating count
+	 *
+	 * @param int $post_id
+	 * @return string
+	 */
+	function get_rating_count( $post_id ) {
+
+		return $this->titan->getOption( self::RATING_COUNT, $post_id );
+
+	}
+
+	/**
+	 * Get a post's Untappd rating score
+	 *
+	 * @param int $post_id
+	 * @return string
+	 */
+	function get_rating_score( $post_id ) {
+
+		return $this->titan->getOption( self::RATING_SCORE, $post_id );
+
+	}
+
+	/**
 	 * Have we hit the Untappd API rate limit?
 	 *
 	 * @return bool

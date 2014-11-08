@@ -181,3 +181,19 @@ function dabc_get_store_beers( $store_post_id ) {
 	return $dabc->get_store_beers( $store_post_id );
 
 }
+
+function dabc_get_untappd_rating_score( $post_id = null ) {
+
+	$post_id = $post_id ?: get_the_ID();
+
+	$untappd = new Untappd_Sync( get_post_type( $post_id ) );
+
+	return $untappd->get_rating_score( $post_id );
+
+}
+
+function dabc_the_untappd_rating_score( $post_id = null ) {
+
+	echo dabc_get_untappd_rating_score( $post_id );
+
+}
