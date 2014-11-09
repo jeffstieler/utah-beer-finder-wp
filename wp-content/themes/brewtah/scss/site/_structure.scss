@@ -218,4 +218,18 @@ img.alignright {
  * ----------------------------------------------------------------------------
  */
 
-// Insert styles here
+.beautiful-taxonomy-filters {
+
+	.beautiful-taxonomy-filters-tax {
+		float: left;
+	}
+
+	.filter-count-3 {
+		margin-right: 5%;
+		width: 30%;
+	}
+	.filter-count-3:nth-child(3n) {
+		margin-right: 0;
+	}
+
+}
