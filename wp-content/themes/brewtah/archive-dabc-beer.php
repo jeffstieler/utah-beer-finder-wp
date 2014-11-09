@@ -5,7 +5,7 @@
 
 	<?php if ( have_posts() ) : ?>
 		<div class="row">
-			<?php paginate_alphabetic_links( get_post_type() ); ?>
+			<?php do_action( 'show_beautiful_filters' ); ?>
 		</div>
 
 		<?php /* Start the Loop */ ?>

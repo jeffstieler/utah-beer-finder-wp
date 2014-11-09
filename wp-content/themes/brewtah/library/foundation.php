@@ -2,9 +2,9 @@
 // Pagination
 function brewtah_pagination() {
 	global $wp_query;
- 
+
 	$big = 999999999; // This needs to be an unlikely integer
- 
+
 	// For more options and info view the docs for paginate_links()
 	// http://codex.wordpress.org/Function_Reference/paginate_links
 	$paginate_links = paginate_links( array(
@@ -17,7 +17,7 @@ function brewtah_pagination() {
 	    'next_text' => __('&raquo;', 'brewtah'),
 		'type' => 'list'
 	) );
- 
+
 	$paginate_links = str_replace( "<ul class='page-numbers'>", "<ul class='pagination'>", $paginate_links );
 	$paginate_links = str_replace( "<li><span class='page-numbers current'>", "<li class='current'><a href='#'>", $paginate_links );
 	$paginate_links = str_replace( "</span>", "</a>", $paginate_links );
@@ -72,4 +72,14 @@ function brewtah_active_list_pages_class( $input ) {
 }
 add_filter( 'wp_list_pages', 'brewtah_active_list_pages_class', 10, 2 );
 
-?>
+if ( function_exists( 'show_beautiful_filters' ) ) {
+
+	add_action( 'show_beautiful_filters', 'show_beautiful_filters' );
+
+}
+
+if ( function_exists( 'show_beautiful_filters_info' ) ) {
+
+	add_action( 'show_beautiful_filters_info', 'show_beautiful_filters_info' );
+
+}
