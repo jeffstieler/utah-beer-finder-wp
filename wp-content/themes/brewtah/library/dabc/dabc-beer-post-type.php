@@ -177,7 +177,27 @@ class DABC_Beer_Post_Type {
 		) );
 
 		register_taxonomy( self::BREWERY_TAXONOMY, self::POST_TYPE, array(
-			'label' => 'Brewery'
+			'labels'	 => array(
+				'name'                       => 'Breweries',
+				'singular_name'              => 'Breweries',
+				'search_items'               => 'Search Breweries',
+				'popular_items'              => 'Popular Breweries',
+				'all_items'                  => 'Breweries',
+				'edit_item'                  => 'Edit Brewery',
+				'view_item'                  => 'View Brewery',
+				'update_item'                => 'Update Brewery',
+				'add_new_item'               => 'Add New Brewery',
+				'new_item_name'              => 'New Brewery Name',
+				'separate_items_with_commas' => 'Separate breweries with commas',
+				'add_or_remove_items'        => 'Add or remove breweries',
+				'choose_from_most_used'      => 'Choose from the most used breweries',
+				'not_found'                  => 'No breweries found.',
+				'menu_name'                  => 'Breweries',
+				'name_admin_bar'             => 'Breweries'
+			),
+			'rewrite'	 => array(
+				'slug' => 'brewery'
+			)
 		) );
 
 		register_taxonomy( self::STATE_TAXONOMY, self::POST_TYPE, array(
