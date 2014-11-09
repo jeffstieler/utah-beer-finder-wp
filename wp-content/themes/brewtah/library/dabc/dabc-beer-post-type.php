@@ -153,7 +153,27 @@ class DABC_Beer_Post_Type {
 		) );
 
 		register_taxonomy( self::STYLE_TAXONOMY, self::POST_TYPE, array(
-			'label' => 'Style'
+			'labels'	 => array(
+				'name'                       => 'Styles',
+				'singular_name'              => 'Styles',
+				'search_items'               => 'Search Styles',
+				'popular_items'              => 'Popular Styles',
+				'all_items'                  => 'Styles',
+				'edit_item'                  => 'Edit Style',
+				'view_item'                  => 'View Style',
+				'update_item'                => 'Update Style',
+				'add_new_item'               => 'Add New Style',
+				'new_item_name'              => 'New Style Name',
+				'separate_items_with_commas' => 'Separate styles with commas',
+				'add_or_remove_items'        => 'Add or remove styles',
+				'choose_from_most_used'      => 'Choose from the most used styles',
+				'not_found'                  => 'No styles found.',
+				'menu_name'                  => 'Styles',
+				'name_admin_bar'             => 'Styles'
+			),
+			'rewrite'	 => array(
+				'slug' => 'style'
+			)
 		) );
 
 		register_taxonomy( self::BREWERY_TAXONOMY, self::POST_TYPE, array(
