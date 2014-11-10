@@ -3,7 +3,7 @@
 		<?php if ( ! is_single() ) : ?>
 		<a href="<?php the_permalink(); ?>">
 		<?php endif; ?>
-		<?php the_post_thumbnail( 'beer-image', array( 'class' => 'th' ) ); ?>
+		<?php the_post_thumbnail( 'archive-image', array( 'class' => 'th' ) ); ?>
 		<?php if ( ! is_single() ) : ?>
 		</a>
 		<?php endif; ?>
