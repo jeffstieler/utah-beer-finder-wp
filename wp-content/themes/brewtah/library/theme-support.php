@@ -18,9 +18,11 @@ function brewtah_theme_support() {
     add_theme_support('post-formats', array('aside', 'gallery', 'link', 'image', 'quote', 'status', 'video', 'audio', 'chat'));
 
 	// Add image sizes
-	add_image_size( 'beer-image', 100, 100, true );
+	add_image_size( 'archive-image', 100, 100, true );
 
-	add_image_size( 'beer-sidebar-image', 50, 50, true );
+	add_image_size( 'sidebar-image', 50, 50, true );
+
+	add_image_size( 'store-image', 250, 188, true );
 
 }
 
