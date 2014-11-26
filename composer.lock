@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "6407360ddc61892dfe84522225fcff1f",
+    "hash": "527b10a1e0fe163dd80286094fb19a04",
     "packages": [
         {
             "name": "composer/installers",
@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/installers.git",
-                "reference": "8024be9aa3ee446272937f46a8807fa52b337767"
+                "reference": "91e7724e6e75291d6f5512415fbdcec525ad4d7e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/installers/zipball/8024be9aa3ee446272937f46a8807fa52b337767",
-                "reference": "8024be9aa3ee446272937f46a8807fa52b337767",
+                "url": "https://api.github.com/repos/composer/installers/zipball/91e7724e6e75291d6f5512415fbdcec525ad4d7e",
+                "reference": "91e7724e6e75291d6f5512415fbdcec525ad4d7e",
                 "shasum": ""
             },
             "replace": {
@@ -69,6 +69,7 @@
                 "codeigniter",
                 "concrete5",
                 "croogo",
+                "dokuwiki",
                 "drupal",
                 "elgg",
                 "fuelphp",
@@ -96,7 +97,7 @@
                 "zend",
                 "zikula"
             ],
-            "time": "2014-11-01 17:51:50"
+            "time": "2014-11-23 19:34:57"
         },
         {
             "name": "fancyguy/webroot-installer",
@@ -142,27 +143,27 @@
         },
         {
             "name": "jeffstieler/beautiful-taxonomy-filters",
-            "version": "1.0.2",
+            "version": "1.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jeffstieler/beautiful-taxonomy-filters.git",
-                "reference": "eeec7e604b3b9f1316392e3f593dbdd3b7e9aafc"
+                "reference": "80ac8b8da014faa6192b5ab8932030079767e20b"
             },
             "type": "wordpress-plugin"
         },
         {
             "name": "symfony/css-selector",
-            "version": "dev-master",
+            "version": "2.7.x-dev",
             "target-dir": "Symfony/Component/CssSelector",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/CssSelector.git",
-                "reference": "41953ad30ffc5cd710d106cf01eff79f6effa117"
+                "reference": "301d5705725b4e11c6255e443244642eb3b5dfa1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/CssSelector/zipball/41953ad30ffc5cd710d106cf01eff79f6effa117",
-                "reference": "41953ad30ffc5cd710d106cf01eff79f6effa117",
+                "url": "https://api.github.com/repos/symfony/CssSelector/zipball/301d5705725b4e11c6255e443244642eb3b5dfa1",
+                "reference": "301d5705725b4e11c6255e443244642eb3b5dfa1",
                 "shasum": ""
             },
             "require": {
@@ -171,7 +172,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.6-dev"
+                    "dev-master": "2.7-dev"
                 }
             },
             "autoload": {
@@ -199,21 +200,21 @@
             ],
             "description": "Symfony CssSelector Component",
             "homepage": "http://symfony.com",
-            "time": "2014-10-26 07:46:28"
+            "time": "2014-11-10 18:00:54"
         },
         {
             "name": "symfony/dom-crawler",
-            "version": "dev-master",
+            "version": "2.7.x-dev",
             "target-dir": "Symfony/Component/DomCrawler",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/DomCrawler.git",
-                "reference": "4ce6a72b51cc79c3b4b20f88cbe56b36af4b073c"
+                "reference": "11a3899509624eb182ae88086eef1ec0634b4af5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/DomCrawler/zipball/4ce6a72b51cc79c3b4b20f88cbe56b36af4b073c",
-                "reference": "4ce6a72b51cc79c3b4b20f88cbe56b36af4b073c",
+                "url": "https://api.github.com/repos/symfony/DomCrawler/zipball/11a3899509624eb182ae88086eef1ec0634b4af5",
+                "reference": "11a3899509624eb182ae88086eef1ec0634b4af5",
                 "shasum": ""
             },
             "require": {
@@ -228,7 +229,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.6-dev"
+                    "dev-master": "2.7-dev"
                 }
             },
             "autoload": {
@@ -252,7 +253,7 @@
             ],
             "description": "Symfony DomCrawler Component",
             "homepage": "http://symfony.com",
-            "time": "2014-10-26 07:46:28"
+            "time": "2014-11-20 13:24:30"
         },
         {
             "name": "upstatement/jigsaw",
@@ -316,16 +317,16 @@
         },
         {
             "name": "voceconnect/post-selection-ui",
-            "version": "1.0.10",
+            "version": "1.0.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/voceconnect/post-selection-ui.git",
-                "reference": "12676d3617e55466f2c7c78fd7617bef6262d834"
+                "reference": "22a33b79537ea80e40d4b19e3aa3d207e8e6e035"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/voceconnect/post-selection-ui/zipball/12676d3617e55466f2c7c78fd7617bef6262d834",
-                "reference": "12676d3617e55466f2c7c78fd7617bef6262d834",
+                "url": "https://api.github.com/repos/voceconnect/post-selection-ui/zipball/22a33b79537ea80e40d4b19e3aa3d207e8e6e035",
+                "reference": "22a33b79537ea80e40d4b19e3aa3d207e8e6e035",
                 "shasum": ""
             },
             "type": "library",
@@ -344,12 +345,16 @@
                     "email": "gary@voceconnect.com"
                 },
                 {
+                    "name": "Mat Gargano",
+                    "email": "mat@voceconnect.com"
+                },
+                {
                     "name": "Michael Pretty",
                     "email": "mpretty@voceconnect.com"
                 }
             ],
             "description": "A WordPress library to display a user interface to easily select posts from any post type",
-            "time": "2014-10-28 15:37:18"
+            "time": "2014-11-14 16:34:22"
         },
         {
             "name": "wordpress",
