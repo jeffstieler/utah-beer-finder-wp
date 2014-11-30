@@ -32,7 +32,8 @@ require_once( __DIR__ . '/template-tags.php' );
 
 class DABC {
 
-	const BEER_INVENTORY_CRON = 'sync_inventory';
+	const BEER_INVENTORY_CRON = 'sync_beer_inventory';
+	const ALL_INVENTORY_CRON  = 'sync_all_inventory';
 
 	var $beers;
 	var $stores;
@@ -58,11 +59,15 @@ class DABC {
 
 		$this->attach_hooks();
 
+		$this->schedule_jobs();
+
 	}
 
 	function attach_hooks() {
 
 		add_action( self::BEER_INVENTORY_CRON, array( $this, 'sync_inventory_for_beer' ) );
+
+		add_action( self::ALL_INVENTORY_CRON, array( $this, 'sync_inventory_with_dabc' ) );
 
 		add_action( 'wp_enqueue_scripts', array( $this, 'add_store_data_to_maps_script' ) );
 
@@ -110,6 +115,15 @@ class DABC {
 		}
 
 		$this->beers->set_beer_inventory( $beer_post_id, $inventory );
+
+	}
+
+	/**
+	 * Schedule recurring jobs
+	 */
+	function schedule_jobs() {
+
+		wp_schedule_event( time(), 'twicedaily', self::ALL_INVENTORY_CRON );
 
 	}
 
