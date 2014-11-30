@@ -28,6 +28,7 @@ class DABC_Beer_Post_Type {
 	const CS_CODE_OPTION         = 'cs-code';
 	const PRICE_OPTION           = 'price';
 	const DABC_INVENTORY         = 'dabc-store-inventory';
+	const DABC_SYNC_CRON         = 'dabc_inventory_sync';
 
 	var $titan;
 	var $dabc_sync;
@@ -50,6 +51,8 @@ class DABC_Beer_Post_Type {
 
 		add_action( 'untappd_sync_post_beer_info', array( $this, 'set_taxonomy_data_from_untappd' ), 10, 2 );
 
+		add_action( self::DABC_SYNC_CRON, array( $this, 'sync_beers_with_dabc' ) );
+
 	}
 
 	function init() {
@@ -67,6 +70,8 @@ class DABC_Beer_Post_Type {
 		$this->ratebeer_sync->init();
 
 		$this->untappd_sync->init();
+
+		$this->schedule_jobs();
 
 	}
 
@@ -348,6 +353,15 @@ class DABC_Beer_Post_Type {
 	function get_cs_code( $post_id ) {
 
 		return $this->titan->getOption( self::CS_CODE_OPTION, $post_id );
+
+	}
+
+	/**
+	 * Schedule beer sync with DABC
+	 */
+	function schedule_jobs() {
+
+		wp_schedule_event( time(), 'twicedaily', self::DABC_SYNC_CRON );
 
 	}
 
