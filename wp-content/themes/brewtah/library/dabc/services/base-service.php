@@ -105,6 +105,8 @@ abstract class Base_Beer_Service {
 
 		$this->attach_hooks();
 
+		$this->schedule_jobs();
+
 	}
 
 	/**
@@ -143,6 +145,17 @@ abstract class Base_Beer_Service {
 	 *
 	 */
 	function register_post_meta() {}
+
+	/**
+	 * Setup recurring search/sync for the service
+	 */
+	function schedule_jobs() {
+
+		wp_schedule_event( time(), 'twicedaily', $this->search_cron_hook );
+
+		wp_schedule_event( time(), 'twicedaily', $this->sync_cron_hook );
+
+	}
 
 	/**
 	 * Find all posts that haven't been searched for on the service
