@@ -70,7 +70,8 @@
 		"wpackagist-plugin/titan-framework": "~1.5",
 		"upstatement/jigsaw": "~0.4",
 		"voceconnect/objects-to-objects": "~1.2",
-		"jeffstieler/beautiful-taxonomy-filters": "~1.1"
+		"jeffstieler/beautiful-taxonomy-filters": "~1.1",
+		"wpackagist-plugin/wp-crontrol": "~1.2"
 	},
 	"require-dev" : {
 		"wpackagist-plugin/developer" : "~1.2"

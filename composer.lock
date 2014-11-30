@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "8b0e25d114f6ddbb1ac14733add59d2d",
+    "hash": "3bb6665116eb2e3668b1eb5cc55d0fff",
     "packages": [
         {
             "name": "composer/installers",
@@ -392,6 +392,29 @@
             },
             "type": "wordpress-plugin",
             "homepage": "http://wordpress.org/plugins/titan-framework/"
+        },
+        {
+            "name": "wpackagist-plugin/wp-crontrol",
+            "version": "1.2.3",
+            "source": {
+                "type": "svn",
+                "url": "http://plugins.svn.wordpress.org/wp-crontrol/",
+                "reference": "tags/1.2.3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "http://downloads.wordpress.org/plugin/wp-crontrol.1.2.3.zip",
+                "reference": null,
+                "shasum": null
+            },
+            "require": {
+                "composer/installers": "~1.0"
+            },
+            "replace": {
+                "wpackagist/wp-crontrol": "self.version"
+            },
+            "type": "wordpress-plugin",
+            "homepage": "http://wordpress.org/plugins/wp-crontrol/"
         }
     ],
     "packages-dev": [
