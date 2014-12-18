@@ -1,7 +1,7 @@
 <?php
-function brewtah_theme_support() {
+function ubf_theme_support() {
     // Add language support
-    load_theme_textdomain('brewtah', get_template_directory() . '/languages');
+    load_theme_textdomain('utah-beer-finder', get_template_directory() . '/languages');
 
     // Add menu support
     add_theme_support('menus');
@@ -26,5 +26,5 @@ function brewtah_theme_support() {
 
 }
 
-add_action('after_setup_theme', 'brewtah_theme_support');
+add_action('after_setup_theme', 'ubf_theme_support');
 ?>

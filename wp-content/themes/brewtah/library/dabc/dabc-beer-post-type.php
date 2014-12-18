@@ -1,8 +1,6 @@
 <?php
 /**
  * Implement the Beer post type
- *
- * @package Brewtah
  */
 
 /**

@@ -6,8 +6,8 @@
             </li>
         </ul>
         <section class="top-bar-section">
-            <?php brewtah_top_bar_l(); ?>
-            <?php brewtah_top_bar_r(); ?>
+            <?php ubf_top_bar_l(); ?>
+            <?php ubf_top_bar_r(); ?>
         </section>
     </nav>
 </div>

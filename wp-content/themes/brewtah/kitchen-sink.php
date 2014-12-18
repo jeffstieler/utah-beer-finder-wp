@@ -736,7 +736,7 @@ get_header(); ?>
 			</p>
 
 			<footer>
-				<?php wp_link_pages(array('before' => '<nav id="page-nav"><p>' . __('Pages:', 'brewtah'), 'after' => '</p></nav>' )); ?>
+				<?php wp_link_pages(array('before' => '<nav id="page-nav"><p>' . __('Pages:', 'utah-beer-finder'), 'after' => '</p></nav>' )); ?>
 				<p><?php the_tags(); ?></p>
 			</footer>
 			<?php comments_template(); ?>

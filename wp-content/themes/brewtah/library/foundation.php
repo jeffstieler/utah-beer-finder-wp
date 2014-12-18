@@ -1,6 +1,6 @@
 <?php
 // Pagination
-function brewtah_pagination() {
+function ubf_pagination() {
 	global $wp_query;
 
 	$big = 999999999; // This needs to be an unlikely integer
@@ -13,8 +13,8 @@ function brewtah_pagination() {
 		'total' => $wp_query->max_num_pages,
 		'mid_size' => 5,
 		'prev_next' => True,
-	    'prev_text' => __('&laquo;', 'brewtah'),
-	    'next_text' => __('&raquo;', 'brewtah'),
+	    'prev_text' => __('&laquo;', 'utah-beer-finder'),
+	    'next_text' => __('&raquo;', 'utah-beer-finder'),
 		'type' => 'list'
 	) );
 
@@ -34,14 +34,14 @@ function brewtah_pagination() {
 /**
  * A fallback when no navigation is selected by default.
  */
-function brewtah_menu_fallback() {
+function ubf_menu_fallback() {
 	echo '<div class="alert-box secondary">';
 	// Translators 1: Link to Menus, 2: Link to Customize
-  	printf( __( 'Please assign a menu to the primary menu location under %1$s or %2$s the design.', 'brewtah' ),
-  		sprintf(  __( '<a href="%s">Menus</a>', 'brewtah' ),
+  	printf( __( 'Please assign a menu to the primary menu location under %1$s or %2$s the design.', 'utah-beer-finder' ),
+  		sprintf(  __( '<a href="%s">Menus</a>', 'utah-beer-finder' ),
   			get_admin_url( get_current_blog_id(), 'nav-menus.php' )
   		),
-  		sprintf(  __( '<a href="%s">Customize</a>', 'brewtah' ),
+  		sprintf(  __( '<a href="%s">Customize</a>', 'utah-beer-finder' ),
   			get_admin_url( get_current_blog_id(), 'customize.php' )
   		)
   	);
@@ -49,19 +49,19 @@ function brewtah_menu_fallback() {
 }
 
 // Add Foundation 'active' class for the current menu item
-function brewtah_active_nav_class( $classes, $item ) {
+function ubf_active_nav_class( $classes, $item ) {
     if ( $item->current == 1 || $item->current_item_ancestor == true ) {
         $classes[] = 'active';
     }
     return $classes;
 }
-add_filter( 'nav_menu_css_class', 'brewtah_active_nav_class', 10, 2 );
+add_filter( 'nav_menu_css_class', 'ubf_active_nav_class', 10, 2 );
 
 /**
  * Use the active class of ZURB Foundation on wp_list_pages output.
  * From required+ Foundation http://themes.required.ch
  */
-function brewtah_active_list_pages_class( $input ) {
+function ubf_active_list_pages_class( $input ) {
 
 	$pattern = '/current_page_item/';
     $replace = 'current_page_item active';
@@ -70,7 +70,7 @@ function brewtah_active_list_pages_class( $input ) {
 
     return $output;
 }
-add_filter( 'wp_list_pages', 'brewtah_active_list_pages_class', 10, 2 );
+add_filter( 'wp_list_pages', 'ubf_active_list_pages_class', 10, 2 );
 
 if ( function_exists( 'show_beautiful_filters' ) ) {
 

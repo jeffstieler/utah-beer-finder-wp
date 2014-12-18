@@ -21,10 +21,10 @@
 	<?php endif; // end have_posts() check ?>
 
 	<?php /* Display navigation to next/previous pages when applicable */ ?>
-	<?php if ( function_exists('brewtah_pagination') ) { brewtah_pagination(); } else if ( is_paged() ) { ?>
+	<?php if ( function_exists('ubf_pagination') ) { ubf_pagination(); } else if ( is_paged() ) { ?>
 		<nav id="post-nav">
-			<div class="post-previous"><?php next_posts_link( __( '&larr; Older posts', 'brewtah' ) ); ?></div>
-			<div class="post-next"><?php previous_posts_link( __( 'Newer posts &rarr;', 'brewtah' ) ); ?></div>
+			<div class="post-previous"><?php next_posts_link( __( '&larr; Older posts', 'utah-beer-finder' ) ); ?></div>
+			<div class="post-next"><?php previous_posts_link( __( 'Newer posts &rarr;', 'utah-beer-finder' ) ); ?></div>
 		</nav>
 	<?php } ?>
 

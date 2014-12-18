@@ -1,8 +1,6 @@
 <?php
 /**
  * Implement the Store post type
- *
- * @package Brewtah
  */
 
 class DABC_Store_Post_Type {
