@@ -2,8 +2,8 @@
 .DS_Store
 # composer directories
 wp/
-wp-content/themes/brewtah/vendor/
-wp-content/themes/brewtah/plugins/
+wp-content/themes/utah-beer-finder/vendor/
+wp-content/themes/utah-beer-finder/plugins/
 # wp uploads
 wp-content/uploads/
 wp-content/plugins/

@@ -60,7 +60,7 @@
 		}
 	],
 	"config": {
-		"vendor-dir": "wp-content/themes/brewtah/vendor"
+		"vendor-dir": "wp-content/themes/utah-beer-finder/vendor"
 	},
 	"require": {
 		"wordpress": "~4.0",
@@ -80,7 +80,7 @@
 		"webroot-dir": "wp",
 		"webroot-package": "wordpress",
 		"installer-paths": {
-			"wp-content/themes/brewtah/plugins/{$name}/": [
+			"wp-content/themes/utah-beer-finder/plugins/{$name}/": [
 				"wpackagist-plugin/titan-framework",
 				"upstatement/jigsaw"
 			],
