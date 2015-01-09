@@ -13,21 +13,6 @@
 		{
 			"type": "package",
 			"package": {
-				"name": "wordpress",
-				"type": "webroot",
-				"version": "4.0.1",
-				"dist": {
-					"type": "zip",
-					"url": "http://wordpress.org/wordpress-4.0.1.zip"
-				},
-				"require" : {
-					"fancyguy/webroot-installer": "1.0.0"
-				}
-			}
-		},
-		{
-			"type": "package",
-			"package": {
 				"name": "upstatement/jigsaw",
 				"type": "wordpress-plugin",
 				"version": "0.4.11",
@@ -60,10 +45,22 @@
 		}
 	],
 	"config": {
-		"vendor-dir": "wp-content/themes/utah-beer-finder/vendor"
+		"vendor-dir": "wp-content/themes/utah-beer-finder/vendor",
+		"preferred-install": "dist",
+		"generate-salts": true
+	},
+	"autoload": {
+		"psr-0": {
+			"Roots\\Bedrock\\Installer": "scripts"
+		}
+	},
+	"scripts": {
+		"post-root-package-install": [
+			"Roots\\Bedrock\\Installer::addSalts"
+		]
 	},
 	"require": {
-		"wordpress": "~4.0",
+		"johnpbloch/wordpress": "4.1",
 		"fancyguy/webroot-installer": "~1.0",
 		"symfony/css-selector": "~2.6",
 		"symfony/dom-crawler": "~2.5",
@@ -71,25 +68,28 @@
 		"upstatement/jigsaw": "~0.4",
 		"voceconnect/objects-to-objects": "~1.2",
 		"jeffstieler/beautiful-taxonomy-filters": "~1.1",
-		"wpackagist-plugin/wp-crontrol": "~1.2"
+		"wpackagist-plugin/wp-crontrol": "~1.2",
+		"vlucas/phpdotenv": "1.0.9"
 	},
 	"require-dev" : {
 		"wpackagist-plugin/developer" : "~1.2"
 	},
 	"extra": {
-		"webroot-dir": "wp",
-		"webroot-package": "wordpress",
 		"installer-paths": {
-			"wp-content/themes/utah-beer-finder/plugins/{$name}/": [
+			"web/app/mu-plugins/{$name}/": [
+				"type:wordpress-muplugin"
+			],
+			"web/app/plugins/{$name}/": [
+				"type:wordpress-plugin"
+			],
+			"web/app/themes/{$name}/": [
+				"type:wordpress-theme"
+			],
+			"web/app/themes/utah-beer-finder/plugins/{$name}/": [
 				"wpackagist-plugin/titan-framework",
 				"upstatement/jigsaw"
 			],
-			"wp-content/plugins/{$name}/": [
-				"type:wordpress-plugin"
-			],
-			"wp-content/themes/{$name}/": [
-				"type:wordpress-theme"
-			]
-		}
-	}
+		},
+		"wordpress-install-dir": "web/wp"
+    }
 }
