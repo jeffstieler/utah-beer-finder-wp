@@ -1,13 +1,5 @@
 # OS X files
 .DS_Store
-# composer directories
-wp/
-wp-content/themes/utah-beer-finder/vendor/
-wp-content/themes/utah-beer-finder/plugins/
-# wp uploads
-wp-content/uploads/
-wp-content/plugins/
-wp-config.php
 
 # WordPress
 web/wp
@@ -23,6 +15,7 @@ sql-dump-*.sql
 !.env.example
 
 # Application
+wp-config.php
 web/app/plugins
 !web/app/plugins/.gitkeep
 web/app/mu-plugins
