@@ -13,14 +13,15 @@
 		{
 			"type": "package",
 			"package": {
-				"name": "wordpress",
+				"name": "wordpress/wordpress",
 				"type": "webroot",
 				"version": "4.1",
-				"dist": {
-					"type": "zip",
-					"url": "http://wordpress.org/wordpress-4.1.zip"
+				"source": {
+					"type": "git",
+					"url": "https://github.com/WordPress/WordPress.git",
+					"reference": "4.1"
 				},
-				"require" : {
+				"require": {
 					"fancyguy/webroot-installer": "1.0.0"
 				}
 			}
@@ -60,7 +61,6 @@
 		}
 	],
 	"config": {
-		"vendor-dir": "web/app/themes/utah-beer-finder/vendor",
 		"preferred-install": "dist",
 		"generate-salts": true
 	},
@@ -75,7 +75,8 @@
 		]
 	},
 	"require": {
-		"wordpress": "4.1",
+		"composer/installers": "~1.0",
+		"wordpress/wordpress": "4.1",
 		"symfony/css-selector": "~2.6",
 		"symfony/dom-crawler": "~2.5",
 		"wpackagist-plugin/titan-framework": "~1.5",
@@ -105,6 +106,6 @@
 			]
 		},
 		"webroot-dir": "web/wp",
-		"webroot-package": "wordpress"
+		"webroot-package": "wordpress/wordpress"
     }
 }

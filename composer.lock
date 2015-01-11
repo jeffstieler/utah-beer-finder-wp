@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "fb8738cf7b369e2ae86f178c32ece3e2",
+    "hash": "f6d53a95571ea308cd31533f37bbd2d8",
     "packages": [
         {
             "name": "composer/installers",
@@ -158,16 +158,16 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/CssSelector.git",
-                "reference": "ac81212959cd431fbfb5a471f813ac70c0ea69be"
+                "reference": "1f8617c67bef17192d28c0f2dda3a04b632629bb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/CssSelector/zipball/ac81212959cd431fbfb5a471f813ac70c0ea69be",
-                "reference": "ac81212959cd431fbfb5a471f813ac70c0ea69be",
+                "url": "https://api.github.com/repos/symfony/CssSelector/zipball/1f8617c67bef17192d28c0f2dda3a04b632629bb",
+                "reference": "1f8617c67bef17192d28c0f2dda3a04b632629bb",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.3"
+                "php": ">=5.3.9"
             },
             "type": "library",
             "extra": {
@@ -200,7 +200,7 @@
             ],
             "description": "Symfony CssSelector Component",
             "homepage": "http://symfony.com",
-            "time": "2015-01-03 08:02:46"
+            "time": "2015-01-09 06:51:41"
         },
         {
             "name": "symfony/dom-crawler",
@@ -209,16 +209,16 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/DomCrawler.git",
-                "reference": "073fe155292af218e5b75b3ec2bba175946fa880"
+                "reference": "57ef66b6d806d9d1b9234e27da304ee5d1e54641"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/DomCrawler/zipball/073fe155292af218e5b75b3ec2bba175946fa880",
-                "reference": "073fe155292af218e5b75b3ec2bba175946fa880",
+                "url": "https://api.github.com/repos/symfony/DomCrawler/zipball/57ef66b6d806d9d1b9234e27da304ee5d1e54641",
+                "reference": "57ef66b6d806d9d1b9234e27da304ee5d1e54641",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.3"
+                "php": ">=5.3.9"
             },
             "require-dev": {
                 "symfony/css-selector": "~2.3|~3.0.0"
@@ -253,7 +253,7 @@
             ],
             "description": "Symfony DomCrawler Component",
             "homepage": "http://symfony.com",
-            "time": "2015-01-03 08:02:46"
+            "time": "2015-01-09 13:24:18"
         },
         {
             "name": "upstatement/jigsaw",
@@ -408,13 +408,12 @@
             "time": "2014-12-08 16:54:48"
         },
         {
-            "name": "wordpress",
+            "name": "wordpress/wordpress",
             "version": "4.1",
-            "dist": {
-                "type": "zip",
-                "url": "http://wordpress.org/wordpress-4.1.zip",
-                "reference": null,
-                "shasum": null
+            "source": {
+                "type": "git",
+                "url": "https://github.com/WordPress/WordPress.git",
+                "reference": "4.1"
             },
             "require": {
                 "fancyguy/webroot-installer": "1.0.0"
