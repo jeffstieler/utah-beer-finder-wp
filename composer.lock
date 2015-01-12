@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "f6d53a95571ea308cd31533f37bbd2d8",
+    "hash": "a6a27693c5fe8de75a86d77b5b67708f",
     "packages": [
         {
             "name": "composer/installers",
@@ -325,46 +325,9 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/voceconnect/objects-to-objects.git",
-                "reference": "53ea0ae777aa486e66e83a6b75a0d81abcae739b"
+                "reference": "1.2.4"
             },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/voceconnect/objects-to-objects/zipball/53ea0ae777aa486e66e83a6b75a0d81abcae739b",
-                "reference": "53ea0ae777aa486e66e83a6b75a0d81abcae739b",
-                "shasum": ""
-            },
-            "require": {
-                "voceconnect/post-selection-ui": "~1.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "3.7.*"
-            },
-            "type": "library",
-            "autoload": {
-                "classmap": [
-                    "src/",
-                    "admin/admin.php"
-                ],
-                "files": [
-                    "objects-to-objects.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "GPLv2+"
-            ],
-            "authors": [
-                {
-                    "name": "Michael Pretty",
-                    "email": "mpretty@voceconnect.com"
-                }
-            ],
-            "description": "A WordPress plugin/module that provides the ability to map relationships between posts and other post types",
-            "keywords": [
-                "Relationships",
-                "wordpress"
-            ],
-            "time": "2014-08-25 12:03:53"
+            "type": "wordpress-plugin"
         },
         {
             "name": "voceconnect/post-selection-ui",
@@ -372,40 +335,9 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/voceconnect/post-selection-ui.git",
-                "reference": "25af2f372b5351921a56accfab6be9d575acf940"
+                "reference": "1.0.12"
             },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/voceconnect/post-selection-ui/zipball/25af2f372b5351921a56accfab6be9d575acf940",
-                "reference": "25af2f372b5351921a56accfab6be9d575acf940",
-                "shasum": ""
-            },
-            "type": "library",
-            "autoload": {
-                "files": [
-                    "post-selection-ui.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "GPLv2+"
-            ],
-            "authors": [
-                {
-                    "name": "Gary Smirny",
-                    "email": "gary@voceconnect.com"
-                },
-                {
-                    "name": "Mat Gargano",
-                    "email": "mat@voceconnect.com"
-                },
-                {
-                    "name": "Michael Pretty",
-                    "email": "mpretty@voceconnect.com"
-                }
-            ],
-            "description": "A WordPress library to display a user interface to easily select posts from any post type",
-            "time": "2014-12-08 16:54:48"
+            "type": "wordpress-plugin"
         },
         {
             "name": "wordpress/wordpress",
@@ -419,6 +351,26 @@
                 "fancyguy/webroot-installer": "1.0.0"
             },
             "type": "webroot"
+        },
+        {
+            "name": "wpackagist-plugin/posts-to-posts",
+            "version": "1.6.3",
+            "source": {
+                "type": "svn",
+                "url": "http://plugins.svn.wordpress.org/posts-to-posts/",
+                "reference": "tags/1.6.3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "http://downloads.wordpress.org/plugin/posts-to-posts.1.6.3.zip",
+                "reference": null,
+                "shasum": null
+            },
+            "require": {
+                "composer/installers": "~1.0"
+            },
+            "type": "wordpress-plugin",
+            "homepage": "https://wordpress.org/plugins/posts-to-posts/"
         },
         {
             "name": "wpackagist-plugin/titan-framework",
