@@ -15,7 +15,6 @@ sql-dump-*.sql
 !.env.example
 
 # Application
-wp-config.php
 web/app/plugins
 !web/app/plugins/.gitkeep
 web/app/mu-plugins
