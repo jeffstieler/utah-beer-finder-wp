@@ -22,9 +22,11 @@ set :linked_dirs, fetch(:linked_dirs, []).push('web/app/uploads')
 
 # build the theme
 set :npm_target_path, -> { release_path.join('web/app/themes/utah-beer-finder') }
+set :npm_flags, '--silent'
 set :bower_target_path, -> { release_path.join('web/app/themes/utah-beer-finder') }
 set :grunt_file, -> { release_path.join('web/app/themes/utah-beer-finder/Gruntfile.js') }
 set :grunt_tasks, 'build'
+before 'deploy:updated', 'grunt'
 
 namespace :deploy do
   desc 'Restart application'
