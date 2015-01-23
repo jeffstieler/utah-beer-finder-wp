@@ -10,6 +10,9 @@ require 'capistrano/composer'
 # Install NPM dependencies
 require 'capistrano/npm'
 
+# Install Bower dependencies
+require 'capistrano/bower'
+
 # Build project
 require 'capistrano/grunt'
 

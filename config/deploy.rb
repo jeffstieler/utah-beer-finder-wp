@@ -22,6 +22,7 @@ set :linked_dirs, fetch(:linked_dirs, []).push('web/app/uploads')
 
 # build the theme
 set :npm_target_path, -> { release_path.join('web/app/themes/utah-beer-finder') }
+set :bower_target_path, -> { release_path.join('web/app/themes/utah-beer-finder') }
 set :grunt_file, -> { release_path.join('web/app/themes/utah-beer-finder/Gruntfile.js') }
 set :grunt_tasks, 'deploy'
 
