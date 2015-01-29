@@ -13,14 +13,15 @@
 		{
 			"type": "package",
 			"package": {
-				"name": "wordpress",
+				"name": "wordpress/wordpress",
 				"type": "webroot",
-				"version": "4.0.1",
-				"dist": {
-					"type": "zip",
-					"url": "http://wordpress.org/wordpress-4.0.1.zip"
+				"version": "4.1",
+				"source": {
+					"type": "git",
+					"url": "https://github.com/WordPress/WordPress.git",
+					"reference": "4.1"
 				},
-				"require" : {
+				"require": {
 					"fancyguy/webroot-installer": "1.0.0"
 				}
 			}
@@ -55,41 +56,86 @@
 			}
 		},
 		{
+			"type": "package",
+			"package": {
+				"name": "voceconnect/objects-to-objects",
+				"type": "wordpress-plugin",
+				"version": "1.2.4",
+				"source": {
+					"url": "https://github.com/voceconnect/objects-to-objects.git",
+					"type": "git",
+					"reference": "1.2.4"
+				}
+			}
+		},
+		{
+			"type": "package",
+			"package": {
+				"name": "voceconnect/post-selection-ui",
+				"type": "wordpress-plugin",
+				"version": "1.0.12",
+				"source": {
+					"url": "https://github.com/voceconnect/post-selection-ui.git",
+					"type": "git",
+					"reference": "1.0.12"
+				}
+			}
+		},
+		{
 			"type": "composer",
 			"url": "http://wpackagist.org"
 		}
 	],
 	"config": {
-		"vendor-dir": "wp-content/themes/utah-beer-finder/vendor"
+		"preferred-install": "dist",
+		"generate-salts": true
+	},
+	"autoload": {
+		"psr-0": {
+			"Roots\\Bedrock\\Installer": "scripts"
+		}
+	},
+	"scripts": {
+		"post-root-package-install": [
+			"Roots\\Bedrock\\Installer::addSalts"
+		]
 	},
 	"require": {
-		"wordpress": "~4.0",
-		"fancyguy/webroot-installer": "~1.0",
+		"composer/installers": "~1.0",
+		"wordpress/wordpress": "4.1",
 		"symfony/css-selector": "~2.6",
 		"symfony/dom-crawler": "~2.5",
 		"wpackagist-plugin/titan-framework": "~1.5",
 		"upstatement/jigsaw": "~0.4",
 		"voceconnect/objects-to-objects": "~1.2",
+		"voceconnect/post-selection-ui": "~1.0",
+		"wpackagist-plugin/posts-to-posts": "~1.6",
 		"jeffstieler/beautiful-taxonomy-filters": "~1.1",
-		"wpackagist-plugin/wp-crontrol": "~1.2"
+		"wpackagist-plugin/wp-crontrol": "~1.2",
+		"vlucas/phpdotenv": "1.0.9"
 	},
 	"require-dev" : {
 		"wpackagist-plugin/developer" : "~1.2"
 	},
 	"extra": {
-		"webroot-dir": "wp",
-		"webroot-package": "wordpress",
 		"installer-paths": {
-			"wp-content/themes/utah-beer-finder/plugins/{$name}/": [
+			"web/app/themes/utah-beer-finder/plugins/{$name}/": [
 				"wpackagist-plugin/titan-framework",
-				"upstatement/jigsaw"
+				"upstatement/jigsaw",
+				"voceconnect/objects-to-objects",
+				"voceconnect/post-selection-ui"
 			],
-			"wp-content/plugins/{$name}/": [
+			"web/app/mu-plugins/{$name}/": [
+				"type:wordpress-muplugin"
+			],
+			"web/app/plugins/{$name}/": [
 				"type:wordpress-plugin"
 			],
-			"wp-content/themes/{$name}/": [
+			"web/app/themes/{$name}/": [
 				"type:wordpress-theme"
 			]
-		}
-	}
+		},
+		"webroot-dir": "web/wp",
+		"webroot-package": "wordpress/wordpress"
+    }
 }

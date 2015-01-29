@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "3bb6665116eb2e3668b1eb5cc55d0fff",
+    "hash": "a6a27693c5fe8de75a86d77b5b67708f",
     "packages": [
         {
             "name": "composer/installers",
@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/installers.git",
-                "reference": "91e7724e6e75291d6f5512415fbdcec525ad4d7e"
+                "reference": "89d77bfbee79e16653f7162c86e602cc188471db"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/installers/zipball/91e7724e6e75291d6f5512415fbdcec525ad4d7e",
-                "reference": "91e7724e6e75291d6f5512415fbdcec525ad4d7e",
+                "url": "https://api.github.com/repos/composer/installers/zipball/89d77bfbee79e16653f7162c86e602cc188471db",
+                "reference": "89d77bfbee79e16653f7162c86e602cc188471db",
                 "shasum": ""
             },
             "replace": {
@@ -97,7 +97,7 @@
                 "zend",
                 "zikula"
             ],
-            "time": "2014-11-23 19:34:57"
+            "time": "2014-11-29 01:29:17"
         },
         {
             "name": "fancyguy/webroot-installer",
@@ -158,16 +158,16 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/CssSelector.git",
-                "reference": "301d5705725b4e11c6255e443244642eb3b5dfa1"
+                "reference": "1f8617c67bef17192d28c0f2dda3a04b632629bb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/CssSelector/zipball/301d5705725b4e11c6255e443244642eb3b5dfa1",
-                "reference": "301d5705725b4e11c6255e443244642eb3b5dfa1",
+                "url": "https://api.github.com/repos/symfony/CssSelector/zipball/1f8617c67bef17192d28c0f2dda3a04b632629bb",
+                "reference": "1f8617c67bef17192d28c0f2dda3a04b632629bb",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.3"
+                "php": ">=5.3.9"
             },
             "type": "library",
             "extra": {
@@ -200,7 +200,7 @@
             ],
             "description": "Symfony CssSelector Component",
             "homepage": "http://symfony.com",
-            "time": "2014-11-10 18:00:54"
+            "time": "2015-01-09 06:51:41"
         },
         {
             "name": "symfony/dom-crawler",
@@ -209,19 +209,19 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/DomCrawler.git",
-                "reference": "11a3899509624eb182ae88086eef1ec0634b4af5"
+                "reference": "57ef66b6d806d9d1b9234e27da304ee5d1e54641"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/DomCrawler/zipball/11a3899509624eb182ae88086eef1ec0634b4af5",
-                "reference": "11a3899509624eb182ae88086eef1ec0634b4af5",
+                "url": "https://api.github.com/repos/symfony/DomCrawler/zipball/57ef66b6d806d9d1b9234e27da304ee5d1e54641",
+                "reference": "57ef66b6d806d9d1b9234e27da304ee5d1e54641",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.3"
+                "php": ">=5.3.9"
             },
             "require-dev": {
-                "symfony/css-selector": "~2.0"
+                "symfony/css-selector": "~2.3|~3.0.0"
             },
             "suggest": {
                 "symfony/css-selector": ""
@@ -253,7 +253,7 @@
             ],
             "description": "Symfony DomCrawler Component",
             "homepage": "http://symfony.com",
-            "time": "2014-11-20 13:24:30"
+            "time": "2015-01-09 13:24:18"
         },
         {
             "name": "upstatement/jigsaw",
@@ -269,101 +269,83 @@
             "type": "wordpress-plugin"
         },
         {
+            "name": "vlucas/phpdotenv",
+            "version": "v1.0.9",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/vlucas/phpdotenv.git",
+                "reference": "56c252d48dce336da97926591aed71805203815b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/vlucas/phpdotenv/zipball/56c252d48dce336da97926591aed71805203815b",
+                "reference": "56c252d48dce336da97926591aed71805203815b",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.2"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Dotenv": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD"
+            ],
+            "authors": [
+                {
+                    "name": "Vance Lucas",
+                    "email": "vance@vancelucas.com",
+                    "homepage": "http://www.vancelucas.com"
+                }
+            ],
+            "description": "Loads environment variables from `.env` to `getenv()`, `$_ENV` and `$_SERVER` automagically.",
+            "homepage": "http://github.com/vlucas/phpdotenv",
+            "keywords": [
+                "dotenv",
+                "env",
+                "environment"
+            ],
+            "time": "2014-10-16 14:50:21"
+        },
+        {
             "name": "voceconnect/objects-to-objects",
             "version": "1.2.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/voceconnect/objects-to-objects.git",
-                "reference": "53ea0ae777aa486e66e83a6b75a0d81abcae739b"
+                "reference": "1.2.4"
             },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/voceconnect/objects-to-objects/zipball/53ea0ae777aa486e66e83a6b75a0d81abcae739b",
-                "reference": "53ea0ae777aa486e66e83a6b75a0d81abcae739b",
-                "shasum": ""
-            },
-            "require": {
-                "voceconnect/post-selection-ui": "~1.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "3.7.*"
-            },
-            "type": "library",
-            "autoload": {
-                "classmap": [
-                    "src/",
-                    "admin/admin.php"
-                ],
-                "files": [
-                    "objects-to-objects.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "GPLv2+"
-            ],
-            "authors": [
-                {
-                    "name": "Michael Pretty",
-                    "email": "mpretty@voceconnect.com"
-                }
-            ],
-            "description": "A WordPress plugin/module that provides the ability to map relationships between posts and other post types",
-            "keywords": [
-                "Relationships",
-                "wordpress"
-            ],
-            "time": "2014-08-25 12:03:53"
+            "type": "wordpress-plugin"
         },
         {
             "name": "voceconnect/post-selection-ui",
-            "version": "1.0.11",
+            "version": "1.0.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/voceconnect/post-selection-ui.git",
-                "reference": "22a33b79537ea80e40d4b19e3aa3d207e8e6e035"
+                "reference": "1.0.12"
             },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/voceconnect/post-selection-ui/zipball/22a33b79537ea80e40d4b19e3aa3d207e8e6e035",
-                "reference": "22a33b79537ea80e40d4b19e3aa3d207e8e6e035",
-                "shasum": ""
-            },
-            "type": "library",
-            "autoload": {
-                "files": [
-                    "post-selection-ui.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "GPLv2+"
-            ],
-            "authors": [
-                {
-                    "name": "Gary Smirny",
-                    "email": "gary@voceconnect.com"
-                },
-                {
-                    "name": "Mat Gargano",
-                    "email": "mat@voceconnect.com"
-                },
-                {
-                    "name": "Michael Pretty",
-                    "email": "mpretty@voceconnect.com"
-                }
-            ],
-            "description": "A WordPress library to display a user interface to easily select posts from any post type",
-            "time": "2014-11-14 16:34:22"
+            "type": "wordpress-plugin"
         },
         {
-            "name": "wordpress",
-            "version": "4.0.1",
-            "dist": {
-                "type": "zip",
-                "url": "http://wordpress.org/wordpress-4.0.1.zip",
-                "reference": null,
-                "shasum": null
+            "name": "wordpress/wordpress",
+            "version": "4.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/WordPress/WordPress.git",
+                "reference": "4.1"
             },
             "require": {
                 "fancyguy/webroot-installer": "1.0.0"
@@ -371,27 +353,44 @@
             "type": "webroot"
         },
         {
-            "name": "wpackagist-plugin/titan-framework",
-            "version": "1.6.1",
+            "name": "wpackagist-plugin/posts-to-posts",
+            "version": "1.6.3",
             "source": {
                 "type": "svn",
-                "url": "http://plugins.svn.wordpress.org/titan-framework/",
-                "reference": "tags/1.6.1"
+                "url": "http://plugins.svn.wordpress.org/posts-to-posts/",
+                "reference": "tags/1.6.3"
             },
             "dist": {
                 "type": "zip",
-                "url": "http://downloads.wordpress.org/plugin/titan-framework.1.6.1.zip",
+                "url": "http://downloads.wordpress.org/plugin/posts-to-posts.1.6.3.zip",
                 "reference": null,
                 "shasum": null
             },
             "require": {
                 "composer/installers": "~1.0"
             },
-            "replace": {
-                "wpackagist/titan-framework": "self.version"
+            "type": "wordpress-plugin",
+            "homepage": "https://wordpress.org/plugins/posts-to-posts/"
+        },
+        {
+            "name": "wpackagist-plugin/titan-framework",
+            "version": "1.7.3",
+            "source": {
+                "type": "svn",
+                "url": "http://plugins.svn.wordpress.org/titan-framework/",
+                "reference": "tags/1.7.3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "http://downloads.wordpress.org/plugin/titan-framework.1.7.3.zip",
+                "reference": null,
+                "shasum": null
+            },
+            "require": {
+                "composer/installers": "~1.0"
             },
             "type": "wordpress-plugin",
-            "homepage": "http://wordpress.org/plugins/titan-framework/"
+            "homepage": "https://wordpress.org/plugins/titan-framework/"
         },
         {
             "name": "wpackagist-plugin/wp-crontrol",
@@ -410,11 +409,8 @@
             "require": {
                 "composer/installers": "~1.0"
             },
-            "replace": {
-                "wpackagist/wp-crontrol": "self.version"
-            },
             "type": "wordpress-plugin",
-            "homepage": "http://wordpress.org/plugins/wp-crontrol/"
+            "homepage": "https://wordpress.org/plugins/wp-crontrol/"
         }
     ],
     "packages-dev": [
@@ -435,17 +431,15 @@
             "require": {
                 "composer/installers": "~1.0"
             },
-            "replace": {
-                "wpackagist/developer": "self.version"
-            },
             "type": "wordpress-plugin",
-            "homepage": "http://wordpress.org/plugins/developer/"
+            "homepage": "https://wordpress.org/plugins/developer/"
         }
     ],
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": [],
     "prefer-stable": false,
+    "prefer-lowest": false,
     "platform": [],
     "platform-dev": []
 }
