@@ -16,6 +16,7 @@ class DABC_Store_Post_Type {
 	const LATITUDE            = 'dabc-store-latitude';
 	const LONGITUDE           = 'dabc-store-longitude';
 	const DABC_IMAGE_CRON     = 'image_dabc_store';
+	const DABC_STORE_CRON     = 'sync_dabc_stores';
 	const DABC_IMG_SEARCHED   = 'has-dabc-image';
 	const STORES_JS_URL       = 'http://abc.utah.gov/common/script/abcMap.js';
 	const STORE_IMGURL_FORMAT = 'http://abc.utah.gov/stores/images/store%s.jpg';
@@ -132,6 +133,8 @@ class DABC_Store_Post_Type {
 	function attach_hooks() {
 
 		add_action( self::DABC_IMAGE_CRON, array( $this, 'sync_featured_image_with_dabc' ), 10, 2 );
+
+		add_action( self::DABC_STORE_CRON, array( $this, 'sync_stores_with_dabc' ) );
 
 	}
 
