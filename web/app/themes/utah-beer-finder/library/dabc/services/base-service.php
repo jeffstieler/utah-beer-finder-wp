@@ -9,6 +9,7 @@ abstract class Base_Beer_Service {
 	protected $search_all_cron_hook;
 	protected $search_cron_hook;
 	protected $synced_flag;
+	protected $sync_all_cron_hook;
 	protected $sync_cron_hook;
 
 	function __construct( $post_type ) {
@@ -24,6 +25,8 @@ abstract class Base_Beer_Service {
 		$this->synced_flag = "has-{$this->service_name}-sync";
 
 		$this->sync_cron_hook = 'sync_' . $this->service_name;
+
+		$this->sync_all_cron_hook = $this->service_name . '_sync_all';
 
 		$this->titan = TitanFramework::getInstance( $this->service_name );
 
@@ -57,6 +60,8 @@ abstract class Base_Beer_Service {
 		add_action( $this->sync_cron_hook, array( $this, 'cron_sync_post_beer_info' ) );
 
 		add_action( $this->search_all_cron_hook, array( $this, 'schedule_search_for_all_posts' ) );
+
+		add_action( $this->sync_all_cron_hook, array( $this, 'schedule_sync_for_all_posts' ) );
 
 	}
 
