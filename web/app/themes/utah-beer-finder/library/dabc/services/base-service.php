@@ -6,6 +6,7 @@ abstract class Base_Beer_Service {
 	protected $service_name;
 	protected $titan;
 	protected $searched_flag;
+	protected $search_all_cron_hook;
 	protected $search_cron_hook;
 	protected $synced_flag;
 	protected $sync_cron_hook;
@@ -17,6 +18,8 @@ abstract class Base_Beer_Service {
 		$this->searched_flag = "has-{$this->service_name}-searched";
 
 		$this->search_cron_hook = 'search_' . $this->service_name;
+
+		$this->search_all_cron_hook = $this->service_name . '_search_all';
 
 		$this->synced_flag = "has-{$this->service_name}-sync";
 
@@ -52,6 +55,8 @@ abstract class Base_Beer_Service {
 		add_action( $this->search_cron_hook, array( $this, 'cron_map_post_to_beer' ) );
 
 		add_action( $this->sync_cron_hook, array( $this, 'cron_sync_post_beer_info' ) );
+
+		add_action( $this->search_all_cron_hook, array( $this, 'schedule_search_for_all_posts' ) );
 
 	}
 
