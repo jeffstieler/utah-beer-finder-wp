@@ -156,7 +156,7 @@ abstract class Base_Beer_Service {
 	 */
 	function schedule_jobs() {
 
-		wp_schedule_event( time(), 'twicedaily', $this->search_cron_hook );
+		wp_schedule_event( time(), 'twicedaily', $this->search_all_cron_hook );
 
 		wp_schedule_event( time(), 'twicedaily', $this->sync_cron_hook );
 
