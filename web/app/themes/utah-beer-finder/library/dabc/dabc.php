@@ -99,9 +99,9 @@ class DABC {
 
 		// TODO: remove beer from stores it's no longer in stock
 
-		foreach ( $inventory as $store_inventory ) {
+		foreach ( $inventory as $store_number => $store_inventory ) {
 
-			$stores = $this->stores->query_stores_by_number( $store_inventory['store'] );
+			$stores = $this->stores->query_stores_by_number( $store_number );
 
 			if ( $stores->have_posts() ) {
 
