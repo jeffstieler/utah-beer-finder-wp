@@ -112,7 +112,8 @@
 		"wpackagist-plugin/posts-to-posts": "~1.6",
 		"jeffstieler/beautiful-taxonomy-filters": "~1.1",
 		"wpackagist-plugin/wp-crontrol": "~1.2",
-		"vlucas/phpdotenv": "1.0.9"
+		"vlucas/phpdotenv": "1.0.9",
+		"wpackagist-plugin/memcached-redux": "~0.1.3"
 	},
 	"require-dev" : {
 		"wpackagist-plugin/developer" : "~1.2"
@@ -124,6 +125,9 @@
 				"upstatement/jigsaw",
 				"voceconnect/objects-to-objects",
 				"voceconnect/post-selection-ui"
+			],
+			"web/app/drop-ins/{$name}/": [
+				"wpackagist-plugin/memcached-redux"
 			],
 			"web/app/mu-plugins/{$name}/": [
 				"type:wordpress-muplugin"

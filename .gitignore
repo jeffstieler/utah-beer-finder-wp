@@ -27,6 +27,7 @@ web/app/uploads
 !web/app/mu-plugins/bedrock-autoloader.php
 web/app/themes/utah-beer-finder/vendor/
 web/app/themes/utah-beer-finder/plugins/
+web/app/drop-ins
 
 # Vendor (e.g. Composer)
 vendor

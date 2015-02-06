@@ -16,3 +16,5 @@ define('UNTAPPD_CLIENT_SECRET', getenv('UNTAPPD_CLIENT_SECRET'));
 define('SAVEQUERIES', true);
 define('WP_DEBUG', true);
 define('SCRIPT_DEBUG', true);
+
+$memcached_servers = array('127.0.0.1:11211');
