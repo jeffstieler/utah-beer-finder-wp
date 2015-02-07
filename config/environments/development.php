@@ -18,3 +18,4 @@ define('WP_DEBUG', true);
 define('SCRIPT_DEBUG', true);
 
 $memcached_servers = array('127.0.0.1:11211');
+define('WP_CACHE_KEY_SALT', getenv('DB_NAME'));
