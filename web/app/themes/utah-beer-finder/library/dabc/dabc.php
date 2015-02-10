@@ -59,7 +59,7 @@ class DABC {
 
 		$this->attach_hooks();
 
-		$this->schedule_jobs();
+//		$this->schedule_jobs();
 
 	}
 
