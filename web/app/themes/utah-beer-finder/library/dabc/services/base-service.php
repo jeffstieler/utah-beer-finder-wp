@@ -6,6 +6,7 @@ abstract class Base_Beer_Service {
 	protected $service_name;
 	protected $titan;
 	protected $searched_flag;
+	protected $searching_flag;
 	protected $search_all_cron_hook;
 	protected $search_cron_hook;
 	protected $synced_flag;
@@ -17,6 +18,8 @@ abstract class Base_Beer_Service {
 		$this->post_type = $post_type;
 
 		$this->searched_flag = "has-{$this->service_name}-searched";
+
+		$this->searching_flag = "is-{$this->service_name}-searching";
 
 		$this->search_cron_hook = 'search_' . $this->service_name;
 
@@ -81,6 +84,18 @@ abstract class Base_Beer_Service {
 		add_action( $this->sync_all_cron_hook, array( $this, 'schedule_sync_for_all_posts' ) );
 
 		add_filter( 'cron_schedules', array( $this, 'add_cron_schedules') );
+
+	}
+
+	/**
+	 * Clear a beer post's flag for being currently searched
+	 *
+	 * @param int $post_id beer post ID
+	 * @return bool success
+	 */
+	function clear_post_as_being_searched( $post_id ) {
+
+		return (bool) delete_post_meta( $post_id, $this->searched_flag );
 
 	}
 
@@ -159,6 +174,18 @@ abstract class Base_Beer_Service {
 	}
 
 	/**
+	 * Flag a beer as being currently searched for with the service
+	 *
+	 * @param int $post_id beer post ID
+	 * @return bool success
+	 */
+	function mark_post_as_being_searched( $post_id ) {
+
+		return (bool) update_post_meta( $post_id, $this->searching_flag, true );
+
+	}
+
+	/**
 	 * Flag a beer as having been synced with the service
 	 *
 	 * @param int $post_id beer post ID
@@ -180,7 +207,7 @@ abstract class Base_Beer_Service {
 	 */
 	function schedule_jobs() {
 
-		wp_schedule_event( time(), 'twicedaily', $this->search_all_cron_hook );
+		wp_schedule_event( time(), 'everytwominutes', $this->search_all_cron_hook );
 
 		wp_schedule_event( time(), 'twicedaily', $this->sync_all_cron_hook );
 
@@ -199,14 +226,29 @@ abstract class Base_Beer_Service {
 					'key'     => $this->searched_flag,
 					'value'   => '',
 					'compare' => 'NOT EXISTS'
-				)
+				),
+				array(
+					'key'     => $this->searching_flag,
+					'value'   => '',
+					'compare' => 'NOT EXISTS'
+				),
 			),
 			'no_found_rows'  => true,
-			'posts_per_page' => -1,
+			'posts_per_page' => 1,
 			'fields'         => 'ids'
 		) );
 
-		$this->schedule_search_for_post( $unmapped_posts->posts );
+		if ( $unmapped_posts->posts ) {
+
+			$post_id = (int) array_shift( $unmapped_posts->posts );
+
+			$this->mark_post_as_being_searched( $post_id );
+
+			$this->cron_map_post_to_beer( $post_id );
+
+			$this->clear_post_as_being_searched( $post_id );
+
+		}
 
 	}
 
