@@ -9,8 +9,8 @@ abstract class Base_Beer_Service {
 	protected $searching_flag;
 	protected $search_all_cron_hook;
 	protected $synced_flag;
+	protected $syncing_flag;
 	protected $sync_all_cron_hook;
-	protected $sync_cron_hook;
 
 	const TWO_MINUTE_CRON_INTERVAL = 'everytwominutes';
 
@@ -26,7 +26,7 @@ abstract class Base_Beer_Service {
 
 		$this->synced_flag = "has-{$this->service_name}-sync";
 
-		$this->sync_cron_hook = 'sync_' . $this->service_name;
+		$this->syncing_flag = "is-{$this->service_name}-syncing";
 
 		$this->sync_all_cron_hook = $this->service_name . '_sync_all';
 
@@ -74,8 +74,6 @@ abstract class Base_Beer_Service {
 
 	function attach_hooks() {
 
-		add_action( $this->sync_cron_hook, array( $this, 'cron_sync_post_beer_info' ) );
-
 		add_action( $this->search_all_cron_hook, array( $this, 'schedule_search_for_all_posts' ) );
 
 		add_action( $this->sync_all_cron_hook, array( $this, 'schedule_sync_for_all_posts' ) );
@@ -93,6 +91,18 @@ abstract class Base_Beer_Service {
 	function clear_post_as_being_searched( $post_id ) {
 
 		return (bool) delete_post_meta( $post_id, $this->searched_flag );
+
+	}
+
+	/**
+	 * Clear a beer post's flag for being currently synced
+	 *
+	 * @param int $post_id beer post ID
+	 * @return bool success
+	 */
+	function clear_post_as_being_synced( $post_id ) {
+
+		return (bool) delete_post_meta( $post_id, $this->syncing_flag );
 
 	}
 
@@ -127,10 +137,6 @@ abstract class Base_Beer_Service {
 		if ( $success ) {
 
 			$this->mark_post_as_synced( $post_id );
-
-		} else {
-
-			$this->schedule_sync_for_post( $post_id, 10 );
 
 		}
 
@@ -175,6 +181,18 @@ abstract class Base_Beer_Service {
 	function mark_post_as_being_searched( $post_id ) {
 
 		return (bool) update_post_meta( $post_id, $this->searching_flag, true );
+
+	}
+
+	/**
+	 * Flag a beer as being currently synced for with the service
+	 *
+	 * @param int $post_id beer post ID
+	 * @return bool success
+	 */
+	function mark_post_as_being_synced( $post_id ) {
+
+		return (bool) update_post_meta( $post_id, $this->syncing_flag, true );
 
 	}
 
@@ -254,29 +272,36 @@ abstract class Base_Beer_Service {
 			'post_type'      => $this->post_type,
 			'meta_query'     => array(
 				array(
+					'key'     => $this->searched_flag,
+					'value'   => true
+				),
+				array(
 					'key'     => $this->synced_flag,
+					'value'   => '',
+					'compare' => 'NOT EXISTS'
+				),
+				array(
+					'key'     => $this->syncing_flag,
 					'value'   => '',
 					'compare' => 'NOT EXISTS'
 				)
 			),
 			'no_found_rows'  => true,
-			'posts_per_page' => -1,
+			'posts_per_page' => 1,
 			'fields'         => 'ids'
 		) );
 
-		$this->schedule_sync_for_post( $unsynced_posts->posts );
+		if ( $unsynced_posts->posts ) {
 
-	}
+			$post_id = (int) array_shift( $unsynced_posts->posts );
 
-	/**
-	 * Schedule a job to sync beer(s) with the service
-	 *
-	 * @param int|array $posts post ID(s)
-	 * @param int $offset_in_minutes optional. delay (from right now) of cron job
-	 */
-	function schedule_sync_for_post( $posts, $offset_in_minutes = 0 ) {
+			$this->mark_post_as_being_synced( $post_id );
 
-		$this->_schedule_job_for_post( $this->sync_cron_hook, $posts, $offset_in_minutes );
+			$this->cron_sync_post_beer_info( $post_id );
+
+			$this->clear_post_as_being_synced( $post_id );
+
+		}
 
 	}
 
