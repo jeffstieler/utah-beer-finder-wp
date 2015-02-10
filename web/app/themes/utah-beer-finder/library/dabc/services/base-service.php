@@ -53,6 +53,23 @@ abstract class Base_Beer_Service {
 
 	}
 
+	/**
+	 * Add non-standard cron schedules for use in beer services
+	 *
+	 * @param array $schedules list of registered cron schedules
+	 * @return array filtered cron schedules
+	 */
+	function add_cron_schedules( $schedules ) {
+
+		$schedules['everytwominutes'] = array(
+			'interval' => 2 * MINUTE_IN_SECONDS,
+			'display' => __( 'Every Two Minutes' )
+		);
+
+		return $schedules;
+
+	}
+
 	function attach_hooks() {
 
 		add_action( $this->search_cron_hook, array( $this, 'cron_map_post_to_beer' ) );
@@ -62,6 +79,8 @@ abstract class Base_Beer_Service {
 		add_action( $this->search_all_cron_hook, array( $this, 'schedule_search_for_all_posts' ) );
 
 		add_action( $this->sync_all_cron_hook, array( $this, 'schedule_sync_for_all_posts' ) );
+
+		add_filter( 'cron_schedules', array( $this, 'add_cron_schedules') );
 
 	}
 
