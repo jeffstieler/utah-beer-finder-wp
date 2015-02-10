@@ -8,7 +8,6 @@ abstract class Base_Beer_Service {
 	protected $searched_flag;
 	protected $searching_flag;
 	protected $search_all_cron_hook;
-	protected $search_cron_hook;
 	protected $synced_flag;
 	protected $sync_all_cron_hook;
 	protected $sync_cron_hook;
@@ -20,8 +19,6 @@ abstract class Base_Beer_Service {
 		$this->searched_flag = "has-{$this->service_name}-searched";
 
 		$this->searching_flag = "is-{$this->service_name}-searching";
-
-		$this->search_cron_hook = 'search_' . $this->service_name;
 
 		$this->search_all_cron_hook = $this->service_name . '_search_all';
 
@@ -75,8 +72,6 @@ abstract class Base_Beer_Service {
 
 	function attach_hooks() {
 
-		add_action( $this->search_cron_hook, array( $this, 'cron_map_post_to_beer' ) );
-
 		add_action( $this->sync_cron_hook, array( $this, 'cron_sync_post_beer_info' ) );
 
 		add_action( $this->search_all_cron_hook, array( $this, 'schedule_search_for_all_posts' ) );
@@ -112,10 +107,6 @@ abstract class Base_Beer_Service {
 		if ( $success ) {
 
 			$this->mark_post_as_searched( $post_id );
-
-		} else {
-
-			$this->schedule_search_for_post( $post_id, 10 );
 
 		}
 
@@ -249,18 +240,6 @@ abstract class Base_Beer_Service {
 			$this->clear_post_as_being_searched( $post_id );
 
 		}
-
-	}
-
-	/**
-	 * Schedule a job to search beer(s) on the service
-	 *
-	 * @param int|array $posts post ID(s)
-	 * @param int $offset_in_minutes optional. delay (from right now) of cron job
-	 */
-	function schedule_search_for_post( $posts, $offset_in_minutes = 0 ) {
-
-		$this->_schedule_job_for_post( $this->search_cron_hook, $posts, $offset_in_minutes );
 
 	}
 
