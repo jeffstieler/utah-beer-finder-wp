@@ -12,6 +12,8 @@ abstract class Base_Beer_Service {
 	protected $sync_all_cron_hook;
 	protected $sync_cron_hook;
 
+	const TWO_MINUTE_CRON_INTERVAL = 'everytwominutes';
+
 	function __construct( $post_type ) {
 
 		$this->post_type = $post_type;
@@ -61,7 +63,7 @@ abstract class Base_Beer_Service {
 	 */
 	function add_cron_schedules( $schedules ) {
 
-		$schedules['everytwominutes'] = array(
+		$schedules[self::TWO_MINUTE_CRON_INTERVAL] = array(
 			'interval' => 2 * MINUTE_IN_SECONDS,
 			'display' => __( 'Every Two Minutes' )
 		);
@@ -198,9 +200,9 @@ abstract class Base_Beer_Service {
 	 */
 	function schedule_jobs() {
 
-		wp_schedule_event( time(), 'everytwominutes', $this->search_all_cron_hook );
+		wp_schedule_event( time(), self::TWO_MINUTE_CRON_INTERVAL, $this->search_all_cron_hook );
 
-		wp_schedule_event( time(), 'twicedaily', $this->sync_all_cron_hook );
+		wp_schedule_event( time(), self::TWO_MINUTE_CRON_INTERVAL, $this->sync_all_cron_hook );
 
 	}
 
