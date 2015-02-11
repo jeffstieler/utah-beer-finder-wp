@@ -363,7 +363,7 @@ class Ratebeer_Sync extends Base_Beer_Service {
 
 		if ( ( $ratebeer_url_key === $meta_key ) && !empty( $meta_value ) ) {
 
-			$this->schedule_sync_for_post( $object_id );
+			$this->sync_post_beer_info( $object_id );
 
 		}
 
