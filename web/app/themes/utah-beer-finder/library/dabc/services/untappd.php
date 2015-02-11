@@ -277,6 +277,12 @@ class Untappd_Sync extends Base_Beer_Service {
 
 		$untappd_id = $this->titan->getOption( self::ID, $post_id );
 
+		if ( is_null( $untappd_id ) ) {
+
+			return false;
+
+		}
+
 		$beer_info  = $this->get_beer_info( $untappd_id );
 
 		if ( is_object( $beer_info ) ) {
