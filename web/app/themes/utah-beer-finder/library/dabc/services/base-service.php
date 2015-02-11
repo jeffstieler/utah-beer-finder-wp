@@ -272,8 +272,9 @@ abstract class Base_Beer_Service {
 			'post_type'      => $this->post_type,
 			'meta_query'     => array(
 				array(
-					'key'     => $this->searched_flag,
-					'value'   => true
+					'key'     => $this->service_name . '_id', // TODO: don't hardcode this
+					'value'   => '',
+					'compare' => '!='
 				),
 				array(
 					'key'     => $this->synced_flag,
