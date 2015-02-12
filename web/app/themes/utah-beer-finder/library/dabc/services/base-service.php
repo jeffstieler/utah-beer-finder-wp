@@ -244,6 +244,7 @@ abstract class Base_Beer_Service {
 					'compare' => 'NOT EXISTS'
 				),
 			),
+			'post_status'    => 'publish',
 			'no_found_rows'  => true,
 			'posts_per_page' => 1,
 			'fields'         => 'ids'
@@ -287,6 +288,7 @@ abstract class Base_Beer_Service {
 					'compare' => 'NOT EXISTS'
 				)
 			),
+			'post_status'    => 'publish',
 			'no_found_rows'  => true,
 			'posts_per_page' => 1,
 			'fields'         => 'ids'
