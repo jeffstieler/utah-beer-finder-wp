@@ -6,6 +6,7 @@ class Untappd_Sync extends Base_Beer_Service {
 
 	const IMAGE_CRON      = 'image_untappd';
 	const ID              = 'id';
+	const LABEL_IMAGE_URL = 'label-img-url';
 	const RATING_SCORE    = 'rating-score';
 	const RATING_COUNT    = 'rating-count';
 	const ABV             = 'abv';
@@ -178,6 +179,11 @@ class Untappd_Sync extends Base_Beer_Service {
 			'id'   => self::ABV
 		) );
 
+		$untappd_box->createOption( array(
+			'name' => 'Label Image URL',
+			'id'   => self::LABEL_IMAGE_URL
+		) );
+
 	}
 
 	/**
@@ -307,7 +313,7 @@ class Untappd_Sync extends Base_Beer_Service {
 
 			if ( isset( $beer_info->beer_label ) ) {
 
-				$this->sync_featured_image( $beer_info->beer_label, $post_id );
+				$this->titan->setOption( self::LABEL_IMAGE_URL, $beer_info->beer_label, $post_id );
 
 			}
 
