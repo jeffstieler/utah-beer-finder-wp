@@ -165,12 +165,36 @@ class DABC {
 	 */
 	function sync_inventory_with_dabc() {
 
-		$beers = new WP_Query( array(
+		$beers_to_sync = new WP_Query( array(
 			'post_type'      => DABC_Beer_Post_Type::POST_TYPE,
 			'post_status'    => 'publish',
-			'posts_per_page' => -1,
-			'fields'         => 'ids'
+			'posts_per_page' => 1,
+			'fields'         => 'ids',
+			'meta_query'     => array(
+				'relation' => 'or',
+				array(
+					'key'     => DABC_Beer_Post_Type::DABC_LAST_UPDATED,
+					'value'   => date( 'Y-m-d H:i:s', strtotime( '-1 day' ) ),
+					'compare' => '<='
+				),
+				array(
+					'key'     => DABC_Beer_Post_Type::DABC_LAST_UPDATED,
+					'value'   => '',
+					'compare' => 'NOT EXISTS'
+				)
+			),
+			'order'          => 'ASC',
+			'orderby'        => 'post_date',
+			'no_found_rows'  => true
 		) );
+
+		if ( $beers_to_sync->posts ) {
+
+			$beer_post_id = array_shift( $beers_to_sync->posts );
+
+			$this->sync_inventory_for_beer( $beer_post_id );
+
+		}
 
 		array_map( array( $this, 'schedule_inventory_sync_for_beer' ), $beers->posts );
 
