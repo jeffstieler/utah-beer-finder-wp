@@ -161,7 +161,7 @@ class DABC {
 	}
 
 	/**
-	 * Schedule one-time cron jobs to sync all beer inventory
+	 * Sync next beer's inventory with DABC
 	 */
 	function sync_inventory_with_dabc() {
 
@@ -195,8 +195,6 @@ class DABC {
 			$this->sync_inventory_for_beer( $beer_post_id );
 
 		}
-
-		array_map( array( $this, 'schedule_inventory_sync_for_beer' ), $beers->posts );
 
 	}
 
