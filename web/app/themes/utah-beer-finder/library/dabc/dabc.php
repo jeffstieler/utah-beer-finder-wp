@@ -60,8 +60,6 @@ class DABC {
 
 		$this->attach_hooks();
 
-		$this->schedule_jobs();
-
 	}
 
 	/**
@@ -90,6 +88,10 @@ class DABC {
 		add_action( 'wp_enqueue_scripts', array( $this, 'add_store_data_to_maps_script' ) );
 
 		add_filter( 'cron_schedules', array( $this, 'add_cron_schedules' ) );
+
+		add_action( 'after_switch_theme', array( $this, 'schedule_jobs' ) );
+
+		add_action( 'switch_theme', array( $this, 'unschedule_jobs' ) );
 
 	}
 
@@ -143,7 +145,24 @@ class DABC {
 	 */
 	function schedule_jobs() {
 
-		wp_schedule_event( time(), 'everytwominutes', self::ALL_INVENTORY_CRON );
+		if ( ! wp_next_scheduled( self::ALL_INVENTORY_CRON ) ) {
+
+			wp_schedule_event( time(), 'everytwominutes', self::ALL_INVENTORY_CRON );
+
+		}
+
+	}
+
+	/**
+	 * Clear recurring jobs schedule
+	 */
+	function unschedule_jobs() {
+
+		if ( $timestamp = wp_next_scheduled( self::ALL_INVENTORY_CRON ) ) {
+
+			wp_unschedule_event( $timestamp, self::ALL_INVENTORY_CRON );
+
+		}
 
 	}
 
