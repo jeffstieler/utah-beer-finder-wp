@@ -59,7 +59,7 @@ class DABC {
 
 		$this->attach_hooks();
 
-//		$this->schedule_jobs();
+		$this->schedule_jobs();
 
 	}
 
@@ -142,7 +142,7 @@ class DABC {
 	 */
 	function schedule_jobs() {
 
-		wp_schedule_event( time(), 'twicedaily', self::ALL_INVENTORY_CRON );
+		wp_schedule_event( time(), 'everytwominutes', self::ALL_INVENTORY_CRON );
 
 	}
 
