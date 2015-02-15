@@ -450,6 +450,12 @@ class DABC_Store_Post_Type {
 
 		}
 
+		if ( ! function_exists( 'wp_read_image_metadata' ) ) {
+
+			require_once( trailingslashit( ABSPATH ) . 'wp-admin/includes/image.php' );
+
+		}
+
 		$image_url = $this->get_dabc_store_image_url( $store_number );
 
 		$result    = media_sideload_image( $image_url, $post_id );
