@@ -39,6 +39,8 @@ class DABC_Store_Post_Type {
 
 		$this->attach_hooks();
 
+		$this->schedule_jobs();
+
 	}
 
 	function register_post_type() {
@@ -422,6 +424,12 @@ class DABC_Store_Post_Type {
 		$timestamp = ( time() + ( $offset_in_minutes * MINUTE_IN_SECONDS ) );
 
 		wp_schedule_single_event( $timestamp, self::DABC_IMAGE_CRON, array( $store_number, $post_id ) );
+
+	}
+
+	function schedule_jobs() {
+
+		wp_schedule_event( time(), 'daily', self::DABC_STORE_CRON );
 
 	}
 
