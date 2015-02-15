@@ -303,7 +303,13 @@ class DABC_Store_Post_Type {
 
 			foreach ( $stores as $store ) {
 
-				// TODO: only create the store if it doesn't already exist
+				$existing_store = $this->query_stores_by_number( $store['storeNumber'] );
+
+				if ( $existing_store->have_posts() ) {
+
+					continue;
+
+				}
 
 				$this->create_store( array(
 					'label'       => $store['label'],
