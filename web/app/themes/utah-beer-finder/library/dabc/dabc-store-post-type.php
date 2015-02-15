@@ -242,6 +242,8 @@ class DABC_Store_Post_Type {
 
 		wp_set_object_terms( $post_id, $store_info['city'], self::CITY_TAXONOMY );
 
+		$this->sync_featured_image_with_dabc( $store_info['number'], $post_id );
+
 		return $post_id;
 
 	}
