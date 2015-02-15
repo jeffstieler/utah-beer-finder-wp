@@ -39,8 +39,6 @@ class DABC_Store_Post_Type {
 
 		$this->attach_hooks();
 
-		$this->schedule_jobs();
-
 	}
 
 	function register_post_type() {
@@ -137,6 +135,10 @@ class DABC_Store_Post_Type {
 		add_action( self::DABC_IMAGE_CRON, array( $this, 'sync_featured_image_with_dabc' ), 10, 2 );
 
 		add_action( self::DABC_STORE_CRON, array( $this, 'sync_stores_with_dabc' ) );
+
+		add_action( 'after_switch_theme', array( $this, 'schedule_jobs' ) );
+
+		add_action( 'switch_theme', array( $this, 'unschedule_jobs' ) );
 
 	}
 
@@ -429,7 +431,21 @@ class DABC_Store_Post_Type {
 
 	function schedule_jobs() {
 
-		wp_schedule_event( time(), 'daily', self::DABC_STORE_CRON );
+		if ( ! wp_next_scheduled( self::DABC_STORE_CRON ) ) {
+
+			wp_schedule_event( time(), 'daily', self::DABC_STORE_CRON );
+
+		}
+
+	}
+
+	function unschedule_jobs() {
+
+		if ( $timestamp = wp_next_scheduled( self::DABC_STORE_CRON ) ) {
+
+			wp_unschedule_event( $timestamp, self::DABC_STORE_CRON );
+
+		}
 
 	}
 
