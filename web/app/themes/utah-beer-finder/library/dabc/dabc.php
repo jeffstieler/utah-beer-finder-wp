@@ -63,6 +63,23 @@ class DABC {
 
 	}
 
+	/**
+	 * Add non-standard cron schedules for use in beer services
+	 *
+	 * @param array $schedules list of registered cron schedules
+	 * @return array filtered cron schedules
+	 */
+	function add_cron_schedules( $schedules ) {
+
+		$schedules[self::TWO_MINUTE_CRON_INTERVAL] = array(
+			'interval' => 2 * MINUTE_IN_SECONDS,
+			'display' => __( 'Every Two Minutes' )
+		);
+
+		return $schedules;
+
+	}
+
 	function attach_hooks() {
 
 		add_action( self::BEER_INVENTORY_CRON, array( $this, 'sync_inventory_for_beer' ) );
@@ -70,6 +87,8 @@ class DABC {
 		add_action( self::ALL_INVENTORY_CRON, array( $this, 'sync_inventory_with_dabc' ) );
 
 		add_action( 'wp_enqueue_scripts', array( $this, 'add_store_data_to_maps_script' ) );
+
+		add_filter( 'cron_schedules', array( $this, 'add_cron_schedules' ) );
 
 	}
 
