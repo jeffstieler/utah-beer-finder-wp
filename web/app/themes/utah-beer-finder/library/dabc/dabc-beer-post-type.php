@@ -26,6 +26,7 @@ class DABC_Beer_Post_Type {
 	const CS_CODE_OPTION         = 'cs-code';
 	const PRICE_OPTION           = 'price';
 	const DABC_INVENTORY         = 'dabc-store-inventory';
+	const DABC_LAST_UPDATED      = 'dabc-last-updated';
 	const DABC_SYNC_CRON         = 'dabc_inventory_sync';
 
 	var $titan;
@@ -364,7 +365,7 @@ class DABC_Beer_Post_Type {
 	}
 
 	/**
-	 * Store beer inventory information
+	 * Store beer inventory information and last updated timestamp
 	 *
 	 * @param int $beer_post_id
 	 * @param array $inventory
@@ -372,12 +373,11 @@ class DABC_Beer_Post_Type {
 	 */
 	function set_beer_inventory( $beer_post_id, $inventory ) {
 
-		$data = array(
-			'last_updated' => date( 'Y-m-d H:i:s' ),
-			'inventory'    => $inventory
-		);
+		$last_updated = date( 'Y-m-d H:i:s' );
 
-		return update_post_meta( $beer_post_id, self::DABC_INVENTORY, $data );
+		update_post_meta( $beer_post_id, self::DABC_LAST_UPDATED, $last_updated );
+
+		return update_post_meta( $beer_post_id, self::DABC_INVENTORY, $inventory );
 
 	}
 
@@ -387,7 +387,7 @@ class DABC_Beer_Post_Type {
 	 * @param int $beer_post_id
 	 * @return mixed
 	 */
-	function get_beer_inventory( $beer_post_id ) {
+	function get_inventory( $beer_post_id ) {
 
 		$inventory = get_post_meta( $beer_post_id, self::DABC_INVENTORY, true );
 
@@ -395,25 +395,17 @@ class DABC_Beer_Post_Type {
 
 	}
 
-	function _get_inventory_meta( $post_id ) {
-
-		return get_post_meta( $post_id, self::DABC_INVENTORY, true );
-
-	}
-
-	function get_inventory( $post_id ) {
-
-		$inventory = $this->_get_inventory_meta( $post_id );
-
-		return isset( $inventory['inventory'] ) ? $inventory['inventory'] : false;
-
-	}
-
+	/**
+	 * Get beer inventory last updated date
+	 *
+	 * @param int $beer_post_id
+	 * @return mixed
+	 */
 	function get_inventory_last_updated( $post_id ) {
 
-		$inventory = $this->_get_inventory_meta( $post_id );
+		$last_updated = get_post_meta( $beer_post_id, self::DABC_INVENTORY, true );
 
-		return isset( $inventory['last_updated'] ) ? $inventory['last_updated'] : false;
+		return $last_updated;
 
 	}
 

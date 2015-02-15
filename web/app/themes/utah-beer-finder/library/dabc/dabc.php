@@ -32,8 +32,9 @@ require_once( __DIR__ . '/template-tags.php' );
 
 class DABC {
 
-	const BEER_INVENTORY_CRON = 'sync_beer_inventory';
-	const ALL_INVENTORY_CRON  = 'sync_all_inventory';
+	const BEER_INVENTORY_CRON      = 'sync_beer_inventory';
+	const ALL_INVENTORY_CRON       = 'sync_all_inventory';
+	const TWO_MINUTE_CRON_INTERVAL = 'everytwominutes';
 
 	var $beers;
 	var $stores;
@@ -63,6 +64,23 @@ class DABC {
 
 	}
 
+	/**
+	 * Add non-standard cron schedules for use in beer services
+	 *
+	 * @param array $schedules list of registered cron schedules
+	 * @return array filtered cron schedules
+	 */
+	function add_cron_schedules( $schedules ) {
+
+		$schedules[self::TWO_MINUTE_CRON_INTERVAL] = array(
+			'interval' => 2 * MINUTE_IN_SECONDS,
+			'display' => __( 'Every Two Minutes' )
+		);
+
+		return $schedules;
+
+	}
+
 	function attach_hooks() {
 
 		add_action( self::BEER_INVENTORY_CRON, array( $this, 'sync_inventory_for_beer' ) );
@@ -70,6 +88,8 @@ class DABC {
 		add_action( self::ALL_INVENTORY_CRON, array( $this, 'sync_inventory_with_dabc' ) );
 
 		add_action( 'wp_enqueue_scripts', array( $this, 'add_store_data_to_maps_script' ) );
+
+		add_filter( 'cron_schedules', array( $this, 'add_cron_schedules' ) );
 
 	}
 
@@ -123,7 +143,7 @@ class DABC {
 	 */
 	function schedule_jobs() {
 
-		wp_schedule_event( time(), 'twicedaily', self::ALL_INVENTORY_CRON );
+		wp_schedule_event( time(), 'everytwominutes', self::ALL_INVENTORY_CRON );
 
 	}
 
@@ -142,18 +162,40 @@ class DABC {
 	}
 
 	/**
-	 * Schedule one-time cron jobs to sync all beer inventory
+	 * Sync next beer's inventory with DABC
 	 */
 	function sync_inventory_with_dabc() {
 
-		$beers = new WP_Query( array(
+		$beers_to_sync = new WP_Query( array(
 			'post_type'      => DABC_Beer_Post_Type::POST_TYPE,
 			'post_status'    => 'publish',
-			'posts_per_page' => -1,
-			'fields'         => 'ids'
+			'posts_per_page' => 1,
+			'fields'         => 'ids',
+			'meta_query'     => array(
+				'relation' => 'or',
+				array(
+					'key'     => DABC_Beer_Post_Type::DABC_LAST_UPDATED,
+					'value'   => date( 'Y-m-d H:i:s', strtotime( '-1 day' ) ),
+					'compare' => '<='
+				),
+				array(
+					'key'     => DABC_Beer_Post_Type::DABC_LAST_UPDATED,
+					'value'   => '',
+					'compare' => 'NOT EXISTS'
+				)
+			),
+			'order'          => 'ASC',
+			'orderby'        => 'post_date',
+			'no_found_rows'  => true
 		) );
 
-		array_map( array( $this, 'schedule_inventory_sync_for_beer' ), $beers->posts );
+		if ( $beers_to_sync->posts ) {
+
+			$beer_post_id = array_shift( $beers_to_sync->posts );
+
+			$this->sync_inventory_for_beer( $beer_post_id );
+
+		}
 
 	}
 

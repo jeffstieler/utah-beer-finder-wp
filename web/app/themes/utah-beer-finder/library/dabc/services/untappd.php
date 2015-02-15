@@ -245,6 +245,12 @@ class Untappd_Sync extends Base_Beer_Service {
 
 		}
 
+		if ( ! function_exists( 'wp_read_image_metadata' ) ) {
+
+			require_once( trailingslashit( ABSPATH ) . 'wp-admin/includes/image.php' );
+
+		}
+
 		$result = media_sideload_image( $image_url, $post_id );
 
 		if ( is_wp_error( $result ) ) {
@@ -276,6 +282,12 @@ class Untappd_Sync extends Base_Beer_Service {
 	function sync_post_beer_info( $post_id ) {
 
 		$untappd_id = $this->titan->getOption( self::ID, $post_id );
+
+		if ( is_null( $untappd_id ) ) {
+
+			return false;
+
+		}
 
 		$beer_info  = $this->get_beer_info( $untappd_id );
 

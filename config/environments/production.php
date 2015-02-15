@@ -17,5 +17,7 @@ ini_set('display_errors', 0);
 define('WP_DEBUG_DISPLAY', false);
 define('SCRIPT_DEBUG', false);
 
+define('DISABLE_WP_CRON', true);
+
 $memcached_servers = array('127.0.0.1:11211');
 define('WP_CACHE_KEY_SALT', getenv('DB_NAME'));
