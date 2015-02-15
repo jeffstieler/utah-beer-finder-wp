@@ -32,8 +32,9 @@ require_once( __DIR__ . '/template-tags.php' );
 
 class DABC {
 
-	const BEER_INVENTORY_CRON = 'sync_beer_inventory';
-	const ALL_INVENTORY_CRON  = 'sync_all_inventory';
+	const BEER_INVENTORY_CRON      = 'sync_beer_inventory';
+	const ALL_INVENTORY_CRON       = 'sync_all_inventory';
+	const TWO_MINUTE_CRON_INTERVAL = 'everytwominutes';
 
 	var $beers;
 	var $stores;
