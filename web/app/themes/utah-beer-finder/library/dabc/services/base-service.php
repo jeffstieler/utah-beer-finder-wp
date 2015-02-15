@@ -59,6 +59,10 @@ abstract class Base_Beer_Service {
 
 		add_action( $this->sync_all_cron_hook, array( $this, 'schedule_sync_for_all_posts' ) );
 
+		add_action( 'after_switch_theme', array( $this, 'schedule_jobs' ) );
+
+		add_action( 'switch_theme', array( $this, 'unschedule_jobs' ) );
+
 	}
 
 	/**
@@ -126,8 +130,6 @@ abstract class Base_Beer_Service {
 		$this->register_post_meta();
 
 		$this->attach_hooks();
-
-		$this->schedule_jobs();
 
 	}
 
@@ -197,9 +199,36 @@ abstract class Base_Beer_Service {
 	 */
 	function schedule_jobs() {
 
-		wp_schedule_event( time(), 'everytwominutes', $this->search_all_cron_hook );
+		if ( ! wp_next_scheduled( $this->search_all_cron_hook ) ) {
 
-		wp_schedule_event( time(), 'everytwominutes', $this->sync_all_cron_hook );
+			wp_schedule_event( time(), 'everytwominutes', $this->search_all_cron_hook );
+
+		}
+
+		if ( ! wp_next_scheduled( $this->sync_all_cron_hook ) ) {
+
+			wp_schedule_event( time(), 'everytwominutes', $this->sync_all_cron_hook );
+
+		}
+
+	}
+
+	/**
+	 * Teardown recurring search/sync for the service
+	 */
+	function unschedule_jobs() {
+
+		if ( $timestamp = wp_next_scheduled( $this->search_all_cron_hook ) ) {
+
+			wp_schedule_event( $timestamp, $this->search_all_cron_hook );
+
+		}
+
+		if ( $timestamp = wp_next_scheduled( $this->sync_all_cron_hook ) ) {
+
+			wp_schedule_event( $timestamp, $this->sync_all_cron_hook );
+
+		}
 
 	}
 
