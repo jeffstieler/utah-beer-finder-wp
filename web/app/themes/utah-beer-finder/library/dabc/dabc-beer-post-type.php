@@ -52,6 +52,10 @@ class DABC_Beer_Post_Type {
 
 		add_action( self::DABC_SYNC_CRON, array( $this, 'sync_beers_with_dabc' ) );
 
+		add_action( 'after_switch_theme', array( $this, 'schedule_jobs' ) );
+
+		add_action( 'switch_theme', array( $this, 'unschedule_jobs' ) );
+
 	}
 
 	function init() {
@@ -69,8 +73,6 @@ class DABC_Beer_Post_Type {
 		$this->ratebeer_sync->init();
 
 		$this->untappd_sync->init();
-
-		$this->schedule_jobs();
 
 	}
 
@@ -360,7 +362,24 @@ class DABC_Beer_Post_Type {
 	 */
 	function schedule_jobs() {
 
-		wp_schedule_event( time(), 'twicedaily', self::DABC_SYNC_CRON );
+		if ( ! wp_next_scheduled( self::DABC_SYNC_CRON ) ) {
+
+			wp_schedule_event( time(), 'twicedaily', self::DABC_SYNC_CRON );
+
+		}
+
+	}
+
+	/**
+	 * Clear scheduled beer sync with DABC
+	 */
+	function unschedule_jobs() {
+
+		if ( $timestamp = wp_next_scheduled( self::DABC_SYNC_CRON ) ) {
+
+			wp_unschedule_event( $timestamp, self::DABC_SYNC_CRON );
+
+		}
 
 	}
 
