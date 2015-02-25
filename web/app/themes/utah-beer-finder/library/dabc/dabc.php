@@ -113,7 +113,7 @@ class DABC {
 
 		$inventory = $this->beers->dabc_sync->search_inventory_for_cs_code( $cs_code );
 
-		if ( ! $inventory ) {
+		if ( false === $inventory ) {
 
 			return;
 
