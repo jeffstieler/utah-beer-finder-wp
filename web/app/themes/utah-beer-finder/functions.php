@@ -27,8 +27,7 @@ require_once('library/theme-support.php');
 /**
  * Include the Composer dependencies
  */
-require dirname( __FILE__ ) . '/plugins/objects-to-objects/objects-to-objects.php';
-require dirname( __FILE__ ) . '/plugins/post-selection-ui/post-selection-ui.php';
+require dirname( __FILE__ ) . '/plugins/posts-to-posts/posts-to-posts.php';
 require dirname( __FILE__ ) . '/plugins/titan-framework/titan-framework.php';
 require dirname( __FILE__ ) . '/plugins/jigsaw/jigsaw.php';
 
