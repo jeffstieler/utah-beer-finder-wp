@@ -31,5 +31,20 @@ require dirname( __FILE__ ) . '/plugins/posts-to-posts/posts-to-posts.php';
 require dirname( __FILE__ ) . '/plugins/titan-framework/titan-framework.php';
 require dirname( __FILE__ ) . '/plugins/jigsaw/jigsaw.php';
 
+// Temp fix for P2P in theme directory
+add_filter( 'plugins_url', function( $url, $path, $plugin ) {
+
+	if ( false === strpos( $plugin, 'posts-to-posts' ) ) {
+
+		return $url;
+
+	}
+
+	$url = TitanFramework::getURL( $path, $plugin );
+
+	return $url;
+
+}, 10, 3 );
+
 // Add DABC functionality
 require_once( 'library/dabc/dabc.php' );
