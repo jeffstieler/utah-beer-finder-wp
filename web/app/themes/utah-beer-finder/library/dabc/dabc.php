@@ -121,7 +121,7 @@ class DABC {
 
 		// TODO: remove beer from stores it's no longer in stock
 
-		foreach ( $inventory as $store_number => $store_inventory ) {
+		foreach ( $inventory as $store_number => $store_quantity ) {
 
 			$stores = $this->stores->query_stores_by_number( $store_number );
 
@@ -130,13 +130,11 @@ class DABC {
 				$store_post = $stores->next_post();
 
 				// TODO: only add beer to store if it isn't already associated
-				$this->connections->add_beer_to_store( $beer_post_id, $store_post->ID );
+				$this->connections->add_beer_to_store( $beer_post_id, $store_post->ID, $store_quantity );
 
 			}
 
 		}
-
-		$this->beers->set_beer_inventory( $beer_post_id, $inventory );
 
 	}
 
