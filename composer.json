@@ -101,7 +101,8 @@
 				"wpackagist-plugin/memcached-redux"
 			],
 			"web/app/mu-plugins/{$name}/": [
-				"type:wordpress-muplugin"
+				"type:wordpress-muplugin",
+				"wpackagist-plugin/posts-to-posts"
 			],
 			"web/app/plugins/{$name}/": [
 				"type:wordpress-plugin"
