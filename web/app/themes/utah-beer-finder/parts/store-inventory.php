@@ -17,7 +17,7 @@ $store_beers   = dabc_get_store_beers( $store_post_id );
 	</thead>
 <?php while ( $store_beers->have_posts() ) : ?>
 	<?php $store_beers->the_post(); ?>
-	<?php if ( $quantity = dabc_get_quantity_for_store( $store_number ) ) : ?>
+	<?php if ( $quantity = p2p_get_meta( get_post()->p2p_id, 'quantity', true ) ) : ?>
 	<tr>
 		<td><?php echo $quantity; ?></td>
 		<td><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></td>
