@@ -4,42 +4,14 @@ class DABC_O2O_Connections {
 
 	const DABC_STORE_BEERS = 'dabc_store_beers';
 
-	var $o2o;
-	var $o2o_connection_factory;
-
-	function __construct() {
-
-		$this->o2o = O2O::GetInstance();
-
-		$this->o2o_connection_factory = $this->o2o->get_connection_factory();
-
-	}
-
 	function init() {
 
-		$this->o2o->Register_Connection(
-			self::DABC_STORE_BEERS,
-			DABC_Store_Post_Type::POST_TYPE,
-			DABC_Beer_Post_Type::POST_TYPE,
-			array(
-				'reciprocal'   => true,
-				'hierarchical' => false,
-				'to'           => array(
-					'sortable' => false,
-					'labels'   => array(
-						'name'          => 'Beers',
-						'singular_name' => 'Beer'
-					)
-				),
-				'from'         => array(
-					'sortable' => false,
-					'labels'   => array(
-						'name'          => 'Stores',
-						'singular_name' => 'Store'
-					)
-				)
-			)
-		);
+		p2p_register_connection_type( array(
+			'name'            => self::DABC_STORE_BEERS,
+			'from'            => DABC_Store_Post_Type::POST_TYPE,
+			'to'              => DABC_Beer_Post_Type::POST_TYPE,
+			'can_create_post' => false
+		) );
 
 	}
 

@@ -56,8 +56,6 @@ class DABC {
 
 		$this->stores->init();
 
-		$this->connections->init();
-
 		$this->attach_hooks();
 
 	}
@@ -92,6 +90,8 @@ class DABC {
 		add_action( 'after_switch_theme', array( $this, 'schedule_jobs' ) );
 
 		add_action( 'switch_theme', array( $this, 'unschedule_jobs' ) );
+
+		add_action( 'p2p_init', array( $this->connections, 'init' ) );
 
 	}
 
