@@ -56,32 +56,6 @@
 			}
 		},
 		{
-			"type": "package",
-			"package": {
-				"name": "voceconnect/objects-to-objects",
-				"type": "wordpress-plugin",
-				"version": "1.2.4",
-				"source": {
-					"url": "https://github.com/voceconnect/objects-to-objects.git",
-					"type": "git",
-					"reference": "1.2.4"
-				}
-			}
-		},
-		{
-			"type": "package",
-			"package": {
-				"name": "voceconnect/post-selection-ui",
-				"type": "wordpress-plugin",
-				"version": "1.0.13",
-				"source": {
-					"url": "https://github.com/voceconnect/post-selection-ui.git",
-					"type": "git",
-					"reference": "1.0.13"
-				}
-			}
-		},
-		{
 			"type": "composer",
 			"url": "http://wpackagist.org"
 		}
@@ -107,8 +81,6 @@
 		"symfony/dom-crawler": "~2.5",
 		"wpackagist-plugin/titan-framework": "~1.5",
 		"upstatement/jigsaw": "~0.4",
-		"voceconnect/objects-to-objects": "~1.2",
-		"voceconnect/post-selection-ui": "1.0.13",
 		"wpackagist-plugin/posts-to-posts": "~1.6",
 		"jeffstieler/beautiful-taxonomy-filters": "~1.1",
 		"wpackagist-plugin/wp-crontrol": "~1.2",
@@ -123,8 +95,7 @@
 			"web/app/themes/utah-beer-finder/plugins/{$name}/": [
 				"wpackagist-plugin/titan-framework",
 				"upstatement/jigsaw",
-				"voceconnect/objects-to-objects",
-				"voceconnect/post-selection-ui"
+				"wpackagist-plugin/posts-to-posts"
 			],
 			"web/app/drop-ins/{$name}/": [
 				"wpackagist-plugin/memcached-redux"

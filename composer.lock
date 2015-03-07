@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "c8262b1b9388277ff4c29064eb48122c",
+    "hash": "77182ade1f1baa7bbdade61547ca6b1e",
     "packages": [
         {
             "name": "composer/installers",
@@ -214,12 +214,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/DomCrawler.git",
-                "reference": "09f93424f3098ff1c95095de6d8c61032bcd8d89"
+                "reference": "3b20aacefd00df97281e07eb81311bd9d58c1d44"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/DomCrawler/zipball/09f93424f3098ff1c95095de6d8c61032bcd8d89",
-                "reference": "09f93424f3098ff1c95095de6d8c61032bcd8d89",
+                "url": "https://api.github.com/repos/symfony/DomCrawler/zipball/3b20aacefd00df97281e07eb81311bd9d58c1d44",
+                "reference": "3b20aacefd00df97281e07eb81311bd9d58c1d44",
                 "shasum": ""
             },
             "require": {
@@ -259,7 +259,7 @@
             ],
             "description": "Symfony DomCrawler Component",
             "homepage": "http://symfony.com",
-            "time": "2015-02-18 10:38:04"
+            "time": "2015-03-07 07:43:00"
         },
         {
             "name": "upstatement/jigsaw",
@@ -324,26 +324,6 @@
                 "environment"
             ],
             "time": "2014-10-16 14:50:21"
-        },
-        {
-            "name": "voceconnect/objects-to-objects",
-            "version": "1.2.4",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/voceconnect/objects-to-objects.git",
-                "reference": "1.2.4"
-            },
-            "type": "wordpress-plugin"
-        },
-        {
-            "name": "voceconnect/post-selection-ui",
-            "version": "1.0.13",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/voceconnect/post-selection-ui.git",
-                "reference": "1.0.13"
-            },
-            "type": "wordpress-plugin"
         },
         {
             "name": "wordpress/wordpress",
