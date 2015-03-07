@@ -417,9 +417,9 @@ class DABC_Beer_Post_Type {
 	 * @param int $beer_post_id
 	 * @return mixed
 	 */
-	function get_inventory_last_updated( $post_id ) {
+	function get_inventory_last_updated( $beer_post_id ) {
 
-		$last_updated = get_post_meta( $beer_post_id, self::DABC_INVENTORY, true );
+		$last_updated = get_post_meta( $beer_post_id, self::DABC_LAST_UPDATED, true );
 
 		return $last_updated;
 
