@@ -230,11 +230,8 @@ class DABC {
 
 		$beers = new WP_Query( array(
 			'post_type' => DABC_Beer_Post_Type::POST_TYPE,
-			'o2o_query' => array(
-				'connection' => DABC_O2O_Connections::DABC_STORE_BEERS,
-				'direction'  => 'to',
-				'id'         => $store_post_id,
-			),
+			'connected_type'  => 'dabc_store_beers',
+			'connected_items' => $store_post_id,
 			'orderby'   => array(
 				'meta_value_num' => 'DESC',
 				'post_title'     => 'ASC'
