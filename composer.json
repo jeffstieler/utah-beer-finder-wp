@@ -73,11 +73,11 @@
 			"package": {
 				"name": "voceconnect/post-selection-ui",
 				"type": "wordpress-plugin",
-				"version": "1.0.12",
+				"version": "1.0.13",
 				"source": {
 					"url": "https://github.com/voceconnect/post-selection-ui.git",
 					"type": "git",
-					"reference": "1.0.12"
+					"reference": "1.0.13"
 				}
 			}
 		},
@@ -108,7 +108,7 @@
 		"wpackagist-plugin/titan-framework": "~1.5",
 		"upstatement/jigsaw": "~0.4",
 		"voceconnect/objects-to-objects": "~1.2",
-		"voceconnect/post-selection-ui": "~1.0",
+		"voceconnect/post-selection-ui": "1.0.13",
 		"wpackagist-plugin/posts-to-posts": "~1.6",
 		"jeffstieler/beautiful-taxonomy-filters": "~1.1",
 		"wpackagist-plugin/wp-crontrol": "~1.2",

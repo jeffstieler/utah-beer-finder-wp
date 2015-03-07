@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "a574a823f6a86c25bfdc27f58a3f04d4",
+    "hash": "c8262b1b9388277ff4c29064eb48122c",
     "packages": [
         {
             "name": "composer/installers",
@@ -341,40 +341,9 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/voceconnect/post-selection-ui.git",
-                "reference": "7d28d3d4c43cd1d51d30ccb0b7c11c15818fa92e"
+                "reference": "1.0.13"
             },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/voceconnect/post-selection-ui/zipball/7d28d3d4c43cd1d51d30ccb0b7c11c15818fa92e",
-                "reference": "7d28d3d4c43cd1d51d30ccb0b7c11c15818fa92e",
-                "shasum": ""
-            },
-            "type": "library",
-            "autoload": {
-                "files": [
-                    "post-selection-ui.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "GPLv2+"
-            ],
-            "authors": [
-                {
-                    "name": "Gary Smirny",
-                    "email": "gary@voceconnect.com"
-                },
-                {
-                    "name": "Mat Gargano",
-                    "email": "mat@voceconnect.com"
-                },
-                {
-                    "name": "Michael Pretty",
-                    "email": "mpretty@voceconnect.com"
-                }
-            ],
-            "description": "A WordPress library to display a user interface to easily select posts from any post type",
-            "time": "2015-03-03 16:03:22"
+            "type": "wordpress-plugin"
         },
         {
             "name": "wordpress/wordpress",
@@ -399,7 +368,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "http://downloads.wordpress.org/plugin/memcached-redux.0.1.3.zip",
+                "url": "https://downloads.wordpress.org/plugin/memcached-redux.0.1.3.zip",
                 "reference": null,
                 "shasum": null
             },
@@ -419,7 +388,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "http://downloads.wordpress.org/plugin/posts-to-posts.1.6.3.zip",
+                "url": "https://downloads.wordpress.org/plugin/posts-to-posts.1.6.3.zip",
                 "reference": null,
                 "shasum": null
             },
@@ -439,7 +408,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "http://downloads.wordpress.org/plugin/titan-framework.1.7.4.zip",
+                "url": "https://downloads.wordpress.org/plugin/titan-framework.1.7.4.zip",
                 "reference": null,
                 "shasum": null
             },
@@ -459,7 +428,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "http://downloads.wordpress.org/plugin/wp-crontrol.1.2.3.zip",
+                "url": "https://downloads.wordpress.org/plugin/wp-crontrol.1.2.3.zip",
                 "reference": null,
                 "shasum": null
             },
@@ -481,7 +450,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "http://downloads.wordpress.org/plugin/developer.1.2.5.zip",
+                "url": "https://downloads.wordpress.org/plugin/developer.1.2.5.zip",
                 "reference": null,
                 "shasum": null
             },
