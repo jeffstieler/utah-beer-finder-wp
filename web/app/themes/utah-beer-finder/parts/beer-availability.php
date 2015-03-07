@@ -3,9 +3,13 @@
 
 $beer_post_id = get_the_ID();
 
-if ( $inventory = dabc_get_inventory( $beer_post_id ) ) :
+$stores = new WP_Query( array(
+	'connected_type'  => 'dabc_store_beers',
+	'connected_items' => $beer_post_id,
+	'posts_per_page'  => -1
+) );
 
-	$store_numbers = array_keys( $inventory );
+if ( $stores->have_posts() ) :
 
 ?>
 	<h3>Store Availability</h3>
@@ -19,11 +23,9 @@ if ( $inventory = dabc_get_inventory( $beer_post_id ) ) :
 			</tr>
 		</thead>
 		<tbody>
-			<?php $stores = dabc_query_stores_by_number( $store_numbers ); ?>
 			<?php while ( $stores->have_posts() ) : ?>
 				<?php $stores->the_post(); ?>
 				<?php $store_post_id = get_the_ID(); ?>
-				<?php $store_number  = dabc_get_store_number( $store_post_id ); ?>
 			<tr>
 				<td>
 					<a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
@@ -31,7 +33,7 @@ if ( $inventory = dabc_get_inventory( $beer_post_id ) ) :
 				<td>
 					<?php dabc_the_store_address( $store_post_id ); ?>
 				</td>
-				<td><?php dabc_the_quantity_for_store( $store_number, $beer_post_id ); ?></td>
+				<td><?php echo p2p_get_meta( get_post()->p2p_id, 'quantity', true ); ?></td>
 			</tr>
 			<?php endwhile; ?>
 		</tbody>
