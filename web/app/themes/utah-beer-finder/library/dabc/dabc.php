@@ -136,6 +136,8 @@ class DABC {
 
 		}
 
+		$this->beers->set_beer_inventory_last_updated( $beer_post_id );
+
 	}
 
 	/**

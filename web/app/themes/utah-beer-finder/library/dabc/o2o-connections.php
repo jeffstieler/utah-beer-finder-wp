@@ -15,10 +15,6 @@ class DABC_O2O_Connections {
 				'quantity'     => array(
 					'title' => 'Quantity',
 					'type'  => 'text'
-				),
-				'last_updated' => array(
-					'title' => 'Last Updated',
-					'type'  => 'text'
 				)
 			)
 		) );
@@ -26,7 +22,7 @@ class DABC_O2O_Connections {
 	}
 
 	/**
-	 * Connect a beer to a store, set it's store quantity and last updated date
+	 * Connect a beer to a store and set it's store quantity
 	 *
 	 * @param int $beer_post_id
 	 * @param int $store_post_id
@@ -39,8 +35,7 @@ class DABC_O2O_Connections {
 			$store_post_id,
 			$beer_post_id,
 			array(
-				'quantity'     => $store_quantity,
-				'last_updated' => date( 'Y-m-d H:i:s' )
+				'quantity' => $store_quantity
 			)
 		);
 
