@@ -10,7 +10,13 @@ class DABC_O2O_Connections {
 			'name'            => self::DABC_STORE_BEERS,
 			'from'            => DABC_Store_Post_Type::POST_TYPE,
 			'to'              => DABC_Beer_Post_Type::POST_TYPE,
-			'can_create_post' => false
+			'can_create_post' => false,
+			'fields'          => array(
+				'quantity' => array(
+					'title' => 'Quantity',
+					'type'  => 'text'
+				)
+			)
 		) );
 
 	}
