@@ -384,19 +384,16 @@ class DABC_Beer_Post_Type {
 	}
 
 	/**
-	 * Store beer inventory information and last updated timestamp
+	 * Update beer inventory last updated timestamp
 	 *
 	 * @param int $beer_post_id
-	 * @param array $inventory
 	 * @return int|bool
 	 */
-	function set_beer_inventory( $beer_post_id, $inventory ) {
+	function set_beer_inventory_last_updated( $beer_post_id ) {
 
 		$last_updated = date( 'Y-m-d H:i:s' );
 
-		update_post_meta( $beer_post_id, self::DABC_LAST_UPDATED, $last_updated );
-
-		return update_post_meta( $beer_post_id, self::DABC_INVENTORY, $inventory );
+		return update_post_meta( $beer_post_id, self::DABC_LAST_UPDATED, $last_updated );
 
 	}
 
