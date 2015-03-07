@@ -15,11 +15,11 @@
 			"package": {
 				"name": "wordpress/wordpress",
 				"type": "webroot",
-				"version": "4.1",
+				"version": "4.1.1",
 				"source": {
 					"type": "git",
 					"url": "https://github.com/WordPress/WordPress.git",
-					"reference": "4.1"
+					"reference": "4.1.1"
 				},
 				"require": {
 					"fancyguy/webroot-installer": "1.0.0"
@@ -102,7 +102,7 @@
 	},
 	"require": {
 		"composer/installers": "~1.0",
-		"wordpress/wordpress": "4.1",
+		"wordpress/wordpress": "4.1.1",
 		"symfony/css-selector": "~2.6",
 		"symfony/dom-crawler": "~2.5",
 		"wpackagist-plugin/titan-framework": "~1.5",

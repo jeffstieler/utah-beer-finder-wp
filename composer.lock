@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "84774dd9cce8f314855b9b75d0dd374e",
+    "hash": "a574a823f6a86c25bfdc27f58a3f04d4",
     "packages": [
         {
             "name": "composer/installers",
@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/installers.git",
-                "reference": "2d91dc9ce37bbf876cd408d483270a07001d8c7d"
+                "reference": "d64e23fce42a4063d63262b19b8e7c0f3b5e4c45"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/installers/zipball/2d91dc9ce37bbf876cd408d483270a07001d8c7d",
-                "reference": "2d91dc9ce37bbf876cd408d483270a07001d8c7d",
+                "url": "https://api.github.com/repos/composer/installers/zipball/d64e23fce42a4063d63262b19b8e7c0f3b5e4c45",
+                "reference": "d64e23fce42a4063d63262b19b8e7c0f3b5e4c45",
                 "shasum": ""
             },
             "replace": {
@@ -63,6 +63,7 @@
                 "Thelia",
                 "WolfCMS",
                 "agl",
+                "aimeos",
                 "annotatecms",
                 "bitrix",
                 "cakephp",
@@ -98,7 +99,7 @@
                 "zend",
                 "zikula"
             ],
-            "time": "2015-01-21 21:08:45"
+            "time": "2015-02-18 17:17:01"
         },
         {
             "name": "fancyguy/webroot-installer",
@@ -159,16 +160,19 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/CssSelector.git",
-                "reference": "1f8617c67bef17192d28c0f2dda3a04b632629bb"
+                "reference": "4e65f063b5a7c33baf4967e486435a9eedddedc8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/CssSelector/zipball/1f8617c67bef17192d28c0f2dda3a04b632629bb",
-                "reference": "1f8617c67bef17192d28c0f2dda3a04b632629bb",
+                "url": "https://api.github.com/repos/symfony/CssSelector/zipball/4e65f063b5a7c33baf4967e486435a9eedddedc8",
+                "reference": "4e65f063b5a7c33baf4967e486435a9eedddedc8",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.9"
+            },
+            "require-dev": {
+                "symfony/phpunit-bridge": "~2.7|~3.0.0"
             },
             "type": "library",
             "extra": {
@@ -201,7 +205,7 @@
             ],
             "description": "Symfony CssSelector Component",
             "homepage": "http://symfony.com",
-            "time": "2015-01-09 06:51:41"
+            "time": "2015-02-18 10:38:04"
         },
         {
             "name": "symfony/dom-crawler",
@@ -210,19 +214,20 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/DomCrawler.git",
-                "reference": "49d1657a690eaa6e8fd4f92d828b89bed05dd55d"
+                "reference": "09f93424f3098ff1c95095de6d8c61032bcd8d89"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/DomCrawler/zipball/49d1657a690eaa6e8fd4f92d828b89bed05dd55d",
-                "reference": "49d1657a690eaa6e8fd4f92d828b89bed05dd55d",
+                "url": "https://api.github.com/repos/symfony/DomCrawler/zipball/09f93424f3098ff1c95095de6d8c61032bcd8d89",
+                "reference": "09f93424f3098ff1c95095de6d8c61032bcd8d89",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.9"
             },
             "require-dev": {
-                "symfony/css-selector": "~2.3|~3.0.0"
+                "symfony/css-selector": "~2.3|~3.0.0",
+                "symfony/phpunit-bridge": "~2.7|~3.0.0"
             },
             "suggest": {
                 "symfony/css-selector": ""
@@ -254,7 +259,7 @@
             ],
             "description": "Symfony DomCrawler Component",
             "homepage": "http://symfony.com",
-            "time": "2015-02-05 06:58:17"
+            "time": "2015-02-18 10:38:04"
         },
         {
             "name": "upstatement/jigsaw",
@@ -332,21 +337,52 @@
         },
         {
             "name": "voceconnect/post-selection-ui",
-            "version": "1.0.12",
+            "version": "1.0.13",
             "source": {
                 "type": "git",
                 "url": "https://github.com/voceconnect/post-selection-ui.git",
-                "reference": "1.0.12"
+                "reference": "7d28d3d4c43cd1d51d30ccb0b7c11c15818fa92e"
             },
-            "type": "wordpress-plugin"
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/voceconnect/post-selection-ui/zipball/7d28d3d4c43cd1d51d30ccb0b7c11c15818fa92e",
+                "reference": "7d28d3d4c43cd1d51d30ccb0b7c11c15818fa92e",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "post-selection-ui.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPLv2+"
+            ],
+            "authors": [
+                {
+                    "name": "Gary Smirny",
+                    "email": "gary@voceconnect.com"
+                },
+                {
+                    "name": "Mat Gargano",
+                    "email": "mat@voceconnect.com"
+                },
+                {
+                    "name": "Michael Pretty",
+                    "email": "mpretty@voceconnect.com"
+                }
+            ],
+            "description": "A WordPress library to display a user interface to easily select posts from any post type",
+            "time": "2015-03-03 16:03:22"
         },
         {
             "name": "wordpress/wordpress",
-            "version": "4.1",
+            "version": "4.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/WordPress/WordPress.git",
-                "reference": "4.1"
+                "reference": "4.1.1"
             },
             "require": {
                 "fancyguy/webroot-installer": "1.0.0"
