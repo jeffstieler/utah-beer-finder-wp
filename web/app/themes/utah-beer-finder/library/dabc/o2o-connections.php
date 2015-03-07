@@ -26,29 +26,6 @@ class DABC_O2O_Connections {
 	}
 
 	/**
-	 * Helper to call a given O2O connetion's set_connected_to() method
-	 *
-	 * @param string $connection_name
-	 * @param int $from_object_id
-	 * @param array|int $connected_to_ids
-	 * @param bool $append
-	 * @return bool|WP_Error true on success, WP_Error on connection not found or other error
-	 */
-	function set_connected_to( $connection_name, $from_object_id, $connected_to_ids = array(), $append = false ) {
-
-		$connection = $this->o2o_connection_factory->get_connection( $connection_name );
-
-		if ( false === $connection ) {
-
-			return new WP_Error( 'invalid_connection_name', 'The given connection name is not valid.' );
-
-		}
-
-		return $connection->set_connected_to( $from_object_id, $connected_to_ids, $append );
-
-	}
-
-	/**
 	 * Connect a beer to a store, set it's store quantity and last updated date
 	 *
 	 * @param int $beer_post_id
