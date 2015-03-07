@@ -12,8 +12,12 @@ class DABC_O2O_Connections {
 			'to'              => DABC_Beer_Post_Type::POST_TYPE,
 			'can_create_post' => false,
 			'fields'          => array(
-				'quantity' => array(
+				'quantity'     => array(
 					'title' => 'Quantity',
+					'type'  => 'text'
+				),
+				'last_updated' => array(
+					'title' => 'Last Updated',
 					'type'  => 'text'
 				)
 			)
@@ -104,15 +108,25 @@ class DABC_O2O_Connections {
 	}
 
 	/**
-	 * Add a beer post to a store's connected beers
+	 * Connect a beer to a store, set it's store quantity and last updated date
 	 *
 	 * @param int $beer_post_id
 	 * @param int $store_post_id
+	 * @param int $store_quantity
 	 * @return bool|WP_Error true on success, WP_Error otherwise
 	 */
-	function add_beer_to_store( $beer_post_id, $store_post_id ) {
+	function add_beer_to_store( $beer_post_id, $store_post_id, $store_quantity ) {
 
-		return $this->set_connected_to( self::DABC_STORE_BEERS, $store_post_id, array( $beer_post_id ), true );
+		$result = p2p_type( self::DABC_STORE_BEERS )->connect(
+			$store_post_id,
+			$beer_post_id,
+			array(
+				'quantity'     => $store_quantity,
+				'last_updated' => date( 'Y-m-d H:i:s' )
+			)
+		);
+
+		return $result;
 
 	}
 
