@@ -25,8 +25,9 @@ web/app/uploads
 !web/app/mu-plugins/disallow-indexing.php
 !web/app/mu-plugins/register-theme-directory.php
 !web/app/mu-plugins/bedrock-autoloader.php
-web/app/themes/utah-beer-finder/vendor/
-web/app/themes/utah-beer-finder/plugins/
+web/app/themes/utah-beer-finder-old/vendor/
+web/app/themes/utah-beer-finder-old/plugins/
+web/app/themes/storefront
 web/app/drop-ins
 
 # Vendor (e.g. Composer)
