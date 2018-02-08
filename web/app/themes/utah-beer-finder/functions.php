@@ -73,10 +73,17 @@ add_action( 'rest_api_init', function() {
 	}
 } );
 
+/**
+ * Allow WooCommerce API keys to authenticate core WP endpoints we need.
+ */
 add_filter( 'woocommerce_rest_is_request_to_rest_api', function( $is_request ) {
 	$rest_prefix = trailingslashit( rest_get_url_prefix() );
 
 	if ( false !== strpos( $_SERVER['REQUEST_URI'], $rest_prefix . 'wp/v2/stores' ) ) {
+		return true;
+	}
+
+	if ( false !== strpos( $_SERVER['REQUEST_URI'], $rest_prefix . 'wp/v2/product' ) ) {
 		return true;
 	}
 
