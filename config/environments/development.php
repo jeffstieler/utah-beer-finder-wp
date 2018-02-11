@@ -2,6 +2,7 @@
 /* Development */
 define('SAVEQUERIES', true);
 define('WP_DEBUG', true);
+define('WP_DEBUG_LOG', true);
 define('SCRIPT_DEBUG', true);
 
 define('GOOGLE_MAPS_API_KEY', env('GOOGLE_MAPS_API_KEY'));
