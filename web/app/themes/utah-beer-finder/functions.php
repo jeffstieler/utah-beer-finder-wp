@@ -8,7 +8,7 @@ add_action( 'manage_product_posts_custom_column', function( $column_name, $post_
 		$product = wc_get_product( $post_id );
 		echo '<p class="description">', $product->get_short_description(), '</p>';
 	}
-}, 10, 2 );
+}, 20, 2 );
 
 /**
  * Add [product_tags] shortcode that outputs with Product Tag widget
