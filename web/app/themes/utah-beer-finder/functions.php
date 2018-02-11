@@ -108,3 +108,30 @@ add_filter( 'woocommerce_rest_is_request_to_rest_api', function( $is_request ) {
 
 	return $is_request;
 } );
+
+/**
+ * Hide empty Stores in the [dt_woo_map] shortcode.
+ */
+$dtwm_map_hide_empty_stores = function( $args, $taxonomies ) {
+	if ( array( 'dtwm_map' ) === $taxonomies ) {
+		$args['hide_empty'] = true;
+	}
+
+	return $args;
+};
+
+add_filter( 'pre_do_shortcode_tag', function( $return, $tag ) use ( $dtwm_map_hide_empty_stores ) {
+	if ( 'dt_woo_map' === $tag ) {
+		add_filter( 'get_terms_args', $dtwm_map_hide_empty_stores, 10, 2 );
+	}
+
+	return $return;
+}, 10, 2 );
+
+add_filter( 'do_shortcode_tag', function( $output, $tag ) use ( $dtwm_map_hide_empty_stores ) {
+	if ( 'dt_woo_map' === $tag ) {
+		remove_filter( 'get_terms_args', $dtwm_map_hide_empty_stores, 10, 2 );
+	}
+
+	return $output;
+}, 10, 2 );
