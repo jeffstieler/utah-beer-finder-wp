@@ -28,8 +28,27 @@ add_shortcode( 'product_tags', function( $atts ) {
  */
 add_filter( 'register_taxonomy_args', function( $args, $name ) {
 	if ( 'dtwm_map' === $name ) {
-		$args['show_in_rest'] = true;
-		$args['rest_base']    = 'stores';
+		$args = array_merge( $args, array(
+			'show_in_rest' => true,
+			'rest_base'    => 'stores',
+			'rewrite'      => array(
+				'slug' => 'stores',
+			),
+			'labels'       => array(
+				'name'              => 'Stores',
+				'singular_name'     => 'Store',
+				'search_items'      => 'Search Stores',
+				'all_items'         => 'All Stores',
+				'parent_item'       => 'Parent Store',
+				'parent_item_colon' => 'Parent Store:',
+				'edit_item'         => 'Edit Store',
+				'update_item'       => 'Update Store',
+				'add_new_item'      => 'Add New Store',
+				'new_item_name'     => 'New Genre Store',
+				'menu_name'         => 'Stores',
+				'not_found'			=> 'No Store found.',
+			),
+		) );
 	}
 
 	return $args;
