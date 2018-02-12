@@ -135,3 +135,21 @@ add_filter( 'do_shortcode_tag', function( $output, $tag ) use ( $dtwm_map_hide_e
 
 	return $output;
 }, 10, 2 );
+
+/**
+ * Show beers of the same style in Product Widgets on single Beer pages.
+ */
+add_filter( 'woocommerce_products_widget_query_args', function( $args ) {
+	if ( is_singular( 'product' ) ) {
+		$product_tags = wp_get_post_terms( get_the_ID(), 'product_tag', array( 'fields' => 'ids' ) );
+
+		$args['tax_query'][] = array(
+			'taxonomy' => 'product_tag',
+			'field'    => 'term_id',
+			'terms'    => $product_tags,
+		);
+	}
+
+	return $args;
+} );
+
