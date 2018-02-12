@@ -153,3 +153,25 @@ add_filter( 'woocommerce_products_widget_query_args', function( $args ) {
 	return $args;
 } );
 
+/**
+ * Show store availability on the single product page
+ */
+add_action( 'woocommerce_after_single_product_summary', function() {
+	global $DT_Woo_Map;
+
+	if ( ! is_a( $DT_Woo_Map, 'DT_Woo_Map' ) ) {
+		return;
+	}
+
+	if ( ! method_exists( $DT_Woo_Map, 'dtwm_get_makersdata_tax' ) ) {
+		return;
+	}
+
+	if ( ! $DT_Woo_Map->dtwm_get_makersdata_tax() ) {
+		return;
+	}
+
+	echo '<h5 class="uppercase mt">Store Availability</h5>';
+	echo do_shortcode( '[dt_woo_single_product_map]' );
+} );
+
