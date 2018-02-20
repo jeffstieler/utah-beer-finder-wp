@@ -175,3 +175,36 @@ add_action( 'woocommerce_after_single_product_summary', function() {
 	echo do_shortcode( '[dt_woo_single_product_map]' );
 } );
 
+/**
+ * Move $options found in $values to the beginning of the array.
+ */
+function ubf_move_selected_sf_inputs_to_top( $options, $values ) {
+	$idx_to_pull = [];
+	$selected    = [];
+
+	foreach ( $options as $idx => $option ) {
+		if ( in_array( $option->value, $values ) ) {
+            array_unshift( $idx_to_pull, $idx );
+		}
+	}
+
+	foreach ( $idx_to_pull as $idx ) {
+        $pulled = array_splice( $options, $idx, 1 );
+
+        array_unshift( $selected, array_pop( $pulled ) );
+	}
+
+	return array_merge( $selected, $options );
+}
+
+/**
+ * Move all selected filter values to the top of the checklist.
+ */
+add_filter( 'sf_input_object_pre', function( $input_args, $sfid ) {
+	if ( 'checkbox' === $input_args['type'] && ! empty( $input_args['defaults'] ) ) {
+		$input_args['options'] = ubf_move_selected_sf_inputs_to_top( $input_args['options'], $input_args['defaults'] );
+	}
+
+	return $input_args;
+}, 10, 2 );
+
