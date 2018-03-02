@@ -4,6 +4,7 @@
 # WordPress
 web/wp
 web/.htaccess
+web/app/debug.log
 
 # WP-CLI
 db-sync
@@ -28,6 +29,7 @@ web/app/uploads
 web/app/themes/utah-beer-finder-old/vendor/
 web/app/themes/utah-beer-finder-old/plugins/
 web/app/themes/storefront
+web/app/themes/flatsome
 web/app/drop-ins
 
 # Vendor (e.g. Composer)
@@ -43,3 +45,6 @@ bin
 
 # Netbeans
 nbproject
+
+# PHPStorm
+.idea
