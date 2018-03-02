@@ -191,3 +191,18 @@ add_filter( 'sf_input_object_pre', function( $input_args, $sfid ) {
 	return $input_args;
 }, 10, 2 );
 
+register_meta( 'post', 'untappd_id', array(
+	'single'       => true,
+	'show_in_rest' => true,
+	'type'         => 'integer',
+) );
+
+add_filter( 'register_post_type_args', function( $args, $post_type ) {
+	if ( 'product' === $post_type ) {
+		$args['show_in_rest'] = true;
+		$args['rest_base']    = 'products';
+	}
+
+	return $args;
+}, 10, 2 );
+
