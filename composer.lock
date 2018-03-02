@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "765232635dd0f81ca975f0dfa18c90ba",
+    "content-hash": "cd40221a999d4681fed7dcd743aab8d4",
     "packages": [
         {
             "name": "composer/installers",
@@ -169,16 +169,6 @@
             "time": "2013-03-15T17:51:14+00:00"
         },
         {
-            "name": "jeffstieler/beautiful-taxonomy-filters",
-            "version": "1.1.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/jeffstieler/beautiful-taxonomy-filters.git",
-                "reference": "80ac8b8da014faa6192b5ab8932030079767e20b"
-            },
-            "type": "wordpress-plugin"
-        },
-        {
             "name": "oscarotero/env",
             "version": "v1.1.0",
             "source": {
@@ -278,187 +268,6 @@
             "time": "2016-03-01T16:27:06+00:00"
         },
         {
-            "name": "symfony/css-selector",
-            "version": "v2.8.34",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/css-selector.git",
-                "reference": "c5b39674eacd34adedbef78227c57109caa9e318"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/css-selector/zipball/c5b39674eacd34adedbef78227c57109caa9e318",
-                "reference": "c5b39674eacd34adedbef78227c57109caa9e318",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.9"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.8-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Symfony\\Component\\CssSelector\\": ""
-                },
-                "exclude-from-classmap": [
-                    "/Tests/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Jean-François Simon",
-                    "email": "jeanfrancois.simon@sensiolabs.com"
-                },
-                {
-                    "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
-                },
-                {
-                    "name": "Symfony Community",
-                    "homepage": "https://symfony.com/contributors"
-                }
-            ],
-            "description": "Symfony CssSelector Component",
-            "homepage": "https://symfony.com",
-            "time": "2018-01-03T07:36:31+00:00"
-        },
-        {
-            "name": "symfony/dom-crawler",
-            "version": "v2.8.34",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/dom-crawler.git",
-                "reference": "31ff8f1d7a3de4b43b35ff821e6e223d81a8988b"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/dom-crawler/zipball/31ff8f1d7a3de4b43b35ff821e6e223d81a8988b",
-                "reference": "31ff8f1d7a3de4b43b35ff821e6e223d81a8988b",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.9",
-                "symfony/polyfill-mbstring": "~1.0"
-            },
-            "require-dev": {
-                "symfony/css-selector": "~2.8|~3.0.0"
-            },
-            "suggest": {
-                "symfony/css-selector": ""
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.8-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Symfony\\Component\\DomCrawler\\": ""
-                },
-                "exclude-from-classmap": [
-                    "/Tests/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
-                },
-                {
-                    "name": "Symfony Community",
-                    "homepage": "https://symfony.com/contributors"
-                }
-            ],
-            "description": "Symfony DomCrawler Component",
-            "homepage": "https://symfony.com",
-            "time": "2018-01-03T07:36:31+00:00"
-        },
-        {
-            "name": "symfony/polyfill-mbstring",
-            "version": "v1.7.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/polyfill-mbstring.git",
-                "reference": "78be803ce01e55d3491c1397cf1c64beb9c1b63b"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/78be803ce01e55d3491c1397cf1c64beb9c1b63b",
-                "reference": "78be803ce01e55d3491c1397cf1c64beb9c1b63b",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.3"
-            },
-            "suggest": {
-                "ext-mbstring": "For best performance"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.7-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Symfony\\Polyfill\\Mbstring\\": ""
-                },
-                "files": [
-                    "bootstrap.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Nicolas Grekas",
-                    "email": "p@tchwork.com"
-                },
-                {
-                    "name": "Symfony Community",
-                    "homepage": "https://symfony.com/contributors"
-                }
-            ],
-            "description": "Symfony polyfill for the Mbstring extension",
-            "homepage": "https://symfony.com",
-            "keywords": [
-                "compatibility",
-                "mbstring",
-                "polyfill",
-                "portable",
-                "shim"
-            ],
-            "time": "2018-01-30T19:27:44+00:00"
-        },
-        {
-            "name": "upstatement/jigsaw",
-            "version": "0.4.11",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/Upstatement/jigsaw.git",
-                "reference": "5c3d9c4fbb095246500c63c2aa9c4cb09bbb8688"
-            },
-            "require": {
-                "composer/installers": "~1.0"
-            },
-            "type": "wordpress-plugin"
-        },
-        {
             "name": "vlucas/phpdotenv",
             "version": "v2.4.0",
             "source": {
@@ -509,26 +318,6 @@
             "time": "2016-09-01T10:05:43+00:00"
         },
         {
-            "name": "voceconnect/objects-to-objects",
-            "version": "1.2.4",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/voceconnect/objects-to-objects.git",
-                "reference": "1.2.4"
-            },
-            "type": "wordpress-plugin"
-        },
-        {
-            "name": "voceconnect/post-selection-ui",
-            "version": "1.0.13",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/voceconnect/post-selection-ui.git",
-                "reference": "1.0.13"
-            },
-            "type": "wordpress-plugin"
-        },
-        {
             "name": "wordpress/wordpress",
             "version": "4.9.2",
             "source": {
@@ -540,6 +329,26 @@
                 "fancyguy/webroot-installer": "1.1.0"
             },
             "type": "webroot"
+        },
+        {
+            "name": "wpackagist-plugin/custom-sidebars",
+            "version": "3.1.2",
+            "source": {
+                "type": "svn",
+                "url": "https://plugins.svn.wordpress.org/custom-sidebars/",
+                "reference": "tags/3.1.2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://downloads.wordpress.org/plugin/custom-sidebars.3.1.2.zip",
+                "reference": null,
+                "shasum": null
+            },
+            "require": {
+                "composer/installers": "~1.0"
+            },
+            "type": "wordpress-plugin",
+            "homepage": "https://wordpress.org/plugins/custom-sidebars/"
         },
         {
             "name": "wpackagist-plugin/memcached-redux",
@@ -562,56 +371,16 @@
             "homepage": "https://wordpress.org/plugins/memcached-redux/"
         },
         {
-            "name": "wpackagist-plugin/posts-to-posts",
-            "version": "1.6.5",
-            "source": {
-                "type": "svn",
-                "url": "https://plugins.svn.wordpress.org/posts-to-posts/",
-                "reference": "tags/1.6.5"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/posts-to-posts.1.6.5.zip",
-                "reference": null,
-                "shasum": null
-            },
-            "require": {
-                "composer/installers": "~1.0"
-            },
-            "type": "wordpress-plugin",
-            "homepage": "https://wordpress.org/plugins/posts-to-posts/"
-        },
-        {
-            "name": "wpackagist-plugin/titan-framework",
-            "version": "1.11",
-            "source": {
-                "type": "svn",
-                "url": "https://plugins.svn.wordpress.org/titan-framework/",
-                "reference": "tags/1.11"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/titan-framework.1.11.zip",
-                "reference": null,
-                "shasum": null
-            },
-            "require": {
-                "composer/installers": "~1.0"
-            },
-            "type": "wordpress-plugin",
-            "homepage": "https://wordpress.org/plugins/titan-framework/"
-        },
-        {
             "name": "wpackagist-plugin/woocommerce",
-            "version": "3.3.0",
+            "version": "3.3.3",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/woocommerce/",
-                "reference": "tags/3.3.0"
+                "reference": "tags/3.3.3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/woocommerce.3.3.0.zip",
+                "url": "https://downloads.wordpress.org/plugin/woocommerce.3.3.3.zip",
                 "reference": null,
                 "shasum": null
             },
@@ -622,16 +391,16 @@
             "homepage": "https://wordpress.org/plugins/woocommerce/"
         },
         {
-            "name": "wpackagist-plugin/wp-crontrol",
-            "version": "1.6.2",
+            "name": "wpackagist-plugin/wp-rest-api-filter-fields",
+            "version": 1,
             "source": {
                 "type": "svn",
-                "url": "https://plugins.svn.wordpress.org/wp-crontrol/",
-                "reference": "tags/1.6.2"
+                "url": "https://plugins.svn.wordpress.org/wp-rest-api-filter-fields/",
+                "reference": "trunk"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/wp-crontrol.1.6.2.zip",
+                "url": "https://downloads.wordpress.org/plugin/wp-rest-api-filter-fields.zip?timestamp=1431008470",
                 "reference": null,
                 "shasum": null
             },
@@ -639,19 +408,39 @@
                 "composer/installers": "~1.0"
             },
             "type": "wordpress-plugin",
-            "homepage": "https://wordpress.org/plugins/wp-crontrol/"
+            "homepage": "https://wordpress.org/plugins/wp-rest-api-filter-fields/"
         },
         {
-            "name": "wpackagist-theme/storefront",
-            "version": "2.2.7",
+            "name": "wpackagist-plugin/yith-woocommerce-catalog-mode",
+            "version": "1.5.9",
             "source": {
                 "type": "svn",
-                "url": "https://themes.svn.wordpress.org/storefront/",
-                "reference": "2.2.7"
+                "url": "https://plugins.svn.wordpress.org/yith-woocommerce-catalog-mode/",
+                "reference": "tags/1.5.9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/theme/storefront.2.2.7.zip",
+                "url": "https://downloads.wordpress.org/plugin/yith-woocommerce-catalog-mode.1.5.9.zip",
+                "reference": null,
+                "shasum": null
+            },
+            "require": {
+                "composer/installers": "~1.0"
+            },
+            "type": "wordpress-plugin",
+            "homepage": "https://wordpress.org/plugins/yith-woocommerce-catalog-mode/"
+        },
+        {
+            "name": "wpackagist-theme/storefront",
+            "version": "2.2.8",
+            "source": {
+                "type": "svn",
+                "url": "https://themes.svn.wordpress.org/storefront/",
+                "reference": "2.2.8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://downloads.wordpress.org/theme/storefront.2.2.8.zip",
                 "reference": null,
                 "shasum": null
             },
@@ -665,16 +454,16 @@
     "packages-dev": [
         {
             "name": "squizlabs/php_codesniffer",
-            "version": "3.2.2",
+            "version": "3.2.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/squizlabs/PHP_CodeSniffer.git",
-                "reference": "d7c00c3000ac0ce79c96fcbfef86b49a71158cd1"
+                "reference": "4842476c434e375f9d3182ff7b89059583aa8b27"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/d7c00c3000ac0ce79c96fcbfef86b49a71158cd1",
-                "reference": "d7c00c3000ac0ce79c96fcbfef86b49a71158cd1",
+                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/4842476c434e375f9d3182ff7b89059583aa8b27",
+                "reference": "4842476c434e375f9d3182ff7b89059583aa8b27",
                 "shasum": ""
             },
             "require": {
@@ -684,7 +473,7 @@
                 "php": ">=5.4.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "^4.0 || ^5.0 || ^6.0"
+                "phpunit/phpunit": "^4.0 || ^5.0 || ^6.0 || ^7.0"
             },
             "bin": [
                 "bin/phpcs",
@@ -712,7 +501,7 @@
                 "phpcs",
                 "standards"
             ],
-            "time": "2017-12-19T21:44:46+00:00"
+            "time": "2018-02-20T21:35:23+00:00"
         }
     ],
     "aliases": [],
