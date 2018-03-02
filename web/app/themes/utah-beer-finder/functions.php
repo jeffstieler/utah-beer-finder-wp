@@ -136,6 +136,72 @@ add_filter( 'woocommerce_products_widget_query_args', function( $args ) {
 	return $args;
 } );
 
+function ubf_single_product_checkins_map() {
+	global $post;
+
+	$markers_query = new WP_Query( array(
+		'post_type'      => 'checkin',
+		'post_parent'    => $post->ID,
+		'post_status'    => 'publish',
+		'posts_per_page' => 50,
+	) );
+
+	if ( ! $markers_query->have_posts() ) {
+		return;
+	}
+
+	extract( array(
+		'maptype'     => dtwm_get_option('map_type','roadmap'),
+		'filter'      => dtwm_get_option('show_filter','true'),
+		'scrollwheel' => dtwm_get_option('scrollwheel', 'false'),
+		'width'       => dtwm_get_option('dtwm_width','auto'),
+		'height'      => dtwm_get_option('dtwm_height','450'),
+	) );
+
+	$html = '';
+	ob_start();
+	?>
+	<h3>Checkins</h3>
+	<div id="dt-woo-map-sc">
+		<script>
+			// Map Configuration
+			var dtwmMapOptions = {
+				scrollwheel: <?php echo $scrollwheel; ?>,
+				mapType: '<?php echo $maptype; ?>',
+				filter: '<?php echo $filter; ?>',
+				width:'<?php echo $width; ?>',
+				height: '<?php echo (int) $height; ?>',
+				catIDs: '',
+				zoom: 0,
+			};
+			// Defining markers information
+			var DTWMMarkersData = [
+				<?php
+				while ( $markers_query->have_posts() ) :
+				$markers_query->the_post();
+				$checkin = json_decode( get_the_content() );
+				?>
+				{
+					lat: <?php echo esc_js( $checkin->venue->location->lat ); ?>,
+					lng: <?php echo esc_js( $checkin->venue->location->lng ); ?>,
+					name: ( new Date( '<?php echo esc_js( $checkin->created_at ); ?>' ) ).toLocaleDateString( 'en-US' ),
+					content: '<?php echo esc_js( $checkin->venue->venue_name ); ?>',
+					title_term: '',
+					directions: '',
+				},
+				<?php endwhile; wp_reset_postdata(); ?>
+			];
+		</script>
+
+		<div id="dt-woo-map-content">
+			<div id="dtwm-map-canvas" class="dt-woo-map-box"></div>
+		</div>
+	</div><!-- /#dt-woo-map -->
+	<?php
+	$html = ob_get_clean();
+	return $html;
+}
+
 /**
  * Show store availability on the single product page
  */
@@ -150,12 +216,13 @@ add_action( 'woocommerce_after_single_product_summary', function() {
 		return;
 	}
 
-	if ( ! $DT_Woo_Map->dtwm_get_makersdata_tax() ) {
+	if ( $DT_Woo_Map->dtwm_get_makersdata_tax() ) {
+		echo '<h3>Store Availability</h3>';
+		echo do_shortcode( '[dt_woo_single_product_map]' );
 		return;
 	}
 
-	echo '<h5 class="uppercase mt">Store Availability</h5>';
-	echo do_shortcode( '[dt_woo_single_product_map]' );
+	echo ubf_single_product_checkins_map();
 } );
 
 /**
