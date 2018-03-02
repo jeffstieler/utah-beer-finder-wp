@@ -295,3 +295,18 @@ register_post_type( 'checkin', array(
 	'hierarchical'        => true,
 ) );
 
+/**
+ * Remove "products tagged" labeling from breadcrumbs.
+ */
+add_filter( 'woocommerce_get_breadcrumb', function( $crumbs ) {
+	if ( is_product_tag() ) {
+		$current_term = get_queried_object();
+
+		array_pop( $crumbs );
+
+		$crumbs[] = array( $current_term->name, '' );
+	}
+
+	return $crumbs;
+} );
+
