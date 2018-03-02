@@ -78,7 +78,7 @@
 		"wpackagist-plugin/woocommerce": "^3.3.0",
 		"wpackagist-theme/storefront": "^2.2.7",
 		"wpackagist-plugin/custom-sidebars": "^3.1.2",
-		"wpackagist-plugin/wp-rest-api-filter-fields": "^1",
+		"wpackagist-plugin/rest-api-filter-fields": "^1.0.7",
 		"wpackagist-plugin/yith-woocommerce-catalog-mode": "^1.5.9",
 		"wp-sync-db/wp-sync-db": "*",
 		"wp-sync-db/wp-sync-db-media-files": "*"

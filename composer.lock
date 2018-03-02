@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "7122369ed0226db8f0d86fea855f8f28",
+    "content-hash": "fc6a9b3d78f769be897a1a3d2dee36d9",
     "packages": [
         {
             "name": "composer/installers",
@@ -393,6 +393,26 @@
             "homepage": "https://wordpress.org/plugins/memcached-redux/"
         },
         {
+            "name": "wpackagist-plugin/rest-api-filter-fields",
+            "version": "1.0.7",
+            "source": {
+                "type": "svn",
+                "url": "https://plugins.svn.wordpress.org/rest-api-filter-fields/",
+                "reference": "tags/1.0.7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://downloads.wordpress.org/plugin/rest-api-filter-fields.1.0.7.zip",
+                "reference": null,
+                "shasum": null
+            },
+            "require": {
+                "composer/installers": "~1.0"
+            },
+            "type": "wordpress-plugin",
+            "homepage": "https://wordpress.org/plugins/rest-api-filter-fields/"
+        },
+        {
             "name": "wpackagist-plugin/woocommerce",
             "version": "3.3.3",
             "source": {
@@ -411,26 +431,6 @@
             },
             "type": "wordpress-plugin",
             "homepage": "https://wordpress.org/plugins/woocommerce/"
-        },
-        {
-            "name": "wpackagist-plugin/wp-rest-api-filter-fields",
-            "version": 1,
-            "source": {
-                "type": "svn",
-                "url": "https://plugins.svn.wordpress.org/wp-rest-api-filter-fields/",
-                "reference": "trunk"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/wp-rest-api-filter-fields.zip?timestamp=1431008470",
-                "reference": null,
-                "shasum": null
-            },
-            "require": {
-                "composer/installers": "~1.0"
-            },
-            "type": "wordpress-plugin",
-            "homepage": "https://wordpress.org/plugins/wp-rest-api-filter-fields/"
         },
         {
             "name": "wpackagist-plugin/yith-woocommerce-catalog-mode",
