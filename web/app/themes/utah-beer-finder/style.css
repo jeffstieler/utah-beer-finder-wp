@@ -4,29 +4,54 @@ Description:        Find the best beer available in Utah
 Version:            0.1
 Author:             Jeff Stieler
 Author URI:         http://jeffstieler.com/
-Template:           flatsome
+Template:           storefront
 License:            MIT License
 License URI:        http://www.opensource.org/licenses/mit-license.php
 */
 
-/* ----------------------------------------------------------------------------
+.searchandfilter > ul > li[data-sf-field-input-type="checkbox"] > ul,
+.searchandfilter > ul > li[data-sf-field-input-type="radio"] > ul
+{
+  max-height: 300px;
+  overflow: auto;
+}
 
-  Unfortunately WordPress will require a style.css file
-  located in the theme's root folder for stuff to work.
+.single-product div.product p.price {
+  float: right;
+}
 
-  However, we will not be using vanilla CSS. We're using Sass.
+.single-product div.product form.cart {
+  display: none;
+}
 
-  Sass is a superset of CSS that adds in amazing features
-  such as variables, nested selectors and loops. It's also
-  the easiest way to customize Foundation.
+.single-product div.product .summary {
+  width: 69%;
+}
 
-  All Sass files are located in the /scss folder.
+.single-product div.product .woocommerce-product-gallery {
+  width: 25%;
+}
 
-  Please read the README.md file before getting started. More info on how
-  to use Sass with Foundation can be found here:
-  http://foundation.zurb.com/docs/sass.html
+.main-navigation ul.menu > li > a, .main-navigation ul.nav-menu > li > a {
+  padding-top: .7em;
+}
 
-  If you for some reason would like to write plain css instead of using Sass,
-  you could just enqueue this file (style.css) to the header and add your styles in this file
+.woocommerce-breadcrumb {
+  background-color: #f0f0f0;
+}
 
----------------------------------------------------------------------------- */
+ul.products li.product img.woocommerce-placeholder {
+  max-width: 100px;
+}
+
+#dtwm_container p {
+  margin-bottom: 0;
+}
+
+#dtwm_container .dtwm_content > div {
+  width: 48%;
+}
+
+.dtwm_bottom_gradient {
+  height: 0;
+}
