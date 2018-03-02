@@ -206,3 +206,25 @@ add_filter( 'register_post_type_args', function( $args, $post_type ) {
 	return $args;
 }, 10, 2 );
 
+register_post_type( 'checkin', array(
+	'public'              => true,
+	'exclude_from_search' => true,
+	'show_in_rest'        => true,
+	'rest_base'           => 'checkins',
+	'labels'              => array(
+		'name'              => 'Checkins',
+		'singular_name'     => 'Checkin',
+		'search_items'      => 'Search Checkins',
+		'all_items'         => 'All Checkins',
+		'parent_item'       => 'Parent Product',
+		'parent_item_colon' => 'Parent Product:',
+		'edit_item'         => 'Edit Checkin',
+		'update_item'       => 'Update Checkin',
+		'add_new_item'      => 'Add New Checkin',
+		'new_item_name'     => 'New Checkin',
+		'menu_name'         => 'Checkins',
+		'not_found'         => 'No Checkin found.',
+	),
+	'hierarchical'        => true,
+) );
+
