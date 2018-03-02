@@ -15,8 +15,8 @@ sql-dump-*.sql
 !.env.example
 
 # Application
-web/app/plugins
-!web/app/plugins/.gitkeep
+web/app/plugins/*
+!web/app/plugins/ubf-rest-auth
 web/app/mu-plugins
 !web/app/mu-plugins/.gitkeep
 web/app/upgrade
