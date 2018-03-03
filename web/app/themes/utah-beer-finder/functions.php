@@ -131,6 +131,8 @@ add_filter( 'woocommerce_products_widget_query_args', function( $args ) {
 			'field'    => 'term_id',
 			'terms'    => $product_tags,
 		);
+
+		$args['post__not_in'] = array( get_the_ID() );
 	}
 
 	return $args;
