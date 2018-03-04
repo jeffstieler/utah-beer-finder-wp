@@ -52,6 +52,45 @@
 			}
 		},
 		{
+			"type": "package",
+			"package": {
+				"name": "jeffstieler/dt-woo-map",
+				"type": "wordpress-plugin",
+				"version": "master",
+				"source": {
+					"type": "git",
+					"url": "git@bitbucket.org:jeffstieler/dt-woo-map.git",
+					"reference": "master"
+				}
+			}
+		},
+		{
+			"type": "package",
+			"package": {
+				"name": "jeffstieler/search-filter-pro",
+				"type": "wordpress-plugin",
+				"version": "master",
+				"source": {
+					"type": "git",
+					"url": "git@bitbucket.org:jeffstieler/search-filter-pro.git",
+					"reference": "master"
+				}
+			}
+		},
+		{
+			"type": "package",
+			"package": {
+				"name": "jeffstieler/storefront-powerpack",
+				"type": "wordpress-plugin",
+				"version": "master",
+				"source": {
+					"type": "git",
+					"url": "git@bitbucket.org:jeffstieler/storefront-powerpack.git",
+					"reference": "master"
+				}
+			}
+		},
+		{
 			"type": "composer",
 			"url": "https://wpackagist.org"
 		}
@@ -81,7 +120,10 @@
 		"wpackagist-plugin/rest-api-filter-fields": "^1.0.7",
 		"wpackagist-plugin/yith-woocommerce-catalog-mode": "^1.5.9",
 		"wp-sync-db/wp-sync-db": "*",
-		"wp-sync-db/wp-sync-db-media-files": "*"
+		"wp-sync-db/wp-sync-db-media-files": "*",
+		"jeffstieler/dt-woo-map": "*",
+		"jeffstieler/search-filter-pro": "*",
+		"jeffstieler/storefront-powerpack": "*"
 	},
 	"require-dev" : {
 		"squizlabs/php_codesniffer": "^3.0.2"

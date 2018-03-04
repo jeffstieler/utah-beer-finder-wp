@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "fc6a9b3d78f769be897a1a3d2dee36d9",
+    "content-hash": "112fc8a0e04a543de5fda48bbe0fd6bf",
     "packages": [
         {
             "name": "composer/installers",
@@ -167,6 +167,39 @@
             "description": "A composer installer for libraries that live in an application webroot.",
             "homepage": "http://fancyguy.github.com/webroot-installer/",
             "time": "2013-03-15T17:51:14+00:00"
+        },
+        {
+            "name": "jeffstieler/dt-woo-map",
+            "version": "master",
+            "source": {
+                "type": "git",
+                "url": "git@bitbucket.org:jeffstieler/dt-woo-map.git",
+                "reference": "master"
+            },
+            "type": "wordpress-plugin",
+            "time": "2018-03-04T01:51:22+00:00"
+        },
+        {
+            "name": "jeffstieler/search-filter-pro",
+            "version": "master",
+            "source": {
+                "type": "git",
+                "url": "git@bitbucket.org:jeffstieler/search-filter-pro.git",
+                "reference": "master"
+            },
+            "type": "wordpress-plugin",
+            "time": "2018-03-04T01:43:45+00:00"
+        },
+        {
+            "name": "jeffstieler/storefront-powerpack",
+            "version": "master",
+            "source": {
+                "type": "git",
+                "url": "git@bitbucket.org:jeffstieler/storefront-powerpack.git",
+                "reference": "master"
+            },
+            "type": "wordpress-plugin",
+            "time": "2018-03-04T01:48:38+00:00"
         },
         {
             "name": "oscarotero/env",
