@@ -323,3 +323,7 @@ add_filter( 'woocommerce_get_breadcrumb', function( $crumbs ) {
 	return $crumbs;
 } );
 
+add_action( 'after_setup_theme', function() {
+	remove_action( 'storefront_footer', 'storefront_handheld_footer_bar', 999 );
+} );
+
