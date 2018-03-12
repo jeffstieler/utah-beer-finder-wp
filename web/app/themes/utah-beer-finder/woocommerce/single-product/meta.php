@@ -16,9 +16,17 @@ global $product;
 
 	<?php endif; ?>
 
-	<?php echo wc_get_product_category_list( $product->get_id(), ', ', '<span class="posted_in">' . _n( 'Brewery:', 'Breweries:', count( $product->get_category_ids() ), 'utah-beer-finder' ) . ' ', '</span>' ); ?>
+	<?php if ( ! is_product_category() ) : ?>
 
-	<?php echo wc_get_product_tag_list( $product->get_id(), ', ', '<span class="tagged_as">' . _n( 'Style:', 'Styles:', count( $product->get_tag_ids() ), 'utah-beer-finder' ) . ' ', '</span>' ); ?>
+		<?php echo wc_get_product_category_list( $product->get_id(), ', ', '<span class="posted_in">' . _n( 'Brewery:', 'Breweries:', count( $product->get_category_ids() ), 'utah-beer-finder' ) . ' ', '</span>' ); ?>
+
+	<?php endif; ?>
+
+	<?php if ( ! is_product_tag() ) : ?>
+
+		<?php echo wc_get_product_tag_list( $product->get_id(), ', ', '<span class="tagged_as">' . _n( 'Style:', 'Styles:', count( $product->get_tag_ids() ), 'utah-beer-finder' ) . ' ', '</span>' ); ?>
+
+	<?php endif; ?>
 
 	<?php do_action( 'woocommerce_product_meta_end' ); ?>
 
