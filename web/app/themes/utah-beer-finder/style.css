@@ -26,6 +26,11 @@ License URI:        http://www.opensource.org/licenses/mit-license.php
 
 .single-product div.product .summary {
   width: 69%;
+  margin-bottom: 0;
+}
+
+.single-product div.product .woocommerce-tabs {
+  padding-bottom: 0;
 }
 
 .single-product div.product .woocommerce-product-gallery {
@@ -54,4 +59,31 @@ ul.products li.product img.woocommerce-placeholder {
 
 .dtwm_bottom_gradient {
   height: 0;
+}
+
+ul.products li.product .product_meta .posted_in,
+ul.products li.product .product_meta .sku_wrapper,
+ul.products li.product .product_meta .tagged_as {
+  display: block;
+}
+
+@media only screen and ( max-width: 767px ) {
+  .single-product div.product .summary,
+  .single-product div.product .woocommerce-tabs {
+    width: 100%;
+  }
+
+  .single-product div.product .images,
+  .single-product div.product .summary,
+  .single-product div.product .woocommerce-product-gallery {
+    margin-bottom: 1em;
+  }
+}
+
+.site-footer {
+   padding: 0;
+ }
+
+.site-footer .col-full .site-info {
+  padding: 1em 0;
 }
