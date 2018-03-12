@@ -325,5 +325,8 @@ add_filter( 'woocommerce_get_breadcrumb', function( $crumbs ) {
 
 add_action( 'after_setup_theme', function() {
 	remove_action( 'storefront_footer', 'storefront_handheld_footer_bar', 999 );
+	remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_excerpt', 20 );
+	add_action( 'woocommerce_after_shop_loop_item', 'woocommerce_template_single_meta' );
+	add_filter( 'woocommerce_single_product_photoswipe_enabled', '__return_false' );
 } );
 
