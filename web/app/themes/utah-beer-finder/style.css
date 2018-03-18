@@ -108,3 +108,7 @@ ul.products li.product .product_meta .tagged_as {
     padding: 0 .5em;
   }
 }
+
+.astm-search-menu.default form {
+  max-width: inherit;
+}
