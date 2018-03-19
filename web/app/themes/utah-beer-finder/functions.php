@@ -54,10 +54,10 @@ add_filter( 'register_taxonomy_args', function( $args, $name ) {
 	return $args;
 }, 10, 2 );
 
-/**
- * Add WooCommerce Maps Store Locator store fields to the REST API
- */
 add_action( 'rest_api_init', function() {
+	/**
+	 * Add WooCommerce Maps Store Locator store fields to the REST API
+	 */
 	$fields = array(
 		'latitude' => array(
 			'id'    => 'dtwm_lat',
@@ -90,6 +90,19 @@ add_action( 'rest_api_init', function() {
 			),
 		) );
 	}
+
+	/**
+	 * Add WooCommerce Maps Store Locator store fields to the REST API
+	 */
+	register_rest_field( 'product', 'stores', array(
+		'get_callback' => function( $product ) {
+			return wc_get_object_terms( $product['id'], 'dtwm_map', 'term_id' );
+		},
+		'schema' => array(
+			'description' => 'Stores',
+			'type'        => 'array',
+		),
+	) );
 } );
 
 /**
@@ -329,4 +342,3 @@ add_action( 'after_setup_theme', function() {
 	add_action( 'woocommerce_after_shop_loop_item', 'woocommerce_template_single_meta' );
 	add_filter( 'woocommerce_single_product_photoswipe_enabled', '__return_false' );
 } );
-
