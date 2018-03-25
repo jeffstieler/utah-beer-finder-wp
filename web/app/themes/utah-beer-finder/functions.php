@@ -415,7 +415,8 @@ add_shortcode( 'ubf_checkins_map', function() {
 	$all_checkins = new WP_Query( array(
 		'post_type'      => 'checkin',
 		'post_status'    => 'publish',
-		'posts_per_page' => -1,
+		'posts_per_page' => 1000,
+		'orderby'        => 'title',
 	) );
 
 	$checkins = ubf_checkin_query_to_map_data( $all_checkins );
