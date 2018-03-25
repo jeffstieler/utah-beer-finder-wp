@@ -313,8 +313,10 @@ add_action( 'woocommerce_after_single_product_summary', function() {
 		return;
 	}
 
-	echo '<h3>Where To Find</h3>';
-	echo ubf_checkins_map( $checkins );
+	if ( $checkins ) {
+		echo '<h3>Where To Find</h3>';
+		echo ubf_checkins_map( $checkins );
+	}
 } );
 
 /**
