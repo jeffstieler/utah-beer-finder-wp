@@ -408,3 +408,15 @@ add_action( 'after_setup_theme', function() {
 	add_action( 'woocommerce_after_shop_loop_item', 'woocommerce_template_single_meta' );
 	add_filter( 'woocommerce_single_product_photoswipe_enabled', '__return_false' );
 } );
+
+add_shortcode( 'ubf_checkins_map', function() {
+	$all_checkins = new WP_Query( array(
+		'post_type'      => 'checkin',
+		'post_status'    => 'publish',
+		'posts_per_page' => -1,
+	) );
+
+	$checkins = ubf_checkin_query_to_map_data( $all_checkins );
+
+	return ubf_checkins_map( $checkins );
+} );
