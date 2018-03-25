@@ -198,7 +198,7 @@ function ubf_single_product_checkins_map() {
 				width:'<?php echo $width; ?>',
 				height: '<?php echo (int) $height; ?>',
 				catIDs: '',
-				zoom: 0,
+				zoom: <?php echo count( $checkin_data ) === 1 ? 18 : 0 ?>,
 			};
 			// Defining markers information
 			var DTWMMarkersData = [
