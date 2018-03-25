@@ -162,17 +162,29 @@ add_filter( 'woocommerce_cached_widget_id', function( $widget_id ) {
 	return $widget_id;
 } );
 
-function ubf_single_product_checkins_map() {
-	global $post;
+function ubf_get_checkins_js_data( $checkins ) {
+	ob_start();
 
-	$markers_query = new WP_Query( array(
-		'post_type'      => 'checkin',
-		'post_parent'    => $post->ID,
-		'post_status'    => 'publish',
-		'posts_per_page' => 50,
-	) );
+	foreach ( $checkins as $checkin ) : ?>
+		{
+			lat: <?php echo esc_js( $checkin['lat'] ); ?>,
+			lng: <?php echo esc_js( $checkin['lng'] ); ?>,
+			name: '<?php echo esc_js( $checkin['name'] ); ?>',
+			content: '<?php echo wp_kses_post( $checkin['content'] ); ?>',
+			title_term: '',
+			directions: '',
+			icon: '<?php echo esc_js( empty( $checkin['icon'] ) ? '' : $checkin['icon'] ); ?>',
+			url_term: '<?php echo esc_js( $checkin['url_term'] ); ?>',
+			title_term: '<?php echo esc_js( $checkin['title_term'] ); ?>',
+			directions: '<?php echo esc_js( $checkin['directions'] ); ?>',
+		},
+	<?php endforeach;
 
-	if ( ! $markers_query->have_posts() ) {
+	return ob_get_clean();
+}
+
+function ubf_checkins_map( $checkin_data ) {
+	if ( empty( $checkin_data ) ) {
 		return;
 	}
 
@@ -187,7 +199,6 @@ function ubf_single_product_checkins_map() {
 	$html = '';
 	ob_start();
 	?>
-	<h3>Checkins</h3>
 	<div id="dt-woo-map-sc">
 		<script>
 			// Map Configuration
@@ -202,20 +213,7 @@ function ubf_single_product_checkins_map() {
 			};
 			// Defining markers information
 			var DTWMMarkersData = [
-				<?php
-				while ( $markers_query->have_posts() ) :
-				$markers_query->the_post();
-				$checkin = json_decode( get_the_content() );
-				?>
-				{
-					lat: <?php echo esc_js( $checkin->venue->location->lat ); ?>,
-					lng: <?php echo esc_js( $checkin->venue->location->lng ); ?>,
-					name: ( new Date( '<?php echo esc_js( $checkin->created_at ); ?>' ) ).toLocaleDateString( 'en-US' ),
-					content: '<?php echo esc_js( $checkin->venue->venue_name ); ?>',
-					title_term: '',
-					directions: '',
-				},
-				<?php endwhile; wp_reset_postdata(); ?>
+				<?php echo ubf_get_checkins_js_data( $checkin_data ); ?>
 			];
 		</script>
 
@@ -228,11 +226,58 @@ function ubf_single_product_checkins_map() {
 	return $html;
 }
 
+function ubf_get_checkin_map_infowindow( $checkin ) {
+	ob_start();
+	?>
+		<div style="float:left;">
+			<p><strong>Beer:</strong> <?php echo esc_html( $checkin->beer->beer_name ); ?></p>
+			<p><strong>User:</strong> <?php echo esc_html( $checkin->user->user_name ); ?><p>
+		</div>
+		<div style="float:right;">
+			<p><strong>Venue Address:</strong></p>
+			<p><?php echo esc_html( $checkin->venue->location->venue_address ); ?></p>
+			<p><?php echo esc_html( sprintf( '%s, %s', $checkin->venue->location->venue_city, $checkin->venue->location->venue_state ) ); ?></p>
+		</div>
+	<?php
+	$info_window = ob_get_clean();
+
+	return preg_replace('/[\r\n\t]/', '', $info_window );
+}
+
+function ubf_checkin_query_to_map_data( WP_Query $checkins_query, $defaults = null ) {
+	$checkins = array();
+
+	if ( is_null( $defaults ) ) {
+		$defaults = array(
+			'icon' => DTWM_PLUGIN_URL . 'assets/images/icon-3.png',
+		);
+	}
+
+	while ( $checkins_query->have_posts() ) {
+		$checkins_query->the_post();
+		$checkin = json_decode( get_the_content() );
+
+		$checkins[] = array_merge( $defaults, array(
+			'lat'     => $checkin->venue->location->lat,
+			'lng'     => $checkin->venue->location->lng,
+			'name'    => $checkin->venue->venue_name . ' - ' . date( 'n/j/Y', strtotime( $checkin->created_at ) ),
+			'content' => ubf_get_checkin_map_infowindow( $checkin ),
+			'url_term'   => sprintf( 'https://untappd.com/user/%s/checkin/%s', $checkin->user->user_name, $checkin->checkin_id ),
+			'title_term' => 'View Check-In',
+			'directions' => 'Get Directions',
+		) );
+	}
+
+	wp_reset_postdata();
+
+	return $checkins;
+}
+
 /**
- * Show store availability on the single product page
+ * Show store availability and checkins on the single product page
  */
 add_action( 'woocommerce_after_single_product_summary', function() {
-	global $DT_Woo_Map;
+	global $DT_Woo_Map, $post;
 
 	if ( ! is_a( $DT_Woo_Map, 'DT_Woo_Map' ) ) {
 		return;
@@ -242,13 +287,34 @@ add_action( 'woocommerce_after_single_product_summary', function() {
 		return;
 	}
 
+	$product_checkins = new WP_Query( array(
+		'post_type'      => 'checkin',
+		'post_parent'    => $post->ID,
+		'post_status'    => 'publish',
+		'posts_per_page' => 50,
+	) );
+
+	$checkins = ubf_checkin_query_to_map_data( $product_checkins );
+
 	if ( $DT_Woo_Map->dtwm_get_makersdata_tax() ) {
-		echo '<h3>Store Availability</h3>';
+		echo '<h3>Where To Find</h3>';
 		echo do_shortcode( '[dt_woo_single_product_map]' );
+
+		if ( $checkins ) {
+			?>
+			<script>
+				 DTWMMarkersData && Array.prototype.push.apply( DTWMMarkersData, [
+					<?php echo ubf_get_checkins_js_data( $checkins ); ?>
+				] );
+			</script>
+			<?php
+		}
+
 		return;
 	}
 
-	echo ubf_single_product_checkins_map();
+	echo '<h3>Where To Find</h3>';
+	echo ubf_checkins_map( $checkins );
 } );
 
 /**
