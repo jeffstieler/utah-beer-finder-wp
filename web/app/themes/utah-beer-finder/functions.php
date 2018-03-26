@@ -226,18 +226,33 @@ function ubf_checkins_map( $checkin_data ) {
 	return $html;
 }
 
-function ubf_get_checkin_map_infowindow( $checkin ) {
+function ubf_get_checkin_map_infowindow( $checkin, $beer_product_id ) {
 	ob_start();
 	?>
-		<div style="float:left;">
-			<p><strong>Beer:</strong> <?php echo esc_html( $checkin->beer->beer_name ); ?></p>
-			<p><strong>User:</strong> <?php echo esc_html( $checkin->user->user_name ); ?><p>
-		</div>
-		<div style="float:right;">
-			<p><strong>Venue Address:</strong></p>
-			<p><?php echo esc_html( $checkin->venue->location->venue_address ); ?></p>
-			<p><?php echo esc_html( sprintf( '%s, %s', $checkin->venue->location->venue_city, $checkin->venue->location->venue_state ) ); ?></p>
-		</div>
+	<?php if ( $checkin->checkin_comment ) : ?>
+		<blockquote>
+			<?php echo esc_html( $checkin->checkin_comment ), ' '; ?>
+			&mdash;&nbsp;<?php echo esc_html( $checkin->user->user_name ); ?>
+		</blockquote>
+	<?php endif; ?>
+		<p>
+			<strong>Beer:</strong>&nbsp;
+			<a href="<?php echo esc_url( get_permalink( $beer_product_id ) ); ?>">
+				<?php echo esc_html( $checkin->beer->beer_name ); ?>
+			</a>
+		</p>
+	<?php if ( ! $checkin->checkin_comment ) : ?>
+		<p>
+			<strong>User:</strong>&nbsp;
+			<?php echo esc_html( $checkin->user->user_name ); ?>
+		</p>
+	<?php endif; ?>
+	<?php if ( $checkin->rating_score ) : ?>
+		<p>
+			<strong>Rating:</strong>&nbsp;
+			<?php echo esc_html( $checkin->rating_score ); ?>
+		</p>
+	<?php endif; ?>
 	<?php
 	$info_window = ob_get_clean();
 
@@ -255,13 +270,14 @@ function ubf_checkin_query_to_map_data( WP_Query $checkins_query, $defaults = nu
 
 	while ( $checkins_query->have_posts() ) {
 		$checkins_query->the_post();
+		$beer_product_id = wp_get_post_parent_id( get_the_ID() );
 		$checkin = json_decode( get_the_content() );
 
 		$checkins[] = array_merge( $defaults, array(
 			'lat'     => $checkin->venue->location->lat,
 			'lng'     => $checkin->venue->location->lng,
 			'name'    => $checkin->venue->venue_name . ' - ' . date( 'n/j/Y', strtotime( $checkin->created_at ) ),
-			'content' => ubf_get_checkin_map_infowindow( $checkin ),
+			'content' => ubf_get_checkin_map_infowindow( $checkin, $beer_product_id ),
 			'url_term'   => sprintf( 'https://untappd.com/user/%s/checkin/%s', $checkin->user->user_name, $checkin->checkin_id ),
 			'title_term' => 'View Check-In',
 			'directions' => 'Get Directions',

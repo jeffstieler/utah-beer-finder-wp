@@ -61,6 +61,10 @@ ul.products li.product img.woocommerce-placeholder {
   height: 0;
 }
 
+#dtwm_container .dtwm_content > blockquote {
+  margin: 0 0 1em 0;
+}
+
 ul.products li.product .product_meta .posted_in,
 ul.products li.product .product_meta .sku_wrapper,
 ul.products li.product .product_meta .tagged_as {
