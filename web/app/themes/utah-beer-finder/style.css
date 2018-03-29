@@ -116,3 +116,14 @@ ul.products li.product .product_meta .tagged_as {
 .astm-search-menu.default form {
   max-width: inherit;
 }
+
+.page-template-template-homepage.has-post-thumbnail .type-page.has-post-thumbnail {
+  padding-top: 2.617924em;
+  min-height: 700px;
+}
+
+.page-template-template-homepage .hentry,
+.page-template-template-homepage .content-area,
+.page-template-template-homepage .site-main {
+  margin-bottom: 0px;
+}
