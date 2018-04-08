@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "e006a916a53ad2fa538e25ec4adbf927",
+    "content-hash": "65b769fe5014f87c948766ca8b51100d",
     "packages": [
         {
             "name": "composer/installers",
@@ -306,12 +306,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/vlucas/phpdotenv.git",
-                "reference": "90b2f4112475578eb60269266e79514e1b4128b6"
+                "reference": "fe2a5c22c94949983be10263417f47f8551d5946"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/vlucas/phpdotenv/zipball/90b2f4112475578eb60269266e79514e1b4128b6",
-                "reference": "90b2f4112475578eb60269266e79514e1b4128b6",
+                "url": "https://api.github.com/repos/vlucas/phpdotenv/zipball/fe2a5c22c94949983be10263417f47f8551d5946",
+                "reference": "fe2a5c22c94949983be10263417f47f8551d5946",
                 "shasum": ""
             },
             "require": {
@@ -333,7 +333,7 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "BSD-3-Clause-Attribution"
+                "BSD-3-Clause"
             ],
             "authors": [
                 {
@@ -348,42 +348,20 @@
                 "env",
                 "environment"
             ],
-            "time": "2018-01-28T23:08:18+00:00"
+            "time": "2018-03-19T21:27:48+00:00"
         },
         {
             "name": "wordpress/wordpress",
-            "version": "4.9.4",
+            "version": "4.9.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/WordPress/WordPress.git",
-                "reference": "4.9.4"
+                "reference": "4.9.5"
             },
             "require": {
                 "fancyguy/webroot-installer": "1.1.0"
             },
             "type": "webroot"
-        },
-        {
-            "name": "wp-sync-db/wp-sync-db",
-            "version": "master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/wp-sync-db/wp-sync-db.git",
-                "reference": "master"
-            },
-            "type": "wordpress-plugin",
-            "time": "2016-04-24T08:56:12+00:00"
-        },
-        {
-            "name": "wp-sync-db/wp-sync-db-media-files",
-            "version": "master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/wp-sync-db/wp-sync-db-media-files.git",
-                "reference": "master"
-            },
-            "type": "wordpress-plugin",
-            "time": "2016-03-07T16:34:12+00:00"
         },
         {
             "name": "wpackagist-plugin/add-search-to-menu",
@@ -407,15 +385,15 @@
         },
         {
             "name": "wpackagist-plugin/custom-sidebars",
-            "version": "3.1.2",
+            "version": "3.1.4",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/custom-sidebars/",
-                "reference": "tags/3.1.2"
+                "reference": "tags/3.1.4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/custom-sidebars.3.1.2.zip",
+                "url": "https://downloads.wordpress.org/plugin/custom-sidebars.3.1.4.zip",
                 "reference": null,
                 "shasum": null
             },
@@ -424,6 +402,26 @@
             },
             "type": "wordpress-plugin",
             "homepage": "https://wordpress.org/plugins/custom-sidebars/"
+        },
+        {
+            "name": "wpackagist-plugin/jetpack",
+            "version": "6.0",
+            "source": {
+                "type": "svn",
+                "url": "https://plugins.svn.wordpress.org/jetpack/",
+                "reference": "tags/6.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://downloads.wordpress.org/plugin/jetpack.6.0.zip",
+                "reference": null,
+                "shasum": null
+            },
+            "require": {
+                "composer/installers": "~1.0"
+            },
+            "type": "wordpress-plugin",
+            "homepage": "https://wordpress.org/plugins/jetpack/"
         },
         {
             "name": "wpackagist-plugin/memcached-redux",
@@ -467,15 +465,15 @@
         },
         {
             "name": "wpackagist-plugin/woocommerce",
-            "version": "3.3.3",
+            "version": "3.3.4",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/woocommerce/",
-                "reference": "tags/3.3.3"
+                "reference": "tags/3.3.4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/woocommerce.3.3.3.zip",
+                "url": "https://downloads.wordpress.org/plugin/woocommerce.3.3.4.zip",
                 "reference": null,
                 "shasum": null
             },
@@ -533,12 +531,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/squizlabs/PHP_CodeSniffer.git",
-                "reference": "78ddbae97cac078f09928bf89e3ab9e53ad2ace0"
+                "reference": "e8420e7b44fd17d1e4c095df742cc56b98899439"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/78ddbae97cac078f09928bf89e3ab9e53ad2ace0",
-                "reference": "78ddbae97cac078f09928bf89e3ab9e53ad2ace0",
+                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/e8420e7b44fd17d1e4c095df742cc56b98899439",
+                "reference": "e8420e7b44fd17d1e4c095df742cc56b98899439",
                 "shasum": ""
             },
             "require": {
@@ -576,7 +574,7 @@
                 "phpcs",
                 "standards"
             ],
-            "time": "2018-03-16T04:26:30+00:00"
+            "time": "2018-04-06T03:42:39+00:00"
         }
     ],
     "aliases": [],

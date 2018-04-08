@@ -14,40 +14,14 @@
 			"package": {
 				"name": "wordpress/wordpress",
 				"type": "webroot",
-				"version": "4.9.4",
+				"version": "4.9.5",
 				"source": {
 					"type": "git",
 					"url": "https://github.com/WordPress/WordPress.git",
-					"reference": "4.9.4"
+					"reference": "4.9.5"
 				},
 				"require": {
 					"fancyguy/webroot-installer": "1.1.0"
-				}
-			}
-		},
-		{
-			"type": "package",
-			"package": {
-				"name": "wp-sync-db/wp-sync-db",
-				"type": "wordpress-plugin",
-				"version": "master",
-				"source": {
-					"type": "git",
-					"url": "https://github.com/wp-sync-db/wp-sync-db.git",
-					"reference": "master"
-				}
-			}
-		},
-		{
-			"type": "package",
-			"package": {
-				"name": "wp-sync-db/wp-sync-db-media-files",
-				"type": "wordpress-plugin",
-				"version": "master",
-				"source": {
-					"type": "git",
-					"url": "https://github.com/wp-sync-db/wp-sync-db-media-files.git",
-					"reference": "master"
 				}
 			}
 		},
@@ -109,7 +83,7 @@
 	"require": {
 		"php": ">=5.6",
 		"composer/installers": "^1.4",
-		"wordpress/wordpress": "4.9.4",
+		"wordpress/wordpress": "4.9.5",
 		"vlucas/phpdotenv": "^2.0.1",
 		"wpackagist-plugin/memcached-redux": "~0.1.6",
 		"oscarotero/env": "^1.1.0",
@@ -119,12 +93,11 @@
 		"wpackagist-plugin/custom-sidebars": "^3.1.2",
 		"wpackagist-plugin/rest-api-filter-fields": "^1.0.7",
 		"wpackagist-plugin/yith-woocommerce-catalog-mode": "^1.5.9",
-		"wp-sync-db/wp-sync-db": "*",
-		"wp-sync-db/wp-sync-db-media-files": "*",
 		"jeffstieler/dt-woo-map": "*",
 		"jeffstieler/search-filter-pro": "*",
 		"jeffstieler/storefront-powerpack": "*",
-		"wpackagist-plugin/add-search-to-menu": "3.4"
+		"wpackagist-plugin/add-search-to-menu": "3.4",
+		"wpackagist-plugin/jetpack": "~6.0"
 	},
 	"require-dev" : {
 		"squizlabs/php_codesniffer": "^3.0.2"
