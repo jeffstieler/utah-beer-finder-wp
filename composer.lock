@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "65b769fe5014f87c948766ca8b51100d",
+    "content-hash": "a69756813ae9ef8a7019b22f2b97049d",
     "packages": [
         {
             "name": "composer/installers",
@@ -404,6 +404,26 @@
             "homepage": "https://wordpress.org/plugins/custom-sidebars/"
         },
         {
+            "name": "wpackagist-plugin/google-analytics-dashboard-for-wp",
+            "version": "5.3.2",
+            "source": {
+                "type": "svn",
+                "url": "https://plugins.svn.wordpress.org/google-analytics-dashboard-for-wp/",
+                "reference": "tags/5.3.2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://downloads.wordpress.org/plugin/google-analytics-dashboard-for-wp.5.3.2.zip",
+                "reference": null,
+                "shasum": null
+            },
+            "require": {
+                "composer/installers": "~1.0"
+            },
+            "type": "wordpress-plugin",
+            "homepage": "https://wordpress.org/plugins/google-analytics-dashboard-for-wp/"
+        },
+        {
             "name": "wpackagist-plugin/jetpack",
             "version": "6.0",
             "source": {
@@ -465,15 +485,15 @@
         },
         {
             "name": "wpackagist-plugin/woocommerce",
-            "version": "3.3.4",
+            "version": "3.3.5",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/woocommerce/",
-                "reference": "tags/3.3.4"
+                "reference": "tags/3.3.5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/woocommerce.3.3.4.zip",
+                "url": "https://downloads.wordpress.org/plugin/woocommerce.3.3.5.zip",
                 "reference": null,
                 "shasum": null
             },
@@ -531,12 +551,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/squizlabs/PHP_CodeSniffer.git",
-                "reference": "e8420e7b44fd17d1e4c095df742cc56b98899439"
+                "reference": "c6a0298d96abcf99e475c1cd0707c4830e0687a3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/e8420e7b44fd17d1e4c095df742cc56b98899439",
-                "reference": "e8420e7b44fd17d1e4c095df742cc56b98899439",
+                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/c6a0298d96abcf99e475c1cd0707c4830e0687a3",
+                "reference": "c6a0298d96abcf99e475c1cd0707c4830e0687a3",
                 "shasum": ""
             },
             "require": {
@@ -574,7 +594,7 @@
                 "phpcs",
                 "standards"
             ],
-            "time": "2018-04-06T03:42:39+00:00"
+            "time": "2018-04-13T03:26:13+00:00"
         }
     ],
     "aliases": [],
