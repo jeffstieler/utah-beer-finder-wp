@@ -98,7 +98,8 @@
 		"jeffstieler/storefront-powerpack": "*",
 		"wpackagist-plugin/add-search-to-menu": "3.4",
 		"wpackagist-plugin/jetpack": "^6.0",
-		"wpackagist-plugin/google-analytics-dashboard-for-wp": "^5.3.2"
+		"wpackagist-plugin/google-analytics-dashboard-for-wp": "^5.3.2",
+		"wpackagist-plugin/vaultpress": "dev-trunk"
 	},
 	"require-dev" : {
 		"squizlabs/php_codesniffer": "^3.0.2"

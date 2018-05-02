@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "a69756813ae9ef8a7019b22f2b97049d",
+    "content-hash": "1ba5f0d9fc46962336320839c2928249",
     "packages": [
         {
             "name": "composer/installers",
@@ -484,6 +484,27 @@
             "homepage": "https://wordpress.org/plugins/rest-api-filter-fields/"
         },
         {
+            "name": "wpackagist-plugin/vaultpress",
+            "version": "dev-trunk",
+            "source": {
+                "type": "svn",
+                "url": "https://plugins.svn.wordpress.org/vaultpress/",
+                "reference": "trunk"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://downloads.wordpress.org/plugin/vaultpress.zip?timestamp=1517594109",
+                "reference": null,
+                "shasum": null
+            },
+            "require": {
+                "composer/installers": "~1.0"
+            },
+            "type": "wordpress-plugin",
+            "homepage": "https://wordpress.org/plugins/vaultpress/",
+            "time": "2018-02-02T17:55:09+00:00"
+        },
+        {
             "name": "wpackagist-plugin/woocommerce",
             "version": "3.3.5",
             "source": {
@@ -599,7 +620,9 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {
+        "wpackagist-plugin/vaultpress": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
