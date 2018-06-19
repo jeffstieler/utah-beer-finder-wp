@@ -127,3 +127,7 @@ ul.products li.product .product_meta .tagged_as {
 .page-template-template-homepage .site-main {
   margin-bottom: 0px;
 }
+
+.page-template-template-homepage .storefront-product-section {
+  margin-top: 1.618em;
+}
