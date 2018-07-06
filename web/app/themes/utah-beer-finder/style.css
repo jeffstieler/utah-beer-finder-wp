@@ -119,7 +119,7 @@ ul.products li.product .product_meta .tagged_as {
 
 .page-template-template-homepage.has-post-thumbnail .type-page.has-post-thumbnail {
   padding-top: 2.617924em;
-  min-height: 700px;
+  min-height: 500px;
 }
 
 .page-template-template-homepage .hentry,
@@ -130,4 +130,20 @@ ul.products li.product .product_meta .tagged_as {
 
 .page-template-template-homepage .storefront-product-section {
   margin-top: 1.618em;
+}
+
+.page-template-template-homepage .entry-title {
+  display: none;
+}
+
+.page-template-template-homepage .copyright {
+  position: absolute;
+  right: 5px;
+  bottom: 5px;
+  font-size: small;
+}
+
+.page-template-template-homepage .copyright a {
+  text-decoration: none;
+  color: rgba( 255, 255, 255, .5 );
 }
