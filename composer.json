@@ -89,7 +89,7 @@
 		"oscarotero/env": "^1.1.0",
 		"roots/wp-password-bcrypt": "1.0.0",
 		"wpackagist-plugin/woocommerce": "^3.3.0",
-		"wpackagist-theme/storefront": "^2.2.7",
+		"wpackagist-theme/storefront": "2.2.8",
 		"wpackagist-plugin/custom-sidebars": "^3.1.2",
 		"wpackagist-plugin/rest-api-filter-fields": "^1.0.7",
 		"wpackagist-plugin/yith-woocommerce-catalog-mode": "^1.5.9",
