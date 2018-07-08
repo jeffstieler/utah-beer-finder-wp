@@ -439,3 +439,7 @@ add_shortcode( 'ubf_checkins_map', function() {
 
 	return ubf_checkins_map( $checkins );
 } );
+
+add_filter( 'woocommerce_placeholder_img_src', function() {
+	return get_stylesheet_directory_uri() . '/assets/images/badge-beer-default.png';
+} );
