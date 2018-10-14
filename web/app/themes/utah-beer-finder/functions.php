@@ -155,7 +155,7 @@ add_filter( 'woocommerce_products_widget_query_args', function( $args ) {
  * Add product ID to the cache key used by the Product Widget.
  */
 add_filter( 'woocommerce_cached_widget_id', function( $widget_id ) {
-	if ( ( 'woocommerce_products' === $widget_id ) && is_singular( 'product' ) ) {
+	if ( 0 === strpos( $widget_id, 'woocommerce_products' ) && is_singular( 'product' ) ) {
 		$widget_id .= '-' . get_the_ID();
 	}
 
