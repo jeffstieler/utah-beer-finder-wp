@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "b9e55515a97875869a44b7e47842a3db",
+    "content-hash": "0fed753ab27ff8595886f62b360a00ee",
     "packages": [
         {
             "name": "composer/installers",
-            "version": "v1.5.0",
+            "version": "v1.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/installers.git",
-                "reference": "049797d727261bf27f2690430d935067710049c2"
+                "reference": "cfcca6b1b60bc4974324efb5783c13dca6932b5b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/installers/zipball/049797d727261bf27f2690430d935067710049c2",
-                "reference": "049797d727261bf27f2690430d935067710049c2",
+                "url": "https://api.github.com/repos/composer/installers/zipball/cfcca6b1b60bc4974324efb5783c13dca6932b5b",
+                "reference": "cfcca6b1b60bc4974324efb5783c13dca6932b5b",
                 "shasum": ""
             },
             "require": {
@@ -124,7 +124,7 @@
                 "zend",
                 "zikula"
             ],
-            "time": "2017-12-29T09:13:20+00:00"
+            "time": "2018-08-27T06:10:37+00:00"
         },
         {
             "name": "fancyguy/webroot-installer",
@@ -306,12 +306,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/vlucas/phpdotenv.git",
-                "reference": "6ae3e2e6494bb5e58c2decadafc3de7f1453f70a"
+                "reference": "54d599d414f8cf3f6129e287acaf44b610486aa1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/vlucas/phpdotenv/zipball/6ae3e2e6494bb5e58c2decadafc3de7f1453f70a",
-                "reference": "6ae3e2e6494bb5e58c2decadafc3de7f1453f70a",
+                "url": "https://api.github.com/repos/vlucas/phpdotenv/zipball/54d599d414f8cf3f6129e287acaf44b610486aa1",
+                "reference": "54d599d414f8cf3f6129e287acaf44b610486aa1",
                 "shasum": ""
             },
             "require": {
@@ -348,15 +348,15 @@
                 "env",
                 "environment"
             ],
-            "time": "2018-07-01T10:25:50+00:00"
+            "time": "2018-08-22T19:34:05+00:00"
         },
         {
             "name": "wordpress/wordpress",
-            "version": "4.9.7",
+            "version": "4.9.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/WordPress/WordPress.git",
-                "reference": "4.9.7"
+                "reference": "4.9.8"
             },
             "require": {
                 "fancyguy/webroot-installer": "1.1.0"
@@ -385,15 +385,15 @@
         },
         {
             "name": "wpackagist-plugin/custom-sidebars",
-            "version": "3.1.6",
+            "version": "3.2.1",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/custom-sidebars/",
-                "reference": "tags/3.1.6"
+                "reference": "tags/3.2.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/custom-sidebars.3.1.6.zip",
+                "url": "https://downloads.wordpress.org/plugin/custom-sidebars.3.2.1.zip",
                 "reference": null,
                 "shasum": null
             },
@@ -425,15 +425,15 @@
         },
         {
             "name": "wpackagist-plugin/jetpack",
-            "version": "6.3.2",
+            "version": "6.6.1",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/jetpack/",
-                "reference": "tags/6.3.2"
+                "reference": "tags/6.6.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/jetpack.6.3.2.zip",
+                "url": "https://downloads.wordpress.org/plugin/jetpack.6.6.1.zip",
                 "reference": null,
                 "shasum": null
             },
@@ -506,15 +506,15 @@
         },
         {
             "name": "wpackagist-plugin/woocommerce",
-            "version": "3.4.3",
+            "version": "3.5.0-rc.1",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/woocommerce/",
-                "reference": "tags/3.4.3"
+                "reference": "tags/3.5.0-rc.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/woocommerce.3.4.3.zip",
+                "url": "https://downloads.wordpress.org/plugin/woocommerce.3.5.0-rc.1.zip",
                 "reference": null,
                 "shasum": null
             },
@@ -546,15 +546,15 @@
         },
         {
             "name": "wpackagist-theme/storefront",
-            "version": "2.2.8",
+            "version": "2.3.4",
             "source": {
                 "type": "svn",
                 "url": "https://themes.svn.wordpress.org/storefront/",
-                "reference": "2.2.8"
+                "reference": "2.3.4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/theme/storefront.2.2.8.zip",
+                "url": "https://downloads.wordpress.org/theme/storefront.2.3.4.zip",
                 "reference": null,
                 "shasum": null
             },
@@ -572,12 +572,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/squizlabs/PHP_CodeSniffer.git",
-                "reference": "0e467f51af1acfb6502b80008591aebb3b331427"
+                "reference": "6ad28354c04b364c3c71a34e4a18b629cc3b231e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/0e467f51af1acfb6502b80008591aebb3b331427",
-                "reference": "0e467f51af1acfb6502b80008591aebb3b331427",
+                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/6ad28354c04b364c3c71a34e4a18b629cc3b231e",
+                "reference": "6ad28354c04b364c3c71a34e4a18b629cc3b231e",
                 "shasum": ""
             },
             "require": {
@@ -615,7 +615,7 @@
                 "phpcs",
                 "standards"
             ],
-            "time": "2018-07-06T03:31:29+00:00"
+            "time": "2018-09-23T23:08:17+00:00"
         }
     ],
     "aliases": [],
